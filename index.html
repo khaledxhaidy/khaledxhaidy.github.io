@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-lang="ar" data-skin="classic">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FBF6EC">
+<title>هايدي و خالد</title>
+<meta name="description" content="دعوة حفل زفاف هايدي و خالد">
+<link rel="stylesheet" href="assets/fonts.css">
+<style>
+/* ═════════════════════════════════════════════════════════════════
+   SKINS — the four looks the guest can switch between.
+   This page commits to a printed-invitation world rather than
+   following the phone's dark mode, so every colour is explicit.
+   ═════════════════════════════════════════════════════════════════ */
+
+:root, :root[data-skin="classic"] {
+  --ground:   #FBF6EC;  --ground-2: #F4EBDA;
+  --ink:      #2B2620;  --ink-soft: #6E6353;
+  --accent:   #B4893C;  --accent-2: #8A6524;
+  --line:     #E0D3B9;
+  --seal-hi:  #C8503F;  --seal-lo:  #6E1A17;  --seal-ink: #F7E3C0;
+  --shadow:   rgba(60,44,20,.18);
+  --paper-a:  #FDFAF3;  --paper-b:  #EFE4CE;
+}
+:root[data-skin="arabesque"] {
+  --ground:   #0D3A31;  --ground-2: #10473C;
+  --ink:      #F1E6D2;  --ink-soft: #AFC0B4;
+  --accent:   #CBA135;  --accent-2: #E3C572;
+  --line:     #245B4E;
+  --seal-hi:  #E0BC55;  --seal-lo:  #8A6A14;  --seal-ink: #0D3A31;
+  --shadow:   rgba(0,0,0,.42);
+  --paper-a:  #145346;  --paper-b:  #0C332B;
+}
+:root[data-skin="floral"] {
+  --ground:   #FCF3F0;  --ground-2: #F7E9E4;
+  --ink:      #46383A;  --ink-soft: #806C6D;
+  --accent:   #BF8079;  --accent-2: #6F8168;
+  --line:     #EBD5CF;
+  --seal-hi:  #C98A83;  --seal-lo:  #7E4842;  --seal-ink: #FCF3F0;
+  --shadow:   rgba(94,62,58,.16);
+  --paper-a:  #FEF8F6;  --paper-b:  #F2DED8;
+}
+/* Terracotta on blush — the palette direction from the reference
+   invitation, rebuilt in this page's own type and layout. */
+:root[data-skin="blush"] {
+  --ground:   #FFF4EF;  --ground-2: #FBE6DD;
+  --ink:      #3A2622;  --ink-soft: #8A6A62;
+  --accent:   #BC2501;  --accent-2: #D35A0B;
+  --line:     #F2D6CA;
+  --seal-hi:  #E06A4A;  --seal-lo:  #8E1B00;  --seal-ink: #FFF4EF;
+  --shadow:   rgba(88,38,24,.18);
+  --paper-a:  #FFFAF7;  --paper-b:  #FBE0D4;
+}
+:root[data-skin="minimal"] {
+  --ground:   #F7F7F5;  --ground-2: #EFEFEB;
+  --ink:      #17150F;  --ink-soft: #6B6862;
+  --accent:   #8C7B5E;  --accent-2: #17150F;
+  --line:     #DEDDD6;
+  --seal-hi:  #3A3630;  --seal-lo:  #100E0A;  --seal-ink: #F7F7F5;
+  --shadow:   rgba(0,0,0,.12);
+  --paper-a:  #FCFCFA;  --paper-b:  #E9E9E4;
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   TYPE — Amiri (naskh) for the Qur'anic line and Arabic display,
+   Cairo for Arabic running text, Cormorant Garamond for Latin.
+   All three are embedded, so nothing depends on a network.
+   ═════════════════════════════════════════════════════════════════ */
+
+:root {
+  --f-quran:   Amiri, "Traditional Arabic", serif;
+  --f-ar-disp: Amiri, "Traditional Arabic", serif;
+  --f-ar-body: Cairo, "Segoe UI", Tahoma, sans-serif;
+  --f-la-disp: "Cormorant Garamond", Didot, Garamond, serif;
+  --f-la-body: Optima, Candara, "Gill Sans MT", "Segoe UI", system-ui, sans-serif;
+
+  --display: var(--f-ar-disp);
+  --body:    var(--f-ar-body);
+
+  --step--1: clamp(.8rem, .76rem + .2vw, .9rem);
+  --step-0:  clamp(1rem, .96rem + .2vw, 1.1rem);
+  --step-1:  clamp(1.2rem, 1.1rem + .5vw, 1.5rem);
+  --step-2:  clamp(1.65rem, 1.4rem + 1.1vw, 2.3rem);
+  --step-3:  clamp(2.2rem, 1.8rem + 2vw, 3.2rem);
+  --step-4:  clamp(3rem, 2.1rem + 4.4vw, 5.8rem);
+
+  --pad: clamp(1.25rem, 5vw, 2.5rem);
+  --gap: clamp(3rem, 9vw, 5.5rem);
+
+  --paper-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='170' height='170' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root[data-lang="en"] { --display: var(--f-la-disp); --body: var(--f-la-body); }
+:root[data-skin="minimal"]                 { --display: var(--f-ar-body); }
+:root[data-skin="minimal"][data-lang="en"] { --display: var(--f-la-body); }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: var(--step-0);
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color .6s ease, color .6s ease;
+}
+body.locked { overflow: hidden; height: 100svh; }
+
+img { max-width: 100%; display: block; }
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ── Paper surface, shared by the envelope and the cards ────────── */
+.paper { position: relative; background: linear-gradient(160deg, var(--paper-a), var(--paper-b)); }
+.paper::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: var(--paper-noise);
+  opacity: .16; mix-blend-mode: multiply; pointer-events: none;
+}
+:root[data-skin="arabesque"] .paper::before { mix-blend-mode: screen; opacity: .1; }
+
+/* ── Shared ─────────────────────────────────────────────────────── */
+.wrap { width: min(100% - (var(--pad) * 2), 46rem); margin-inline: auto; }
+section { padding-block: var(--gap); }
+
+.eyebrow {
+  font-size: var(--step--1); letter-spacing: .1em;
+  color: var(--accent-2); margin: 0 0 1rem; text-align: center;
+}
+:root[data-lang="en"] .eyebrow { letter-spacing: .32em; text-transform: uppercase; }
+
+h1, h2 { font-weight: 400; margin: 0; }
+h2 {
+  font-family: var(--display); font-size: var(--step-2);
+  line-height: 1.35; text-align: center; text-wrap: balance;
+  margin-bottom: 1.3rem;
+}
+.lede {
+  max-width: 34rem; margin-inline: auto; text-align: center;
+  color: var(--ink-soft); text-wrap: pretty;
+}
+
+.orn { display: flex; align-items: center; gap: .85rem; justify-content: center; margin-block: 1.5rem; color: var(--accent); }
+.orn::before, .orn::after {
+  content: ""; height: 1px; width: min(22vw, 6rem);
+  background: linear-gradient(to right, transparent, var(--line), transparent);
+}
+.orn i { width: 9px; height: 9px; border: 1px solid currentColor; transform: rotate(45deg); position: relative; }
+.orn i::after { content: ""; position: absolute; inset: 2px; background: currentColor; opacity: .55; }
+:root[data-skin="minimal"] .orn i { display: none; }
+
+.flute {
+  height: 46px;
+  background-image: repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 9px);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+}
+
+/* The arch — taken from the venue's windows. */
+.arch {
+  border-radius: 50% 50% 6px 6px / 38% 38% 2% 2%;
+  overflow: hidden; position: relative;
+  box-shadow: 0 20px 55px -20px var(--shadow);
+  background: var(--ground-2);
+}
+.arch::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--line); pointer-events: none;
+}
+.arch img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ═════════════════════════════════════════════════════════════════
+   THE GATE — envelope and wax seal
+   ═════════════════════════════════════════════════════════════════ */
+
+#gate {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center; gap: 1.4rem;
+  background: var(--ground); padding: var(--pad);
+  transition: opacity 1s ease .35s, visibility 1s .35s;
+}
+#gate.done { opacity: 0; visibility: hidden; }
+#gate::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 42%, transparent 30%, var(--ground-2) 130%);
+  opacity: .8;
+}
+.gate-inner { display: grid; justify-items: center; gap: 1.8rem; position: relative; z-index: 1; }
+
+.envelope {
+  --w: min(80vw, 22rem);
+  width: var(--w); height: calc(var(--w) * .68);
+  position: relative; cursor: pointer; border: 0; background: none; padding: 0;
+  perspective: 1200px; transform-style: preserve-3d;
+  transition: transform .8s cubic-bezier(.3,.8,.3,1), opacity .6s ease;
+}
+.envelope:hover { transform: translateY(-4px); }
+.envelope.gone { transform: translateY(60px) scale(.9); opacity: 0; }
+
+.env-back {
+  position: absolute; inset: 0;
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 70px -30px var(--shadow), 0 2px 6px -2px var(--shadow);
+}
+/* the two side creases */
+.env-back::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom right, transparent calc(50% - .5px), color-mix(in srgb, var(--line) 60%, transparent) 50%, transparent calc(50% + .5px)),
+    linear-gradient(to bottom left,  transparent calc(50% - .5px), color-mix(in srgb, var(--line) 60%, transparent) 50%, transparent calc(50% + .5px));
+  background-size: 50.5% 100%, 50.5% 100%;
+  background-position: left top, right top;
+  background-repeat: no-repeat;
+}
+
+.env-flap {
+  position: absolute; inset-inline: 0; top: 0; height: 64%;
+  border: 1px solid var(--line);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform 1.15s cubic-bezier(.55,-.2,.25,1.15);
+  z-index: 3; backface-visibility: hidden;
+  filter: brightness(1.02);
+}
+.envelope.opening .env-flap { transform: rotateX(-176deg); }
+
+.env-card {
+  position: absolute; inset-inline: 7%; top: 9%; height: 82%;
+  border: 1px solid var(--line); z-index: 4;
+  display: grid; grid-template-rows: 1fr auto; overflow: hidden;
+  opacity: 0; transform: translateY(4%);
+  box-shadow: 0 12px 34px -16px var(--shadow);
+  transition: transform 1.1s cubic-bezier(.25,.9,.3,1) .45s, opacity .35s ease .45s;
+}
+.envelope.opening .env-card { opacity: 1; transform: translateY(-58%); }
+.env-card img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+.env-card .cap {
+  padding: .5rem .6rem .7rem; text-align: center;
+  font-family: var(--display); font-size: var(--step--1);
+  color: var(--ink); background: var(--paper-a); letter-spacing: .04em;
+}
+
+/* wax seal */
+.seal {
+  position: absolute; top: 45%; left: 50%; translate: -50% 0;
+  width: clamp(88px, 25vw, 116px); aspect-ratio: 1; z-index: 6;
+  overflow: visible; transition: transform .45s cubic-bezier(.3,1.4,.5,1);
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.42));
+}
+.envelope:hover .seal { transform: translate(-50%, -2px) scale(1.05); }
+.envelope.pressing .seal { transform: translate(-50%, 2px) scale(.93); }
+
+.seal .half { transition: transform 1s cubic-bezier(.4,0,.25,1), opacity .9s ease .15s; }
+.envelope.opening .seal .half-l { transform: translate(-26px, 30px) rotate(-38deg); opacity: 0; }
+.envelope.opening .seal .half-r { transform: translate(26px, 34px) rotate(34deg); opacity: 0; }
+.seal .mono { transition: opacity .3s ease; }
+.envelope.opening .seal .mono { opacity: 0; }
+
+.gate-hint {
+  font-size: var(--step--1); color: var(--ink-soft);
+  text-align: center; margin: 0; animation: breathe 2.8s ease-in-out infinite;
+}
+:root[data-lang="en"] .gate-hint { letter-spacing: .2em; text-transform: uppercase; }
+.envelope.opening ~ .gate-hint { opacity: 0; transition: opacity .3s; }
+@keyframes breathe { 0%,100% { opacity: .4 } 50% { opacity: 1 } }
+
+.gate-bism {
+  font-family: var(--f-quran); font-size: var(--step-1);
+  color: var(--accent-2); margin: 0; text-align: center; line-height: 2;
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   Chrome — progress bar and switcher
+   ═════════════════════════════════════════════════════════════════ */
+
+#progress {
+  position: fixed; inset-block-start: 0; inset-inline: 0; height: 2px; z-index: 70;
+  background: var(--accent); transform: scaleX(0); transform-origin: left center;
+  opacity: 0; transition: opacity .6s ease;
+}
+:root[dir="rtl"] #progress { transform-origin: right center; }
+body.open #progress { opacity: .85; }
+
+.switcher {
+  position: fixed; top: .75rem; inset-inline-end: .75rem; z-index: 60;
+  display: flex; align-items: center; gap: .5rem;
+  padding: .4rem .55rem; border-radius: 999px;
+  background: color-mix(in srgb, var(--ground) 80%, transparent);
+  border: 1px solid var(--line); backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px -14px var(--shadow);
+  opacity: 0; transform: translateY(-10px);
+  transition: opacity .7s ease .3s, transform .7s ease .3s;
+}
+body.open .switcher { opacity: 1; transform: none; }
+.lang-btn {
+  font: inherit; font-size: var(--step--1); font-family: var(--f-la-body);
+  letter-spacing: .1em; padding: .1rem .5rem; border: 0; background: none;
+  color: var(--ink-soft); cursor: pointer; border-radius: 999px;
+}
+.lang-btn:hover { color: var(--ink); }
+.skins { display: flex; gap: .3rem; }
+.skin-dot {
+  width: 19px; height: 19px; border-radius: 50%; border: 1px solid var(--line);
+  cursor: pointer; padding: 0; position: relative; transition: transform .2s ease;
+}
+.skin-dot:hover { transform: scale(1.15); }
+.skin-dot[aria-pressed="true"]::after {
+  content: ""; position: absolute; inset: -4px;
+  border: 1px solid var(--accent); border-radius: 50%;
+}
+.skin-dot[data-sw="classic"]   { background: linear-gradient(135deg,#FBF6EC 50%,#B4893C 50%); }
+.skin-dot[data-sw="arabesque"] { background: linear-gradient(135deg,#0D3A31 50%,#CBA135 50%); }
+.skin-dot[data-sw="floral"]    { background: linear-gradient(135deg,#FCF3F0 50%,#BF8079 50%); }
+.skin-dot[data-sw="blush"]     { background: linear-gradient(135deg,#FFF4EF 50%,#BC2501 50%); }
+.skin-dot[data-sw="minimal"]   { background: linear-gradient(135deg,#F7F7F5 50%,#17150F 50%); }
+
+/* ═════════════════════════════════════════════════════════════════
+   Hero
+   ═════════════════════════════════════════════════════════════════ */
+
+.hero {
+  position: relative; min-height: 100svh;
+  display: grid; align-content: center; justify-items: center; gap: 1rem;
+  padding: calc(var(--gap) * .9) var(--pad); text-align: center; overflow: hidden;
+}
+#dust { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.hero > *:not(#dust) { position: relative; z-index: 1; }
+
+.bism {
+  font-family: var(--f-quran); font-size: var(--step-1);
+  color: var(--accent-2); margin: 0 0 .3rem; line-height: 2;
+}
+.hero-photo { width: min(60vw, 14.5rem); aspect-ratio: 4/5; margin-bottom: .5rem; }
+.kicker { font-size: var(--step--1); letter-spacing: .12em; color: var(--accent-2); margin: 0; }
+:root[data-lang="en"] .kicker { letter-spacing: .32em; text-transform: uppercase; }
+
+.names {
+  font-family: var(--display); font-size: var(--step-4);
+  line-height: 1.08; display: grid; gap: .04em;
+}
+.names .amp { font-size: .36em; color: var(--accent); line-height: 1; }
+:root[data-lang="en"] .names .amp { font-style: italic; }
+
+.hero-date { color: var(--ink-soft); margin: 0; font-size: var(--step-0); }
+
+.count { display: flex; gap: clamp(.9rem,4.5vw,2.2rem); justify-content: center; margin-top: .5rem; }
+.count div { display: grid; gap: .1rem; min-width: 3.4rem; }
+.count b {
+  font-family: var(--display); font-size: var(--step-2); font-weight: 400;
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.count span { font-size: .74rem; color: var(--ink-soft); }
+:root[data-lang="en"] .count span { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; }
+
+.scroll-cue {
+  position: absolute; bottom: 1.4rem; left: 50%; translate: -50% 0;
+  width: 1px; height: 3rem; z-index: 1;
+  background: linear-gradient(to bottom, transparent, var(--accent));
+}
+.scroll-cue::after {
+  content: ""; position: absolute; bottom: 0; left: -2px;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  animation: drop 2.4s ease-in-out infinite;
+}
+@keyframes drop {
+  0% { transform: translateY(-3rem); opacity: 0 }
+  40% { opacity: 1 }
+  100% { transform: translateY(0); opacity: 0 }
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   The verse
+   ═════════════════════════════════════════════════════════════════ */
+
+.ayah-sec { background: var(--ground-2); }
+.ayah {
+  font-family: var(--f-quran); font-size: var(--step-2);
+  line-height: 2.15; text-align: center; text-wrap: balance;
+  max-width: 32rem; margin-inline: auto; color: var(--ink);
+}
+:root[data-lang="en"] .ayah { font-family: var(--f-la-disp); font-style: italic; line-height: 1.7; }
+.ayah-src { text-align: center; color: var(--accent-2); font-size: var(--step--1); margin: 1rem 0 0; }
+
+/* ═════════════════════════════════════════════════════════════════
+   Story
+   ═════════════════════════════════════════════════════════════════ */
+
+.story { display: grid; gap: clamp(1.8rem,5vw,3rem); align-items: center; }
+@media (min-width: 46rem) {
+  .story { grid-template-columns: .85fr 1fr; }
+  .story .txt { text-align: start; }
+  .story .txt .lede { text-align: start; margin-inline: 0; }
+  .story .txt h2, .story .txt .eyebrow { text-align: start; }
+  .story .txt .orn { justify-content: start; }
+  .story .txt .orn::before { display: none; }
+}
+.story .arch { aspect-ratio: 4/5; }
+
+/* ═════════════════════════════════════════════════════════════════
+   Detail cards
+   ═════════════════════════════════════════════════════════════════ */
+
+.cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(13rem,1fr)); margin-top: 2rem; }
+.card {
+  border: 1px solid var(--line); background: var(--ground-2);
+  padding: 1.7rem 1.3rem; text-align: center;
+  display: grid; gap: .35rem; align-content: start; position: relative;
+}
+.card::before {
+  content: ""; position: absolute; top: -1px; inset-inline: 24%;
+  height: 2px; background: var(--accent); opacity: .6;
+}
+.card .k { font-size: var(--step--1); color: var(--accent-2); letter-spacing: .06em; }
+:root[data-lang="en"] .card .k { letter-spacing: .22em; text-transform: uppercase; }
+.card .v { font-family: var(--display); font-size: var(--step-1); line-height: 1.4; }
+.card .n { font-size: var(--step--1); color: var(--ink-soft); }
+
+/* ═════════════════════════════════════════════════════════════════
+   Venue — pinned, and the photo relaxes out of a zoom as you scroll
+   ═════════════════════════════════════════════════════════════════ */
+
+.venue-stage { position: relative; height: 190svh; }
+.venue-pin {
+  position: sticky; top: 0; height: 100svh;
+  display: grid; place-items: center; overflow: hidden;
+}
+.venue-pin img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; transform: scale(1.28); will-change: transform;
+}
+/* A light vignette only — the hall stays vivid, and the copy gets its
+   legibility from its own panel rather than from fogging the photo. */
+.venue-veil {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--ground) 42%, transparent),
+    color-mix(in srgb, var(--ground) 4%, transparent) 42%,
+    color-mix(in srgb, var(--ground) 52%, transparent));
+}
+/* the invitation card, set down in front of the hall */
+.venue-copy {
+  position: relative; z-index: 2; text-align: center;
+  display: grid; justify-items: center; gap: .15rem;
+  width: min(100% - (var(--pad) * 2), 27rem);
+  padding: clamp(1.8rem, 5vw, 2.8rem) clamp(1.4rem, 4vw, 2.4rem);
+  background: color-mix(in srgb, var(--ground) 93%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: 0 28px 70px -30px var(--shadow);
+  backdrop-filter: blur(4px);
+}
+.venue-copy h2 { font-size: var(--step-3); margin-bottom: .3rem; }
+
+/* ═════════════════════════════════════════════════════════════════
+   Buttons and forms
+   ═════════════════════════════════════════════════════════════════ */
+
+.btn {
+  position: relative; z-index: 0; display: inline-block; cursor: pointer;
+  font-family: var(--body); font-size: var(--step-0);
+  padding: .9rem 2rem; border: 1px solid var(--accent);
+  background: none; color: var(--ink); text-decoration: none;
+  overflow: hidden; transition: color .35s ease;
+}
+:root[data-lang="en"] .btn { font-size: var(--step--1); letter-spacing: .2em; text-transform: uppercase; }
+.btn::after {
+  content: ""; position: absolute; inset: 0; background: var(--accent);
+  transform: scaleX(0); transform-origin: left center; z-index: -1;
+  transition: transform .45s cubic-bezier(.5,0,.2,1);
+}
+:root[dir="rtl"] .btn::after { transform-origin: right center; }
+.btn:hover { color: var(--ground); }
+.btn:hover::after { transform: scaleX(1); }
+.btn[disabled] { opacity: .5; cursor: default; }
+.btn[disabled]:hover { color: var(--ink); }
+.btn[disabled]:hover::after { transform: scaleX(0); }
+.btn-row { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center; margin-top: 1.7rem; }
+
+.form { display: grid; gap: 1.1rem; max-width: 32rem; margin: 2.2rem auto 0; }
+.field { display: grid; gap: .4rem; }
+.field > label { font-size: var(--step--1); color: var(--ink-soft); }
+:root[data-lang="en"] .field > label { letter-spacing: .16em; text-transform: uppercase; }
+
+input, textarea, select {
+  font-family: var(--body); font-size: var(--step-0); color: var(--ink);
+  background: var(--ground-2); border: 1px solid var(--line);
+  padding: .8rem .9rem; width: 100%; border-radius: 0;
+  transition: border-color .25s ease;
+}
+input:hover, textarea:hover, select:hover { border-color: var(--accent); }
+textarea { min-height: 6.5rem; resize: vertical; line-height: 1.7; }
+::placeholder { color: color-mix(in srgb, var(--ink-soft) 60%, transparent); }
+
+.choice { display: flex; gap: .7rem; flex-wrap: wrap; }
+.choice label {
+  position: relative; flex: 1 1 9rem; border: 1px solid var(--line);
+  background: var(--ground-2); padding: .8rem 1rem; text-align: center;
+  cursor: pointer; font-size: var(--step--1);
+  transition: border-color .25s, background-color .25s, color .25s;
+}
+.choice input { position: absolute; opacity: 0; pointer-events: none; }
+.choice label:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--ground); }
+.choice label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.hidden { display: none !important; }
+.status { text-align: center; font-family: var(--display); font-size: var(--step-1); color: var(--accent-2); min-height: 1.7em; }
+
+.wishes { display: grid; gap: 1rem; margin-top: 2.4rem; grid-template-columns: repeat(auto-fill, minmax(15rem,1fr)); }
+.wish {
+  border: 1px solid var(--line); background: var(--ground-2);
+  padding: 1.2rem 1.3rem; display: grid; gap: .5rem;
+  animation: rise .6s cubic-bezier(.2,.8,.3,1) both;
+}
+.wish p { margin: 0; font-family: var(--display); font-size: var(--step-1); line-height: 1.6; text-wrap: pretty; }
+.wish cite { font-style: normal; font-size: var(--step--1); color: var(--accent-2); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+.wishes-empty { text-align: center; color: var(--ink-soft); margin-top: 2rem; }
+
+footer {
+  text-align: center; padding: var(--gap) var(--pad) calc(var(--gap) * .6);
+  border-top: 1px solid var(--line); display: grid; gap: .7rem; justify-items: center;
+}
+.hashtag { font-family: var(--display); font-size: var(--step-2); color: var(--accent); margin: 0; }
+footer small { color: var(--ink-soft); font-size: var(--step--1); }
+
+/* ═════════════════════════════════════════════════════════════════
+   Scroll reveals
+   ═════════════════════════════════════════════════════════════════ */
+
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 1s cubic-bezier(.2,.8,.3,1), transform 1s cubic-bezier(.2,.8,.3,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* images wipe up from their own base line */
+.wipe { clip-path: inset(0 0 100% 0); transition: clip-path 1.25s cubic-bezier(.25,.9,.25,1); }
+.wipe.in { clip-path: inset(0 0 0 0); }
+.wipe img { transform: scale(1.16); transition: transform 1.6s cubic-bezier(.25,.9,.25,1); }
+.wipe.in img { transform: scale(1); }
+
+/* headings arrive word by word */
+.w { display: inline-block; opacity: 0; transform: translateY(.5em); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.9,.3,1); }
+.in .w, .w.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+  .reveal, .w { opacity: 1; transform: none; }
+  .wipe { clip-path: none; }
+  .venue-stage { height: auto; }
+  .venue-pin { position: static; height: 70svh; }
+}
+</style>
+</head>
+<body>
+
+<span id="progress" aria-hidden="true"></span>
+
+<!-- ══ GATE ══════════════════════════════════════════════════════ -->
+<div id="gate">
+  <div class="gate-inner">
+    <p class="gate-bism" data-t="bism"></p>
+
+    <button class="envelope" id="envelope" aria-label="افتح الدعوة">
+      <span class="env-back paper"></span>
+
+      <span class="env-card paper">
+        <img src="assets/couple-hero.jpg" alt="" width="960" height="1200">
+        <span class="cap" data-t="gateCap"></span>
+      </span>
+
+      <span class="env-flap paper"></span>
+
+      <svg class="seal" viewBox="0 0 120 120" aria-hidden="true">
+        <defs>
+          <!-- the only thing the filter does is give the disc a poured,
+               hand-pressed outline; colour and depth are painted, which
+               keeps the wax saturated instead of washing it grey -->
+          <filter id="waxEdge" x="-35%" y="-35%" width="170%" height="170%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="2"
+                          seed="11" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="9"
+                               xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <!-- grayscale noise, clipped to whatever shape it is applied to -->
+          <filter id="grainF" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="3" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0" result="g"/>
+            <feComposite in="g" in2="SourceGraphic" operator="in"/>
+          </filter>
+          <filter id="soften" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+          <radialGradient id="waxG" cx="36%" cy="30%" r="80%">
+            <stop offset="0%"   stop-color="var(--seal-hi)"/>
+            <stop offset="55%"  stop-color="var(--seal-lo)"/>
+            <stop offset="100%" stop-color="var(--seal-lo)"/>
+          </radialGradient>
+          <!-- darkens the rim so the blob has depth -->
+          <radialGradient id="waxRim" cx="50%" cy="50%" r="50%">
+            <stop offset="60%"  stop-color="#000" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#000" stop-opacity=".45"/>
+          </radialGradient>
+          <!-- a jagged break, so the two halves read as broken, not cut -->
+          <clipPath id="clipL">
+            <path d="M0 0 H63 L57 15 L67 31 L55 48 L65 66 L56 84 L67 101 L58 120 H0 Z"/>
+          </clipPath>
+          <clipPath id="clipR">
+            <path d="M63 0 H120 V120 H58 L67 101 L56 84 L65 66 L55 48 L67 31 L57 15 Z"/>
+          </clipPath>
+        </defs>
+
+        <symbol id="waxBlob" viewBox="0 0 120 120">
+          <g filter="url(#waxEdge)">
+            <circle cx="60" cy="60" r="45" fill="url(#waxG)"/>
+            <circle cx="60" cy="60" r="45" fill="url(#waxRim)"/>
+            <circle cx="60" cy="60" r="45" filter="url(#grainF)" opacity=".14"/>
+            <ellipse cx="45" cy="38" rx="19" ry="13" fill="#fff"
+                     opacity=".22" filter="url(#soften)"/>
+            <circle cx="60" cy="60" r="34" fill="none" stroke="var(--seal-lo)"
+                    stroke-width="1.6" opacity=".55"/>
+          </g>
+        </symbol>
+
+        <g class="half half-l" clip-path="url(#clipL)">
+          <use href="#waxBlob" x="0" y="0" width="120" height="120"/>
+        </g>
+        <g class="half half-r" clip-path="url(#clipR)">
+          <use href="#waxBlob" x="0" y="0" width="120" height="120"/>
+        </g>
+
+        <text class="mono" id="sealMono" x="60" y="61" text-anchor="middle"
+              dominant-baseline="central" fill="var(--seal-ink)"
+              style="font-family:var(--display);font-size:25px;letter-spacing:.02em;
+                     opacity:.9;filter:drop-shadow(0 1.5px 1px rgba(0,0,0,.5))"></text>
+      </svg>
+    </button>
+
+    <p class="gate-hint" data-t="gateHint"></p>
+  </div>
+</div>
+
+<div class="switcher" role="group" aria-label="خيارات العرض">
+  <button class="lang-btn" id="langBtn" type="button"></button>
+  <span aria-hidden="true" style="width:1px;height:17px;background:var(--line)"></span>
+  <span class="skins" id="skins"></span>
+</div>
+
+<main id="page">
+
+  <!-- ══ HERO ═══════════════════════════════════════════════════ -->
+  <header class="hero">
+    <canvas id="dust" aria-hidden="true"></canvas>
+
+    <p class="bism reveal" data-t="bism"></p>
+
+    <div class="arch hero-photo wipe" id="heroPhoto">
+      <img src="assets/couple-hero.jpg" alt="" width="960" height="1200">
+    </div>
+
+    <p class="kicker reveal" data-t="kicker"></p>
+
+    <h1 class="names reveal" id="names">
+      <span id="nBride"></span>
+      <span class="amp" data-t="amp"></span>
+      <span id="nGroom"></span>
+    </h1>
+
+    <div class="orn reveal"><i></i></div>
+    <p class="hero-date reveal" id="heroDate"></p>
+
+    <div class="count reveal" id="count">
+      <div><b id="cd">٠</b><span data-t="days"></span></div>
+      <div><b id="ch">٠</b><span data-t="hours"></span></div>
+      <div><b id="cm">٠</b><span data-t="mins"></span></div>
+      <div><b id="cs">٠</b><span data-t="secs"></span></div>
+    </div>
+
+    <span class="scroll-cue" aria-hidden="true"></span>
+  </header>
+
+  <!-- ══ THE VERSE ══════════════════════════════════════════════ -->
+  <section class="ayah-sec">
+    <div class="wrap">
+      <p class="ayah reveal" data-t="ayah"></p>
+      <p class="ayah-src reveal" data-t="ayahSrc"></p>
+    </div>
+  </section>
+
+  <!-- ══ WELCOME ════════════════════════════════════════════════ -->
+  <section id="welcome">
+    <div class="wrap story">
+      <div class="arch wipe">
+        <img src="assets/couple-story.jpg" alt="" width="880" height="1100">
+      </div>
+      <div class="txt reveal">
+        <p class="eyebrow" data-t="welcomeEyebrow"></p>
+        <h2 data-split data-t="welcomeTitle"></h2>
+        <div class="orn"><i></i></div>
+        <p class="lede" data-t="welcomeBody"></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="flute" aria-hidden="true"></div>
+
+  <!-- ══ DETAILS ════════════════════════════════════════════════ -->
+  <section id="details">
+    <div class="wrap">
+      <p class="eyebrow reveal" data-t="detailsEyebrow"></p>
+      <h2 class="reveal" data-split data-t="detailsTitle"></h2>
+      <div class="cards">
+        <div class="card reveal">
+          <span class="k" data-t="kWhen"></span>
+          <span class="v" id="cardDate"></span>
+          <span class="n" id="cardDay"></span>
+        </div>
+        <div class="card reveal">
+          <span class="k" data-t="kTime"></span>
+          <span class="v" id="cardTime"></span>
+          <span class="n" data-t="timeNote"></span>
+        </div>
+        <div class="card reveal">
+          <span class="k" data-t="kDress"></span>
+          <span class="v" data-t="dressValue"></span>
+          <span class="n" data-t="dressNote"></span>
+        </div>
+      </div>
+      <div class="btn-row reveal">
+        <button class="btn" id="calBtn" type="button" data-t="addToCalendar"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ VENUE ══════════════════════════════════════════════════ -->
+  <div class="venue-stage" id="venueStage">
+    <div class="venue-pin">
+      <img id="venueImg" src="assets/venue-main.jpg" alt="" width="1320" height="901">
+      <span class="venue-veil" aria-hidden="true"></span>
+      <div class="venue-copy">
+        <p class="eyebrow" data-t="venueEyebrow"></p>
+        <h2 id="venueName"></h2>
+        <div class="orn"><i></i></div>
+        <p class="lede" id="venueAddress"></p>
+        <div class="btn-row">
+          <a class="btn" id="mapBtn" href="#" target="_blank" rel="noopener" data-t="openMap"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RSVP ═══════════════════════════════════════════════════ -->
+  <section id="rsvp">
+    <div class="wrap">
+      <p class="eyebrow reveal" data-t="rsvpEyebrow"></p>
+      <h2 class="reveal" data-split data-t="rsvpTitle"></h2>
+      <p class="lede reveal" data-t="rsvpBody"></p>
+
+      <form class="form reveal" id="rsvpForm" novalidate>
+        <div class="field">
+          <label for="rName" data-t="fName"></label>
+          <input type="text" id="rName" name="name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label data-t="fAttending"></label>
+          <div class="choice">
+            <label><input type="radio" name="attending" value="yes" checked><span data-t="optYes"></span></label>
+            <label><input type="radio" name="attending" value="no"><span data-t="optNo"></span></label>
+          </div>
+        </div>
+        <div class="field" id="guestsField">
+          <label for="rGuests" data-t="fGuests"></label>
+          <select id="rGuests" name="guests">
+            <option>0</option><option>1</option><option>2</option>
+            <option>3</option><option>4</option><option>5+</option>
+          </select>
+        </div>
+        <div class="field" id="namesField">
+          <label for="rNames" data-t="fGuestNames"></label>
+          <textarea id="rNames" name="guestNames" rows="2"></textarea>
+        </div>
+        <div class="field">
+          <label for="rPhone" data-t="fPhone"></label>
+          <input type="tel" id="rPhone" name="phone" autocomplete="tel" inputmode="tel">
+        </div>
+        <button class="btn" type="submit" id="rsvpSubmit" data-t="sendRsvp"></button>
+        <p class="status" id="rsvpStatus" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <div class="flute" aria-hidden="true"></div>
+
+  <!-- ══ GUESTBOOK ══════════════════════════════════════════════ -->
+  <section id="guestbook">
+    <div class="wrap">
+      <p class="eyebrow reveal" data-t="wishEyebrow"></p>
+      <h2 class="reveal" data-split data-t="wishTitle"></h2>
+      <p class="lede reveal" data-t="wishBody"></p>
+
+      <form class="form reveal" id="wishForm" novalidate>
+        <div class="field">
+          <label for="wName" data-t="fName"></label>
+          <input type="text" id="wName" name="name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="wMsg" data-t="fMessage"></label>
+          <textarea id="wMsg" name="message" rows="3"></textarea>
+        </div>
+        <button class="btn" type="submit" id="wishSubmit" data-t="sendWish"></button>
+        <p class="status" id="wishStatus" role="status"></p>
+      </form>
+
+      <div class="wishes" id="wishList"></div>
+      <p class="wishes-empty hidden" id="wishEmpty" data-t="noWishes"></p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="orn"><i></i></div>
+    <p class="hashtag" id="hashtag"></p>
+    <small data-t="footerNote"></small>
+  </footer>
+
+</main>
+
+<script>
+/* ═════════════════════════════════════════════════════════════════
+   CONFIG — the only block you need to edit.
+   ═════════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  bride: { ar: "هايدي", en: "Haidy" },
+  groom: { ar: "خالد",  en: "Khaled" },
+
+  /* pressed into the wax seal */
+  monogram: { ar: "هـ خ", en: "H K" },
+
+  /* venue local time — Friday 19 September 2026, 7pm to 2am */
+  startsAt: "2026-09-19T19:00:00",
+  endsAt:   "2026-09-20T02:00:00",
+
+  venue: {
+    name:    { ar: "قاعة كابيتال", en: "Capital" },
+    address: { ar: "طلخا، محافظة الدقهلية", en: "Talkha, Dakahlia Governorate" }
+  },
+
+  /* Drops a pin on the hall so every guest routes from where they are. */
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=31.0549652%2C31.3933104",
+
+  /* Optional. Only used when `endpoint` is empty: the RSVP then arrives
+     as a WhatsApp message instead. Digits only, e.g. "201001234567". */
+  whatsapp: "",
+
+  /* Google Apps Script /exec URL — see SETUP.md. */
+  endpoint: "",
+
+  hashtag: "#هايدي_وخالد",
+
+  defaultLang: "ar",
+  /* classic | arabesque | floral | blush | minimal */
+  defaultSkin: "classic"
+};
+
+/* ═════════════════════════════════════════════════════════════════
+   WORDING — Egyptian Arabic, and English.
+   ═════════════════════════════════════════════════════════════════ */
+const T = {
+  ar: {
+    bism: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ",
+    gateCap: "حفل زفاف",
+    gateHint: "دوس على الختم تفتح الدعوة",
+
+    kicker: "حفل زفاف",
+    amp: "و",
+    days: "يوم", hours: "ساعة", mins: "دقيقة", secs: "ثانية",
+
+    ayah: "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    ayahSrc: "سورة الروم — الآية ٢١",
+
+    welcomeEyebrow: "أهلاً بيكم",
+    welcomeTitle: "نورتوا فرحنا",
+    welcomeBody: "بكل فرحة وسعادة، بندعوكم تشاركونا أحلى يوم في حياتنا. " +
+                 "وجودكم معانا هو أغلى هدية، وفرحتنا مش هتكمل من غيركم.",
+
+    detailsEyebrow: "التفاصيل",
+    detailsTitle: "ميعاد الفرح",
+    kWhen: "التاريخ", kTime: "الميعاد", kDress: "الزي",
+    timeNote: "الاستقبال من ٧ بالليل",
+    dressValue: "أناقة رسمية",
+    dressNote: "نورونا بأحلى إطلالة",
+    addToCalendar: "ضيف الميعاد للتقويم",
+
+    venueEyebrow: "المكان",
+    openMap: "افتح الخريطة",
+
+    rsvpEyebrow: "تأكيد الحضور",
+    rsvpTitle: "هتشرفونا؟",
+    rsvpBody: "أكدولنا حضوركم عشان نجهزلكم مكانكم على أصوله.",
+    fName: "الاسم",
+    fAttending: "هتحضروا؟",
+    optYes: "إن شاء الله هحضر",
+    optNo: "للأسف مش هقدر",
+    fGuests: "عدد المرافقين",
+    fGuestNames: "أسماء المرافقين (اختياري)",
+    fPhone: "رقم الموبايل (اختياري)",
+    sendRsvp: "ابعت التأكيد",
+    rsvpOkYes: "نورتونا، مستنينكم!",
+    rsvpOkNo: "شكراً إنك قلتلنا، هتوحشنا.",
+    rsvpNeedName: "اكتب اسمك الأول من فضلك.",
+    sending: "بنبعت…",
+    sendFailed: "معرفناش نبعت، جرب تاني من فضلك.",
+
+    wishEyebrow: "دفتر التهاني",
+    wishTitle: "اكتبلنا كلمة حلوة",
+    wishBody: "سيبلنا تهنئة أو ذكرى، هنحتفظ بيها للأبد.",
+    fMessage: "رسالتك",
+    sendWish: "ابعت التهنئة",
+    wishOk: "شكراً من قلبنا على كلامك الجميل.",
+    wishNeed: "اكتب اسمك ورسالتك من فضلك.",
+    noWishes: "كن أول واحد يسيبلنا كلمة.",
+
+    footerNote: "مستنينكم",
+    waIntro: "تأكيد حضور"
+  },
+  en: {
+    bism: "In the name of God, the Most Gracious, the Most Merciful",
+    gateCap: "Wedding",
+    gateHint: "Tap the seal to open",
+
+    kicker: "The wedding of",
+    amp: "&",
+    days: "Days", hours: "Hours", mins: "Minutes", secs: "Seconds",
+
+    ayah: "And among His signs is that He created for you mates from among yourselves, " +
+          "that you may find tranquillity in them, and He placed between you affection and mercy.",
+    ayahSrc: "Ar-Rum — 21",
+
+    welcomeEyebrow: "Welcome",
+    welcomeTitle: "You light up our day",
+    welcomeBody: "With all our joy, we invite you to share the happiest day of our lives. " +
+                 "Your presence is the greatest gift, and our celebration is not complete without you.",
+
+    detailsEyebrow: "The details",
+    detailsTitle: "When and how",
+    kWhen: "Date", kTime: "Time", kDress: "Dress code",
+    timeNote: "Reception opens at seven",
+    dressValue: "Formal elegant",
+    dressNote: "Come as your finest",
+    addToCalendar: "Add to calendar",
+
+    venueEyebrow: "The venue",
+    openMap: "Open in maps",
+
+    rsvpEyebrow: "RSVP",
+    rsvpTitle: "Will you join us?",
+    rsvpBody: "Let us know so we can set your place exactly as it should be.",
+    fName: "Your name",
+    fAttending: "Will you attend?",
+    optYes: "Joyfully accept",
+    optNo: "Regretfully decline",
+    fGuests: "Companions",
+    fGuestNames: "Companion names (optional)",
+    fPhone: "Phone (optional)",
+    sendRsvp: "Send RSVP",
+    rsvpOkYes: "Wonderful — we can't wait to see you.",
+    rsvpOkNo: "Thank you for telling us. You'll be missed.",
+    rsvpNeedName: "Please add your name first.",
+    sending: "Sending…",
+    sendFailed: "That didn't send. Please try once more.",
+
+    wishEyebrow: "Guestbook",
+    wishTitle: "Leave us a word",
+    wishBody: "Write a wish or a memory. We'll keep it for good.",
+    fMessage: "Your message",
+    sendWish: "Send your wish",
+    wishOk: "Thank you, truly, for your words.",
+    wishNeed: "Please add your name and a message.",
+    noWishes: "Be the first to leave a word.",
+
+    footerNote: "We'll be waiting for you",
+    waIntro: "RSVP"
+  }
+};
+
+/* ═════════════════════════════════════════════════════════════════
+   Runtime
+   ═════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  const root   = document.documentElement;
+  const $      = (s, c) => (c || document).querySelector(s);
+  const $$     = (s, c) => Array.from((c || document).querySelectorAll(s));
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const START = new Date(CONFIG.startsAt);
+  const END   = new Date(CONFIG.endsAt);
+
+  let lang = CONFIG.defaultLang === "en" ? "en" : "ar";
+  let skin = CONFIG.defaultSkin || "classic";
+
+  const locale = () => (lang === "ar" ? "ar-EG" : "en-GB");
+  const num    = n => Number(n).toLocaleString(locale());
+
+  const KEY = { rsvp: "hk.rsvp.v1", wish: "hk.wishes.v1" };
+  const store = {
+    read(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch (e) { return []; } },
+    push(k, v) {
+      const list = store.read(k); list.push(v);
+      try { localStorage.setItem(k, JSON.stringify(list)); } catch (e) {}
+      return list;
+    }
+  };
+
+  /* ── words, split for the staggered heading reveal ─────────────── */
+  function setSplit(el, text) {
+    el.textContent = "";
+    text.split(" ").forEach((word, i) => {
+      const s = document.createElement("span");
+      s.className = "w";
+      s.textContent = word;
+      s.style.transitionDelay = i * 55 + "ms";
+      el.append(s, document.createTextNode(" "));
+    });
+    if (el.classList.contains("in") || !el.classList.contains("reveal")) {
+      requestAnimationFrame(() => $$(".w", el).forEach(w => w.classList.add("in")));
+    }
+  }
+
+  /* ── language ──────────────────────────────────────────────────── */
+  function applyLang(next) {
+    lang = next;
+    root.lang = lang;
+    root.dir  = lang === "ar" ? "rtl" : "ltr";
+    root.dataset.lang = lang;
+
+    const t = T[lang];
+    $$("[data-t]").forEach(el => {
+      const v = t[el.dataset.t];
+      if (v === undefined) return;
+      if (el.hasAttribute("data-split")) setSplit(el, v);
+      else el.textContent = v;
+    });
+
+    $("#nBride").textContent   = CONFIG.bride[lang];
+    $("#nGroom").textContent   = CONFIG.groom[lang];
+    $("#sealMono").textContent = CONFIG.monogram[lang];
+    $("#venueName").textContent    = CONFIG.venue.name[lang];
+    $("#venueAddress").textContent = CONFIG.venue.address[lang];
+    $("#hashtag").textContent      = CONFIG.hashtag;
+
+    $("#langBtn").textContent = lang === "ar" ? "EN" : "ع";
+    $("#langBtn").setAttribute("aria-label",
+      lang === "ar" ? "Switch to English" : "التبديل إلى العربية");
+    $("#envelope").setAttribute("aria-label", lang === "ar" ? "افتح الدعوة" : "Open the invitation");
+
+    const L = locale();
+    const dateOpts = { day: "numeric", month: "long", year: "numeric" };
+    $("#heroDate").textContent = START.toLocaleDateString(L, dateOpts);
+    $("#cardDate").textContent = START.toLocaleDateString(L, dateOpts);
+    $("#cardDay").textContent  = START.toLocaleDateString(L, { weekday: "long" });
+
+    const tm = d => d.toLocaleTimeString(L, { hour: "numeric", minute: "2-digit" });
+    $("#cardTime").textContent = tm(START) + " – " + tm(END);
+
+    renderWishes();
+    tick();
+  }
+
+  function applySkin(next) {
+    skin = next;
+    root.dataset.skin = skin;
+    $$(".skin-dot").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.sw === skin)));
+    const bg = getComputedStyle(root).getPropertyValue("--ground").trim();
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta && bg) meta.setAttribute("content", bg);
+  }
+
+  ["classic", "arabesque", "floral", "blush", "minimal"].forEach(name => {
+    const b = document.createElement("button");
+    b.className = "skin-dot"; b.type = "button"; b.dataset.sw = name;
+    b.setAttribute("aria-label", name);
+    b.addEventListener("click", () => applySkin(name));
+    $("#skins").appendChild(b);
+  });
+  $("#langBtn").addEventListener("click", () => applyLang(lang === "ar" ? "en" : "ar"));
+
+  /* ── countdown ─────────────────────────────────────────────────── */
+  function tick() {
+    const ms = START - new Date();
+    const box = $("#count");
+    if (ms <= 0) { box.style.visibility = "hidden"; return; }
+    box.style.visibility = "visible";
+    const s = Math.floor(ms / 1000);
+    $("#cd").textContent = num(Math.floor(s / 86400));
+    $("#ch").textContent = num(Math.floor(s / 3600) % 24);
+    $("#cm").textContent = num(Math.floor(s / 60) % 60);
+    $("#cs").textContent = num(s % 60);
+  }
+  setInterval(tick, 1000);
+
+  $("#mapBtn").href = CONFIG.mapUrl;
+
+  /* ── reveals ───────────────────────────────────────────────────── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("in");
+      $$(".w", e.target).forEach(w => w.classList.add("in"));
+      io.unobserve(e.target);
+    });
+  }, { threshold: .14, rootMargin: "0px 0px -6% 0px" });
+
+  function observeAll() {
+    $$(".reveal, .wipe").forEach((el, i) => {
+      if (!el.dataset.delayed) {
+        el.style.transitionDelay = Math.min(i % 5, 4) * 80 + "ms";
+        el.dataset.delayed = "1";
+      }
+      io.observe(el);
+    });
+  }
+
+  /* ── scroll: progress, hero parallax, venue zoom ───────────────── */
+  function scrollFx() {
+    if (reduce) return;
+    const bar   = $("#progress");
+    const hero  = $(".hero");
+    const photo = $("#heroPhoto");
+    const names = $("#names");
+    const stage = $("#venueStage");
+    const vimg  = $("#venueImg");
+    let ticking = false;
+
+    function frame() {
+      const y   = scrollY;
+      const max = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
+
+      const hh = hero.offsetHeight;
+      if (y < hh) {
+        const p = y / hh;
+        photo.style.transform = "translateY(" + (y * .22) + "px) scale(" + (1 - p * .06) + ")";
+        names.style.transform = "translateY(" + (y * .1) + "px)";
+        hero.style.opacity    = String(Math.max(0, 1 - p * 1.25));
+      }
+
+      const r = stage.getBoundingClientRect();
+      const span = r.height - innerHeight;
+      if (span > 0 && r.top <= 0 && r.bottom >= 0) {
+        const p = Math.min(1, Math.max(0, -r.top / span));
+        vimg.style.transform = "scale(" + (1.28 - p * .28) + ")";
+      }
+      ticking = false;
+    }
+
+    addEventListener("scroll", () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(frame); }
+    }, { passive: true });
+    frame();
+  }
+
+  /* ── gold dust ─────────────────────────────────────────────────── */
+  function dust() {
+    if (reduce) return;
+    const cv = $("#dust"), ctx = cv.getContext("2d"), host = cv.parentElement;
+    let w, h, motes = [], raf = 0;
+
+    function size() {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      w = host.clientWidth; h = host.clientHeight;
+      cv.width = w * dpr; cv.height = h * dpr;
+      cv.style.width = w + "px"; cv.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      motes = Array.from({ length: Math.round(Math.min(w, 760) / 13) }, () => ({
+        x: Math.random() * w, y: Math.random() * h,
+        r: Math.random() * 1.5 + .35, v: Math.random() * .22 + .05,
+        d: Math.random() * Math.PI * 2, a: Math.random() * .45 + .12
+      }));
+    }
+    function frame() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = getComputedStyle(root).getPropertyValue("--accent").trim() || "#B4893C";
+      motes.forEach(m => {
+        m.y -= m.v; m.d += .008; m.x += Math.sin(m.d) * .28;
+        if (m.y < -6) { m.y = h + 6; m.x = Math.random() * w; }
+        ctx.globalAlpha = m.a;
+        ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(frame);
+    }
+    size();
+    addEventListener("resize", size, { passive: true });
+    frame();
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { if (!raf) frame(); }
+      else { cancelAnimationFrame(raf); raf = 0; }
+    }, { threshold: 0 }).observe(host);
+  }
+
+  /* ── the gate ──────────────────────────────────────────────────── */
+  const env = $("#envelope");
+
+  function openGate() {
+    if (env.classList.contains("opening")) return;
+    env.classList.add("pressing");
+
+    setTimeout(() => {
+      env.classList.remove("pressing");
+      env.classList.add("opening");           // seal cracks, flap folds back
+    }, 170);
+
+    setTimeout(() => env.classList.add("gone"), reduce ? 0 : 1900);
+
+    setTimeout(() => {
+      $("#gate").classList.add("done");
+      document.body.classList.remove("locked");
+      document.body.classList.add("open");
+      observeAll();
+      scrollFx();
+      dust();
+      setTimeout(() => $("#gate").remove(), 1400);
+    }, reduce ? 0 : 2050);
+  }
+  env.addEventListener("click", openGate);
+
+  /* ── sending ───────────────────────────────────────────────────── */
+  async function post(payload) {
+    if (!CONFIG.endpoint) return "local";
+    await fetch(CONFIG.endpoint, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    return "sent";
+  }
+
+  /* ── RSVP ──────────────────────────────────────────────────────── */
+  const rsvpForm = $("#rsvpForm");
+  function syncAttending() {
+    const yes = rsvpForm.attending.value === "yes";
+    $("#guestsField").classList.toggle("hidden", !yes);
+    $("#namesField").classList.toggle("hidden", !yes);
+  }
+  $$("input[name='attending']", rsvpForm).forEach(r => r.addEventListener("change", syncAttending));
+  syncAttending();
+
+  rsvpForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const t = T[lang], status = $("#rsvpStatus");
+    const name = $("#rName").value.trim();
+    if (!name) { status.textContent = t.rsvpNeedName; $("#rName").focus(); return; }
+
+    const attending = rsvpForm.attending.value;
+    const entry = {
+      type: "rsvp", name, attending,
+      guests: attending === "yes" ? $("#rGuests").value : "0",
+      guestNames: attending === "yes" ? $("#rNames").value.trim() : "",
+      phone: $("#rPhone").value.trim(),
+      lang, at: new Date().toISOString()
+    };
+
+    const btn = $("#rsvpSubmit");
+    btn.disabled = true; status.textContent = t.sending;
+    try {
+      const mode = await post(entry);
+      store.push(KEY.rsvp, entry);
+      status.textContent = attending === "yes" ? t.rsvpOkYes : t.rsvpOkNo;
+      rsvpForm.reset(); syncAttending();
+
+      if (mode === "local" && CONFIG.whatsapp) {
+        const msg = t.waIntro + ": " + entry.name + " — " +
+          (attending === "yes" ? t.optYes : t.optNo) +
+          (entry.guests !== "0" ? " (+" + entry.guests + ")" : "") +
+          (entry.phone ? " — " + entry.phone : "");
+        open("https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
+      }
+    } catch (err) {
+      status.textContent = t.sendFailed;
+    } finally { btn.disabled = false; }
+  });
+
+  /* ── guestbook ─────────────────────────────────────────────────── */
+  function renderWishes(list) {
+    const items = list || store.read(KEY.wish);
+    const box = $("#wishList");
+    box.textContent = "";
+    $("#wishEmpty").classList.toggle("hidden", items.length > 0);
+    items.slice().reverse().forEach((w, i) => {
+      const el = document.createElement("article");
+      el.className = "wish";
+      el.style.animationDelay = Math.min(i, 8) * 60 + "ms";
+      const p = document.createElement("p");
+      p.textContent = "“" + w.message + "”";
+      const c = document.createElement("cite");
+      c.textContent = "— " + w.name;
+      el.append(p, c);
+      box.appendChild(el);
+    });
+  }
+
+  $("#wishForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const t = T[lang], status = $("#wishStatus");
+    const name = $("#wName").value.trim(), message = $("#wMsg").value.trim();
+    if (!name || !message) { status.textContent = t.wishNeed; return; }
+
+    const entry = { type: "wish", name, message, lang, at: new Date().toISOString() };
+    const btn = $("#wishSubmit");
+    btn.disabled = true; status.textContent = t.sending;
+    try {
+      await post(entry);
+      renderWishes(store.push(KEY.wish, entry));
+      status.textContent = t.wishOk;
+      e.target.reset();
+    } catch (err) {
+      status.textContent = t.sendFailed;
+    } finally { btn.disabled = false; }
+  });
+
+  async function loadWishes() {
+    if (!CONFIG.endpoint) return;
+    try {
+      const res = await fetch(CONFIG.endpoint + "?type=wish");
+      const remote = await res.json();
+      if (Array.isArray(remote) && remote.length) renderWishes(remote);
+    } catch (e) {}
+  }
+
+  /* ── add to calendar ───────────────────────────────────────────── */
+  const stamp = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+
+  $("#calBtn").addEventListener("click", async () => {
+    const title = CONFIG.bride[lang] + " " + T[lang].amp + " " + CONFIG.groom[lang];
+    const ics = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//wedding//invitation//EN",
+      "BEGIN:VEVENT",
+      "UID:" + stamp(START) + "@wedding",
+      "DTSTAMP:" + stamp(new Date()),
+      "DTSTART:" + stamp(START),
+      "DTEND:" + stamp(END),
+      "SUMMARY:" + title,
+      "LOCATION:" + CONFIG.venue.name[lang] + ", " + CONFIG.venue.address[lang],
+      "END:VEVENT", "END:VCALENDAR"
+    ].join("\r\n");
+    const filename = "wedding.ics";
+
+    try {
+      if (window.claude && typeof window.claude.use === "function") {
+        const dl = await window.claude.use("downloads");
+        if (dl) { await dl.save({ filename, data: ics }); return; }
+      }
+    } catch (e) {}
+
+    const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  /* ── go ────────────────────────────────────────────────────────── */
+  document.body.classList.add("locked");
+  applySkin(skin);
+  applyLang(lang);
+  loadWishes();
+
+  if (reduce) {
+    $("#gate").classList.add("done");
+    document.body.classList.remove("locked");
+    document.body.classList.add("open");
+    $$(".reveal, .wipe").forEach(el => el.classList.add("in"));
+    $$(".w").forEach(w => w.classList.add("in"));
+    setTimeout(() => $("#gate").remove(), 50);
+  }
+})();
+</script>
+</body>
+</html>
