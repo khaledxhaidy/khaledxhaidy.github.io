@@ -1,0 +1,282 @@
+/* ═══════════════════════════════════════════════════════════════════
+   BASE — everything the four variants share: resets, layout
+   primitives, forms, guestbook, footer, chrome, reveal machinery.
+
+   A variant file owns: colour tokens, type, the hero composition,
+   the section rhythm, the ornament system, and the opening.
+   Nothing visual that a variant might want to change lives here.
+   ═══════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  /* embedded faces — see assets/fonts.css */
+  --f-quran:   Amiri, "Traditional Arabic", serif;
+  --f-ar-disp: Amiri, "Traditional Arabic", serif;
+  --f-ar-body: Cairo, "Segoe UI", Tahoma, sans-serif;
+  --f-la-disp: "Cormorant Garamond", Didot, Garamond, serif;
+  --f-la-body: Optima, Candara, "Gill Sans MT", "Segoe UI", system-ui, sans-serif;
+
+  --step--1: clamp(.8rem, .76rem + .2vw, .9rem);
+  --step-0:  clamp(1rem, .96rem + .2vw, 1.1rem);
+  --step-1:  clamp(1.2rem, 1.1rem + .5vw, 1.5rem);
+  --step-2:  clamp(1.65rem, 1.4rem + 1.1vw, 2.3rem);
+  --step-3:  clamp(2.2rem, 1.8rem + 2vw, 3.2rem);
+  --step-4:  clamp(3rem, 2.1rem + 4.4vw, 5.8rem);
+  --step-5:  clamp(3.6rem, 2.2rem + 6.5vw, 8rem);
+
+  --pad: clamp(1.25rem, 5vw, 2.5rem);
+  --gap: clamp(3rem, 9vw, 5.5rem);
+
+  --paper-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='170' height='170' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: var(--step-0);
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color .6s ease, color .6s ease;
+}
+body.locked { overflow: hidden; height: 100svh; }
+
+img { max-width: 100%; display: block; }
+h1, h2, h3 { font-weight: 400; margin: 0; }
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ── layout primitives ─────────────────────────────────────────── */
+
+.wrap { width: min(100% - (var(--pad) * 2), 46rem); margin-inline: auto; }
+.wrap-wide { width: min(100% - (var(--pad) * 2), 66rem); margin-inline: auto; }
+section { padding-block: var(--gap); }
+
+.eyebrow {
+  font-size: var(--step--1);
+  color: var(--accent-2);
+  margin: 0 0 1rem;
+  text-align: center;
+}
+:root[data-lang="en"] .eyebrow { letter-spacing: .32em; text-transform: uppercase; }
+
+h2 {
+  font-family: var(--display);
+  font-size: var(--step-2);
+  line-height: 1.35;
+  text-align: center;
+  text-wrap: balance;
+  margin-bottom: 1.3rem;
+}
+
+.lede {
+  max-width: 34rem;
+  margin-inline: auto;
+  text-align: center;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* The ambient canvas must never occupy a grid cell in the hero —
+   variants lay the hero out with grid, and a stray item breaks it. */
+#dust { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.hero-copy, .hero-media { position: relative; z-index: 1; }
+
+.paper { position: relative; background: linear-gradient(160deg, var(--paper-a), var(--paper-b)); }
+.paper::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: var(--paper-noise);
+  opacity: .16; mix-blend-mode: multiply; pointer-events: none;
+}
+
+/* ── countdown ─────────────────────────────────────────────────── */
+
+.count { display: flex; gap: clamp(.9rem, 4.5vw, 2.2rem); justify-content: center; }
+.count div { display: grid; gap: .1rem; min-width: 3.4rem; }
+.count b {
+  font-family: var(--display); font-size: var(--step-2); font-weight: 400;
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.count span { font-size: .74rem; color: var(--ink-soft); }
+:root[data-lang="en"] .count span { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; }
+
+/* ── detail cards ──────────────────────────────────────────────── */
+
+.cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); margin-top: 2rem; }
+.card {
+  border: 1px solid var(--line); background: var(--ground-2);
+  padding: 1.7rem 1.3rem; text-align: center;
+  display: grid; gap: .35rem; align-content: start; position: relative;
+}
+.card .k { font-size: var(--step--1); color: var(--accent-2); }
+:root[data-lang="en"] .card .k { letter-spacing: .22em; text-transform: uppercase; }
+.card .v { font-family: var(--display); font-size: var(--step-1); line-height: 1.4; }
+.card .n { font-size: var(--step--1); color: var(--ink-soft); }
+
+/* ── buttons ───────────────────────────────────────────────────── */
+
+.btn {
+  position: relative; z-index: 0; display: inline-block; cursor: pointer;
+  font-family: var(--body); font-size: var(--step-0);
+  padding: .9rem 2rem; border: 1px solid var(--accent);
+  background: none; color: var(--ink); text-decoration: none;
+  overflow: hidden; transition: color .35s ease;
+}
+:root[data-lang="en"] .btn { font-size: var(--step--1); letter-spacing: .2em; text-transform: uppercase; }
+.btn::after {
+  content: ""; position: absolute; inset: 0; background: var(--accent);
+  transform: scaleX(0); transform-origin: left center; z-index: -1;
+  transition: transform .45s cubic-bezier(.5, 0, .2, 1);
+}
+:root[dir="rtl"] .btn::after { transform-origin: right center; }
+.btn:hover { color: var(--btn-hover-ink, var(--ground)); }
+.btn:hover::after { transform: scaleX(1); }
+.btn[disabled] { opacity: .5; cursor: default; }
+.btn[disabled]:hover { color: var(--ink); }
+.btn[disabled]:hover::after { transform: scaleX(0); }
+.btn-row { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center; margin-top: 1.7rem; }
+
+/* ── forms ─────────────────────────────────────────────────────── */
+
+.form { display: grid; gap: 1.1rem; max-width: 32rem; margin: 2.2rem auto 0; }
+.field { display: grid; gap: .4rem; }
+.field > label { font-size: var(--step--1); color: var(--ink-soft); }
+:root[data-lang="en"] .field > label { letter-spacing: .16em; text-transform: uppercase; }
+
+input, textarea, select {
+  font-family: var(--body); font-size: var(--step-0); color: var(--ink);
+  background: var(--ground-2); border: 1px solid var(--line);
+  padding: .8rem .9rem; width: 100%; border-radius: var(--input-radius, 0);
+  transition: border-color .25s ease;
+}
+input:hover, textarea:hover, select:hover { border-color: var(--accent); }
+textarea { min-height: 6.5rem; resize: vertical; line-height: 1.7; }
+::placeholder { color: color-mix(in srgb, var(--ink-soft) 60%, transparent); }
+
+.choice { display: flex; gap: .7rem; flex-wrap: wrap; }
+.choice label {
+  position: relative; flex: 1 1 9rem; border: 1px solid var(--line);
+  background: var(--ground-2); padding: .8rem 1rem; text-align: center;
+  cursor: pointer; font-size: var(--step--1);
+  border-radius: var(--input-radius, 0);
+  transition: border-color .25s, background-color .25s, color .25s;
+}
+.choice input { position: absolute; opacity: 0; pointer-events: none; }
+.choice label:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--btn-hover-ink, var(--ground)); }
+.choice label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.hidden { display: none !important; }
+.status { text-align: center; font-family: var(--display); font-size: var(--step-1); color: var(--accent-2); min-height: 1.7em; }
+
+/* ── guestbook ─────────────────────────────────────────────────── */
+
+.wishes { display: grid; gap: 1rem; margin-top: 2.4rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+.wish {
+  border: 1px solid var(--line); background: var(--ground-2);
+  padding: 1.2rem 1.3rem; display: grid; gap: .5rem;
+  border-radius: var(--input-radius, 0);
+  animation: rise .6s cubic-bezier(.2, .8, .3, 1) both;
+}
+.wish p { margin: 0; font-family: var(--display); font-size: var(--step-1); line-height: 1.6; text-wrap: pretty; }
+.wish cite { font-style: normal; font-size: var(--step--1); color: var(--accent-2); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+.wishes-empty { text-align: center; color: var(--ink-soft); margin-top: 2rem; }
+
+/* ── footer ────────────────────────────────────────────────────── */
+
+footer {
+  text-align: center; padding: var(--gap) var(--pad) calc(var(--gap) * .6);
+  border-top: 1px solid var(--line); display: grid; gap: .7rem; justify-items: center;
+}
+.hashtag { font-family: var(--display); font-size: var(--step-2); color: var(--accent); margin: 0; }
+footer small { color: var(--ink-soft); font-size: var(--step--1); }
+
+/* ── chrome: progress bar + switcher ───────────────────────────── */
+
+#progress {
+  position: fixed; top: 0; inset-inline: 0; height: 2px; z-index: 70;
+  background: var(--accent); transform: scaleX(0); transform-origin: left center;
+  opacity: 0; transition: opacity .6s ease;
+}
+:root[dir="rtl"] #progress { transform-origin: right center; }
+body.open #progress { opacity: .85; }
+
+.switcher {
+  position: fixed; top: .75rem; inset-inline-end: .75rem; z-index: 60;
+  display: flex; align-items: center; gap: .5rem;
+  padding: .4rem .55rem; border-radius: 999px;
+  background: color-mix(in srgb, var(--ground) 80%, transparent);
+  border: 1px solid var(--line); backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px -14px var(--shadow);
+  opacity: 0; transform: translateY(-10px);
+  transition: opacity .7s ease .3s, transform .7s ease .3s;
+}
+body.open .switcher { opacity: 1; transform: none; }
+.lang-btn {
+  font: inherit; font-size: var(--step--1); font-family: var(--f-la-body);
+  letter-spacing: .1em; padding: .1rem .5rem; border: 0; background: none;
+  color: var(--ink-soft); cursor: pointer; border-radius: 999px;
+}
+.lang-btn:hover { color: var(--ink); }
+
+.variants { display: flex; gap: .3rem; }
+.v-dot {
+  width: 19px; height: 19px; border-radius: 50%; border: 1px solid var(--line);
+  cursor: pointer; padding: 0; position: relative; transition: transform .2s ease;
+}
+.v-dot:hover { transform: scale(1.15); }
+.v-dot[aria-pressed="true"]::after {
+  content: ""; position: absolute; inset: -4px;
+  border: 1px solid var(--accent); border-radius: 50%;
+}
+.v-dot[data-v="manuscript"] { background: linear-gradient(135deg, #FBF6EC 50%, #B4893C 50%); }
+.v-dot[data-v="arabesque"]  { background: linear-gradient(135deg, #0C3A31 50%, #CBA135 50%); }
+.v-dot[data-v="garden"]     { background: linear-gradient(135deg, #FBF4F1 50%, #C0857C 50%); }
+.v-dot[data-v="modern"]     { background: linear-gradient(135deg, #F2F2F0 50%, #16130F 50%); }
+
+/* ── openings: only the active variant's gate is in the DOM flow ── */
+
+.gate {
+  position: fixed; inset: 0; z-index: 100;
+  display: none; place-items: center;
+  background: var(--ground); padding: var(--pad);
+  transition: opacity 1s ease .35s, visibility 1s .35s;
+}
+.gate.done { opacity: 0; visibility: hidden; }
+.gate-hint {
+  font-size: var(--step--1); color: var(--ink-soft);
+  text-align: center; margin: 0; animation: breathe 2.8s ease-in-out infinite;
+}
+:root[data-lang="en"] .gate-hint { letter-spacing: .2em; text-transform: uppercase; }
+@keyframes breathe { 0%, 100% { opacity: .4 } 50% { opacity: 1 } }
+
+/* ── reveal machinery ──────────────────────────────────────────── */
+
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 1s cubic-bezier(.2,.8,.3,1), transform 1s cubic-bezier(.2,.8,.3,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+.wipe { clip-path: inset(0 0 100% 0); transition: clip-path 1.25s cubic-bezier(.25,.9,.25,1); }
+.wipe.in { clip-path: inset(0 0 0 0); }
+.wipe img { transform: scale(1.16); transition: transform 1.6s cubic-bezier(.25,.9,.25,1); }
+.wipe.in img { transform: scale(1); }
+
+.w { display: inline-block; opacity: 0; transform: translateY(.5em); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.9,.3,1); }
+.in .w, .w.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+  .reveal, .w { opacity: 1; transform: none; }
+  .wipe { clip-path: none; }
+}

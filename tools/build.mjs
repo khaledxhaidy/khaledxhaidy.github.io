@@ -1,7 +1,7 @@
-// Turns index.html into a single self-contained file:
-//   · assets/fonts.css folded into a <style>
-//   · every photo inlined as a data URI
-//   · the document wrapper stripped, since the preview host supplies its own
+// Folds the invitation into a single self-contained file:
+//   · every <link rel=stylesheet> replaced with the stylesheet itself
+//   · every image inlined as a data URI, in HTML src= and CSS url()
+//   · the document wrapper stripped, since the preview host supplies one
 //
 //   node tools/build.mjs
 //
@@ -16,40 +16,61 @@ const outPath = resolve(root, "dist", "invitation.html");
 
 let html = await readFile(resolve(root, "index.html"), "utf8");
 
-/* ── fonts ──────────────────────────────────────────────────────── */
-const fontsCss = await readFile(resolve(root, "assets", "fonts.css"), "utf8");
-const linkTag = /<link rel="stylesheet" href="assets\/fonts\.css">/;
-if (!linkTag.test(html)) throw new Error("fonts.css <link> not found in index.html");
-html = html.replace(linkTag, `<style>\n${fontsCss}\n</style>`);
+const MIME = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png",
+               webp: "image/webp", svg: "image/svg+xml", gif: "image/gif" };
 
-/* ── images ─────────────────────────────────────────────────────── */
-const refs = [...new Set([...html.matchAll(/src="(assets\/[^"]+)"/g)].map(m => m[1]))];
-let imgBytes = 0;
-for (const ref of refs) {
-  const bytes = await readFile(resolve(root, ref));
-  imgBytes += bytes.length;
-  html = html.replaceAll(`src="${ref}"`, `src="data:image/jpeg;base64,${bytes.toString("base64")}"`);
-  console.log(`  inlined ${ref.padEnd(26)} ${Math.round(bytes.length / 1024)} KB`);
+const cache = new Map();
+async function dataUri(relPath) {
+  if (cache.has(relPath)) return cache.get(relPath);
+  const bytes = await readFile(resolve(root, relPath));
+  const ext = relPath.split(".").pop().toLowerCase();
+  const uri = `data:${MIME[ext] || "application/octet-stream"};base64,${bytes.toString("base64")}`;
+  cache.set(relPath, uri);
+  console.log(`  ${relPath.padEnd(30)} ${Math.round(bytes.length / 1024)} KB`);
+  return uri;
+}
+
+/* ── stylesheets ────────────────────────────────────────────────── */
+const links = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)];
+if (!links.length) throw new Error("no stylesheet links found in index.html");
+
+for (const [tag, href] of links) {
+  let css = await readFile(resolve(root, href), "utf8");
+
+  // url(../assets/x) and url(assets/x) -> data URIs
+  const urls = [...new Set([...css.matchAll(/url\((?:'|")?((?:\.\.\/)?assets\/[^)'"]+)(?:'|")?\)/g)]
+    .map(m => m[1]))];
+  for (const u of urls) {
+    const rel = u.replace(/^\.\.\//, "");
+    css = css.replaceAll(u, await dataUri(rel));
+  }
+
+  html = html.replace(tag, `<style>\n/* ${href} */\n${css}\n</style>`);
+}
+
+/* ── images in markup ───────────────────────────────────────────── */
+const srcs = [...new Set([...html.matchAll(/src="(assets\/[^"]+)"/g)].map(m => m[1]))];
+for (const ref of srcs) {
+  html = html.replaceAll(`src="${ref}"`, `src="${await dataUri(ref)}"`);
 }
 html = html.replaceAll(' loading="lazy"', "");
 
-/* ── unwrap ─────────────────────────────────────────────────────── */
-// The preview host wraps the file in its own doctype/head/body, so the
-// tags here would nest a second document inside the first.
+/* ── unwrap the document ────────────────────────────────────────── */
 const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
 const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-if (!headMatch || !bodyMatch) throw new Error("Could not find <head> / <body> in index.html");
+if (!headMatch || !bodyMatch) throw new Error("could not find <head> / <body>");
 
-const head = headMatch[1]
-  .replace(/<meta[^>]*>\s*/gi, "")   // charset/viewport are the host's job
-  .trim();
+// The host supplies its own <html> element, so the variant and language
+// hooks that live on <html> have to be re-applied at runtime instead.
+const htmlAttrs = (html.match(/<html([^>]*)>/i) || [, ""])[1];
+const bootstrap = `<script>(function(){var a=${JSON.stringify(htmlAttrs.trim())};` +
+  `a.replace(/([\\w-]+)="([^"]*)"/g,function(m,k,v){document.documentElement.setAttribute(k,v);});})();</script>`;
 
-const out = `${head}\n\n${bodyMatch[1].trim()}\n`;
+const head = headMatch[1].replace(/<meta[^>]*>\s*/gi, "").trim();
+const out = `${head}\n\n${bootstrap}\n${bodyMatch[1].trim()}\n`;
 
 await mkdir(dirname(outPath), { recursive: true });
 await writeFile(outPath, out, "utf8");
 
-const kb = n => `${Math.round(n / 1024)} KB`;
-console.log(`\n  fonts  ${kb(Buffer.byteLength(fontsCss))} (css, already base64)`);
-console.log(`  photos ${kb(imgBytes)} raw`);
-console.log(`  -> dist/invitation.html  ${kb(Buffer.byteLength(out))}`);
+console.log(`\n  ${links.length} stylesheets, ${cache.size} images`);
+console.log(`  -> dist/invitation.html  ${Math.round(Buffer.byteLength(out) / 1024)} KB`);

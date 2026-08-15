@@ -1,0 +1,230 @@
+/* ═══════════════════════════════════════════════════════════════════
+   VARIANT · المخطوطة / MANUSCRIPT
+   Symmetric and centred, like a printed card. Arches lifted from the
+   venue's windows, column fluting as dividers, gold hairlines.
+   Opening: a wax-sealed envelope.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root[data-variant="manuscript"] {
+  --ground:   #FBF6EC;  --ground-2: #F4EBDA;
+  --ink:      #2B2620;  --ink-soft: #6E6353;
+  --accent:   #B4893C;  --accent-2: #8A6524;
+  --line:     #E0D3B9;
+  --seal:     #9B2C22;  --seal-ink: #F7E3C0;
+  --shadow:   rgba(60,44,20,.18);
+  --paper-a:  #FDFAF3;  --paper-b:  #EFE4CE;
+
+  --display: var(--f-ar-disp);
+  --body:    var(--f-ar-body);
+}
+:root[data-variant="manuscript"][data-lang="en"] {
+  --display: var(--f-la-disp);
+  --body:    var(--f-la-body);
+}
+
+/* ── hero: everything on one centred axis ──────────────────────── */
+
+[data-variant="manuscript"] .hero {
+  position: relative; min-height: 100svh;
+  display: grid; align-content: center; justify-items: center;
+  gap: 1rem; padding: calc(var(--gap) * .9) var(--pad);
+  text-align: center; overflow: hidden;
+}
+[data-variant="manuscript"] .hero-copy {
+  display: grid; justify-items: center; gap: .9rem;
+  position: relative; z-index: 1;
+}
+[data-variant="manuscript"] .hero-media { position: relative; z-index: 1; }
+
+[data-variant="manuscript"] .frame {
+  position: relative; overflow: hidden;
+  width: min(60vw, 14.5rem); aspect-ratio: 4/5;
+  border-radius: 50% 50% 6px 6px / 38% 38% 2% 2%;   /* the venue's arch */
+  box-shadow: 0 20px 55px -20px var(--shadow);
+  background: var(--ground-2);
+}
+[data-variant="manuscript"] .frame::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--line); pointer-events: none;
+}
+[data-variant="manuscript"] .frame img { width: 100%; height: 100%; object-fit: cover; }
+
+[data-variant="manuscript"] .bism {
+  font-family: var(--f-quran); font-size: var(--step-1);
+  color: var(--accent-2); margin: 0; line-height: 2;
+}
+[data-variant="manuscript"] .kicker { font-size: var(--step--1); color: var(--accent-2); margin: 0; }
+[data-variant="manuscript"] .names {
+  font-family: var(--display); font-size: var(--step-4);
+  line-height: 1.08; display: grid; gap: .04em;
+}
+[data-variant="manuscript"] .names .amp { font-size: .36em; color: var(--accent); line-height: 1; }
+[data-variant="manuscript"] .hero-date { color: var(--ink-soft); margin: 0; }
+
+/* ── ornament: hairline + diamond, and column fluting ──────────── */
+
+[data-variant="manuscript"] .orn {
+  display: flex; align-items: center; gap: .85rem; justify-content: center;
+  margin-block: 1.5rem; color: var(--accent);
+}
+[data-variant="manuscript"] .orn::before,
+[data-variant="manuscript"] .orn::after {
+  content: ""; height: 1px; width: min(22vw, 6rem);
+  background: linear-gradient(to right, transparent, var(--line), transparent);
+}
+[data-variant="manuscript"] .orn i {
+  width: 9px; height: 9px; border: 1px solid currentColor;
+  transform: rotate(45deg); position: relative;
+}
+[data-variant="manuscript"] .orn i::after {
+  content: ""; position: absolute; inset: 2px; background: currentColor; opacity: .55;
+}
+
+[data-variant="manuscript"] .rule {
+  display: block; height: 46px;
+  background-image: repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 9px);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+}
+
+/* ── the verse, on its own tinted band ─────────────────────────── */
+
+[data-variant="manuscript"] .ayah-sec { background: var(--ground-2); }
+[data-variant="manuscript"] .ayah {
+  font-family: var(--f-quran); font-size: var(--step-2);
+  line-height: 2.15; text-align: center; text-wrap: balance;
+  max-width: 32rem; margin-inline: auto;
+}
+[data-variant="manuscript"] .ayah-src { text-align: center; color: var(--accent-2); font-size: var(--step--1); margin: 1rem 0 0; }
+
+/* ── story: photo beside text ──────────────────────────────────── */
+
+[data-variant="manuscript"] .story { display: grid; gap: clamp(1.8rem, 5vw, 3rem); align-items: center; }
+[data-variant="manuscript"] .story .frame { width: 100%; aspect-ratio: 4/5; }
+@media (min-width: 46rem) {
+  [data-variant="manuscript"] .story { grid-template-columns: .85fr 1fr; }
+  [data-variant="manuscript"] .story .txt,
+  [data-variant="manuscript"] .story .txt h2,
+  [data-variant="manuscript"] .story .txt .eyebrow { text-align: start; }
+  [data-variant="manuscript"] .story .txt .lede { text-align: start; margin-inline: 0; }
+  [data-variant="manuscript"] .story .txt .orn { justify-content: start; }
+  [data-variant="manuscript"] .story .txt .orn::before { display: none; }
+}
+
+/* ── cards get a gold cap ──────────────────────────────────────── */
+
+[data-variant="manuscript"] .card::before {
+  content: ""; position: absolute; top: -1px; inset-inline: 24%;
+  height: 2px; background: var(--accent); opacity: .6;
+}
+
+/* ── venue: pinned photo, copy on a card ───────────────────────── */
+
+[data-variant="manuscript"] .venue-stage { position: relative; height: 190svh; }
+[data-variant="manuscript"] .venue-pin {
+  position: sticky; top: 0; height: 100svh;
+  display: grid; place-items: center; overflow: hidden;
+}
+[data-variant="manuscript"] .venue-pin img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; transform: scale(1.28); will-change: transform;
+}
+[data-variant="manuscript"] .venue-veil {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--ground) 42%, transparent),
+    color-mix(in srgb, var(--ground) 4%, transparent) 42%,
+    color-mix(in srgb, var(--ground) 52%, transparent));
+}
+[data-variant="manuscript"] .venue-copy {
+  position: relative; z-index: 2; text-align: center;
+  display: grid; justify-items: center; gap: .15rem;
+  width: min(100% - (var(--pad) * 2), 27rem);
+  padding: clamp(1.8rem, 5vw, 2.8rem) clamp(1.4rem, 4vw, 2.4rem);
+  background: color-mix(in srgb, var(--ground) 93%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: 0 28px 70px -30px var(--shadow);
+  backdrop-filter: blur(4px);
+}
+[data-variant="manuscript"] .venue-copy h2 { font-size: var(--step-3); margin-bottom: .3rem; }
+
+/* ═══ OPENING · a wax-sealed envelope ═══════════════════════════ */
+
+[data-variant="manuscript"] #gate-envelope { display: grid; }
+
+.env-wrap { display: grid; justify-items: center; gap: 1.8rem; position: relative; z-index: 1; }
+.env-bism {
+  font-family: var(--f-quran); font-size: var(--step-1);
+  color: var(--accent-2); margin: 0; text-align: center; line-height: 2;
+}
+
+.envelope {
+  --w: min(80vw, 22rem);
+  width: var(--w); height: calc(var(--w) * .68);
+  position: relative; cursor: pointer; border: 0; background: none; padding: 0;
+  perspective: 1200px;
+  transition: transform .8s cubic-bezier(.3,.8,.3,1), opacity .6s ease;
+}
+.envelope:hover { transform: translateY(-4px); }
+.envelope.gone { transform: translateY(60px) scale(.9); opacity: 0; }
+
+.env-back {
+  position: absolute; inset: 0; border: 1px solid var(--line);
+  box-shadow: 0 30px 70px -30px var(--shadow), 0 2px 6px -2px var(--shadow);
+}
+.env-back::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom right, transparent calc(50% - .5px), color-mix(in srgb, var(--line) 60%, transparent) 50%, transparent calc(50% + .5px)),
+    linear-gradient(to bottom left,  transparent calc(50% - .5px), color-mix(in srgb, var(--line) 60%, transparent) 50%, transparent calc(50% + .5px));
+  background-size: 50.5% 100%, 50.5% 100%;
+  background-position: left top, right top;
+  background-repeat: no-repeat;
+}
+
+.env-flap {
+  position: absolute; inset-inline: 0; top: 0; height: 64%;
+  border: 1px solid var(--line);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center; transform: rotateX(0deg);
+  transition: transform 1.15s cubic-bezier(.55,-.2,.25,1.15);
+  z-index: 3; backface-visibility: hidden; filter: brightness(1.02);
+}
+.envelope.opening .env-flap { transform: rotateX(-176deg); }
+
+.env-card {
+  position: absolute; inset-inline: 7%; top: 9%; height: 82%;
+  border: 1px solid var(--line); z-index: 4;
+  display: grid; grid-template-rows: 1fr auto; overflow: hidden;
+  opacity: 0; transform: translateY(4%);
+  box-shadow: 0 12px 34px -16px var(--shadow);
+  transition: transform 1.1s cubic-bezier(.25,.9,.3,1) .45s, opacity .35s ease .45s;
+}
+.envelope.opening .env-card { opacity: 1; transform: translateY(-58%); }
+.env-card img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+.env-card .cap {
+  padding: .5rem .6rem .7rem; text-align: center;
+  font-family: var(--display); font-size: var(--step--1);
+  color: var(--ink); background: var(--paper-a);
+}
+
+/* A photograph of a real wax seal, already engraved with the couple's
+   Kh monogram — so no lettering is drawn over it. */
+.seal {
+  position: absolute; top: 45%; left: 50%; translate: -50% 0;
+  width: clamp(84px, 24vw, 112px); aspect-ratio: 1; z-index: 6;
+  display: grid; place-items: center;
+  transition: transform .45s cubic-bezier(.3,1.4,.5,1);
+  filter: drop-shadow(0 6px 10px rgba(60,20,14,.42));
+}
+.envelope:hover .seal { transform: translate(-50%, -2px) scale(1.05); }
+.envelope.pressing .seal { transform: translate(-50%, 2px) scale(.93); }
+
+.seal-face {
+  position: absolute; inset: 0;
+  background: url(../assets/seal.png) center / contain no-repeat;
+  transition: transform 1.05s cubic-bezier(.4,0,.25,1), opacity .9s ease .2s;
+}
+.seal-mono { display: none; }
+
+.envelope.opening .seal-face { transform: translateY(54px) rotate(-18deg) scale(.94); opacity: 0; }

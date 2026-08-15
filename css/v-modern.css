@@ -1,0 +1,196 @@
+/* ═══════════════════════════════════════════════════════════════════
+   VARIANT · الحديث / MODERN
+   Editorial and left-aligned. Split-screen hero, numbered sections,
+   heavy rules, no ornament at all. Type does the whole job: one
+   sans at extreme scale contrast.
+   Opening: a black curtain that wipes up off the names.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root[data-variant="modern"] {
+  --ground:   #F2F2F0;  --ground-2: #E7E7E3;
+  --ink:      #16130F;  --ink-soft: #6A6660;
+  --accent:   #16130F;  --accent-2: #8A7A5E;
+  --line:     #D3D2CC;
+  --shadow:   rgba(0,0,0,.16);
+  --paper-a:  #FAFAF8;  --paper-b:  #E4E4DF;
+  --btn-hover-ink: #F2F2F0;
+
+  /* Cairo covers both scripts, so the whole variant runs on one face */
+  --display: Cairo, "Segoe UI", system-ui, sans-serif;
+  --body:    Cairo, "Segoe UI", system-ui, sans-serif;
+}
+
+[data-variant="modern"] body { line-height: 1.65; }
+[data-variant="modern"] .eyebrow,
+[data-variant="modern"] .card .k,
+[data-variant="modern"] .field > label {
+  letter-spacing: .18em; text-transform: uppercase; font-size: .72rem;
+}
+[data-variant="modern"] h2 {
+  font-size: var(--step-3); text-align: start; letter-spacing: -.02em;
+  font-weight: 600; line-height: 1.05;
+}
+[data-variant="modern"] .eyebrow { text-align: start; }
+[data-variant="modern"] .lede { text-align: start; margin-inline: 0; max-width: 38rem; }
+
+/* no ornaments in this one — a rule instead */
+[data-variant="modern"] .orn {
+  display: block; height: 1px; background: var(--ink);
+  width: 100%; margin-block: 1.6rem; opacity: .85;
+}
+[data-variant="modern"] .orn i { display: none; }
+[data-variant="modern"] .rule { display: block; height: 1px; background: var(--line); }
+
+/* numbered sections — the order is real information here */
+[data-variant="modern"] section > .wrap,
+[data-variant="modern"] section > .wrap-wide { position: relative; }
+[data-variant="modern"] section[data-n] > .wrap::before {
+  content: attr(data-num); position: absolute; top: -.4rem; inset-inline-start: 0;
+  font-size: .72rem; letter-spacing: .18em; color: var(--accent-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── hero: split screen ────────────────────────────────────────── */
+
+[data-variant="modern"] .hero {
+  position: relative; min-height: 100svh; overflow: hidden;
+  display: grid; grid-template-columns: 1fr; align-content: center;
+  gap: 2rem; padding: calc(var(--gap) * .8) var(--pad);
+}
+[data-variant="modern"] .hero-copy {
+  display: grid; gap: .8rem; justify-items: start; text-align: start;
+  z-index: 2; align-content: center;
+}
+[data-variant="modern"] .hero-media { position: relative; z-index: 1; }
+[data-variant="modern"] .frame {
+  position: relative; overflow: hidden;
+  width: 100%; aspect-ratio: 4/5; border-radius: 0;
+  background: var(--ground-2);
+}
+[data-variant="modern"] .frame img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (min-width: 50rem) {
+  [data-variant="modern"] .hero {
+    grid-template-columns: 1fr 1fr; align-items: stretch; gap: 0;
+    padding: 0; min-height: 100svh;
+  }
+  /* both halves need explicit placement — with only the media placed,
+     auto-placement drops the copy into a second row */
+  [data-variant="modern"] .hero-copy {
+    grid-column: 1; grid-row: 1;
+    padding: var(--gap) clamp(2rem, 5vw, 4rem);
+    border-inline-end: 1px solid var(--line);
+  }
+  [data-variant="modern"] .hero-media { grid-column: 2; grid-row: 1; }
+  [data-variant="modern"] .frame { height: 100%; aspect-ratio: auto; }
+}
+
+[data-variant="modern"] .bism {
+  font-size: .8rem; color: var(--accent-2); margin: 0;
+  font-family: var(--f-quran); line-height: 2;
+}
+[data-variant="modern"] .kicker {
+  font-size: .72rem; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--accent-2); margin: 0;
+}
+[data-variant="modern"] .names {
+  font-family: var(--display); font-size: var(--step-4); font-weight: 600;
+  line-height: .92; letter-spacing: -.035em;
+  display: grid; gap: 0; justify-items: start;
+}
+[data-variant="modern"] .names .amp {
+  font-size: .26em; color: var(--accent-2); font-weight: 400;
+  letter-spacing: 0; margin-block: .35em;
+}
+[data-variant="modern"] .hero-date {
+  margin: 0; font-variant-numeric: tabular-nums;
+  font-size: var(--step-0); color: var(--ink-soft);
+}
+[data-variant="modern"] .count { justify-content: start; gap: 2rem; }
+[data-variant="modern"] .count b { font-weight: 600; letter-spacing: -.03em; }
+[data-variant="modern"] .count span { letter-spacing: .16em; text-transform: uppercase; font-size: .66rem; }
+
+/* ── verse: quiet, indented ────────────────────────────────────── */
+
+[data-variant="modern"] .ayah-sec { background: var(--ground); }
+[data-variant="modern"] .ayah {
+  font-family: var(--f-quran); font-size: var(--step-1);
+  line-height: 2.2; text-align: start; max-width: 36rem;
+  margin: 0; padding-inline-start: 1.4rem;
+  border-inline-start: 2px solid var(--ink);
+}
+[data-variant="modern"] .ayah-src {
+  text-align: start; color: var(--ink-soft); font-size: .72rem;
+  letter-spacing: .16em; text-transform: uppercase;
+  margin: 1rem 0 0; padding-inline-start: 1.4rem;
+}
+
+/* ── story: full-bleed photo, text below it ────────────────────── */
+
+[data-variant="modern"] .story { display: grid; gap: 2rem; }
+[data-variant="modern"] .story .frame { width: 100%; aspect-ratio: 16/10; }
+@media (min-width: 50rem) {
+  [data-variant="modern"] .story { grid-template-columns: 1.4fr 1fr; align-items: end; gap: 3rem; }
+  [data-variant="modern"] .story .frame { aspect-ratio: 4/5; }
+}
+
+/* ── cards: flat, ruled, no fill ───────────────────────────────── */
+
+[data-variant="modern"] .cards { gap: 0; border-top: 1px solid var(--ink); margin-top: 2.4rem; }
+[data-variant="modern"] .card {
+  background: none; border: 0; border-bottom: 1px solid var(--line);
+  text-align: start; padding: 1.5rem 0; gap: .2rem;
+}
+@media (min-width: 44rem) {
+  [data-variant="modern"] .card { padding-inline-end: 2rem; border-inline-end: 1px solid var(--line); }
+  [data-variant="modern"] .card:last-child { border-inline-end: 0; }
+}
+[data-variant="modern"] .card .v { font-weight: 600; letter-spacing: -.01em; }
+
+/* ── venue: full-bleed photo, caption bar under it ─────────────── */
+
+[data-variant="modern"] .venue-stage { padding-block: 0; }
+[data-variant="modern"] .venue-pin { display: grid; }
+[data-variant="modern"] .venue-pin img {
+  width: 100%; height: 68svh; object-fit: cover; filter: grayscale(.15) contrast(1.05);
+}
+[data-variant="modern"] .venue-veil { display: none; }
+[data-variant="modern"] .venue-copy {
+  display: grid; gap: .3rem; justify-items: start; text-align: start;
+  width: min(100% - (var(--pad) * 2), 66rem); margin-inline: auto;
+  padding-block: 2.4rem;
+}
+[data-variant="modern"] .venue-copy h2 { font-size: var(--step-3); }
+[data-variant="modern"] .venue-copy .lede { text-align: start; margin-inline: 0; }
+
+/* ── forms line up left ────────────────────────────────────────── */
+
+[data-variant="modern"] .form { margin-inline: 0; }
+[data-variant="modern"] .btn-row { justify-content: start; }
+[data-variant="modern"] .status { text-align: start; font-weight: 600; }
+[data-variant="modern"] .wish p { font-weight: 400; }
+[data-variant="modern"] footer { text-align: start; justify-items: start; padding-inline: max(var(--pad), calc((100% - 66rem) / 2)); }
+
+/* ═══ OPENING · a curtain wipes up off the names ════════════════ */
+
+[data-variant="modern"] #gate-curtain { display: grid; }
+
+.curtain {
+  position: absolute; inset: 0; background: var(--ink);
+  display: grid; align-content: center; justify-content: start; justify-items: start;
+  gap: .6rem; padding: var(--pad) clamp(1.5rem, 8vw, 6rem);
+  cursor: pointer; border: 0; width: 100%; text-align: start;
+  transition: transform 1.25s cubic-bezier(.76, 0, .24, 1);
+}
+.curtain.opening { transform: translateY(-101%); }
+.curtain .nm {
+  font-family: var(--display); font-weight: 600;
+  font-size: var(--step-4); line-height: .92; letter-spacing: -.035em;
+  color: var(--ground); display: grid; justify-items: start;
+}
+.curtain .nm .amp { font-size: .26em; color: var(--accent-2); font-weight: 400; margin-block: .35em; }
+.curtain .sub {
+  font-size: .72rem; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--accent-2);
+}
+.curtain .hint { color: color-mix(in srgb, var(--ground) 55%, transparent); margin-top: 1.6rem; }
