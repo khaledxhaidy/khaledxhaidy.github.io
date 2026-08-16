@@ -582,6 +582,8 @@ const T = {
     const bg = getComputedStyle(root).getPropertyValue("--ground").trim();
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta && bg) meta.setAttribute("content", bg);
+
+    gateSky(variant === "night" && !opened);
   }
 
   VARIANTS.forEach(name => {
@@ -662,12 +664,73 @@ const T = {
   }
 
   /* ── ambient dust ──────────────────────────────────────────────── */
+  /* pre-rendered glow sprites shared by the night sky and the meteors */
+  let SPRITES = null;
+  function sprites() {
+    if (SPRITES) return SPRITES;
+    function glow(size, core, mid, edge) {
+      const c = document.createElement("canvas");
+      c.width = c.height = size;
+      const g = c.getContext("2d");
+      const rg = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      rg.addColorStop(0, core); rg.addColorStop(.3, mid); rg.addColorStop(1, edge);
+      g.fillStyle = rg; g.fillRect(0, 0, size, size);
+      return c;
+    }
+    // a bright star with a four-point cross flare
+    const flare = glow(64, "rgba(255,250,235,.98)", "rgba(212,175,106,.5)", "rgba(212,175,106,0)");
+    const fg = flare.getContext("2d");
+    const lg = fg.createLinearGradient(0, 0, 64, 0);
+    lg.addColorStop(0, "rgba(237,234,242,0)");
+    lg.addColorStop(.5, "rgba(255,252,240,.9)");
+    lg.addColorStop(1, "rgba(237,234,242,0)");
+    fg.fillStyle = lg;
+    fg.fillRect(0, 31.2, 64, 1.6);
+    fg.save(); fg.translate(32, 32); fg.rotate(Math.PI / 2); fg.translate(-32, -32);
+    fg.fillRect(0, 31.2, 64, 1.6); fg.restore();
+
+    SPRITES = {
+      gold:  glow(48, "rgba(255,250,235,.95)", "rgba(212,175,106,.5)",  "rgba(212,175,106,0)"),
+      white: glow(48, "rgba(255,255,255,.95)", "rgba(186,200,232,.45)", "rgba(186,200,232,0)"),
+      flare
+    };
+    return SPRITES;
+  }
+
+  // one shooting star; shared by the hero sky and the gate sky
+  function drawMeteor(ctx, mt) {
+    const mag = Math.hypot(mt.vx, mt.vy);
+    const ux = mt.vx / mag, uy = mt.vy / mag;
+    const L = mt.len * Math.max(mt.life, 0);
+    const g = ctx.createLinearGradient(mt.x, mt.y, mt.x - ux * L, mt.y - uy * L);
+    g.addColorStop(0, "rgba(255,252,240," + (.9 * mt.life) + ")");
+    g.addColorStop(1, "rgba(212,175,106,0)");
+    ctx.strokeStyle = g; ctx.lineWidth = 1.8; ctx.lineCap = "round";
+    ctx.globalAlpha = 1;
+    ctx.beginPath();
+    ctx.moveTo(mt.x, mt.y);
+    ctx.lineTo(mt.x - ux * L, mt.y - uy * L);
+    ctx.stroke();
+    ctx.globalAlpha = Math.max(mt.life, 0);
+    ctx.drawImage(sprites().white, mt.x - 9, mt.y - 9, 18, 18);
+    ctx.globalAlpha = 1;
+  }
+  function spawnMeteor(list, w) {
+    const ang = Math.PI * (.6 + Math.random() * .16);   // down and across
+    const spd = 6.5 + Math.random() * 5;
+    list.push({
+      x: Math.random() * w * .9 + w * .05, y: -14,
+      vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
+      life: 1, len: 60 + Math.random() * 90
+    });
+  }
+
   let dustOn = false;
   function dust() {
     if (dustOn || reduce) return;
     dustOn = true;
     const cv = $("#dust"), ctx = cv.getContext("2d"), host = cv.parentElement;
-    let w, h, motes = [], raf = 0;
+    let w, h, motes = [], raf = 0, meteors = [], nextMeteor = 0;
 
     function size() {
       const dpr = Math.min(devicePixelRatio || 1, 2);
@@ -682,27 +745,50 @@ const T = {
       }));
     }
     function paint() {
-      // postal and garden get falling petals; night gets twinkling stars;
-      // the rest, rising gold dust
+      // postal and garden get falling petals; night gets a living sky of
+      // glowing stars and shooting stars; the rest, rising gold dust
       const petals = variant === "postal" || variant === "garden";
       const stars  = variant === "night";
+
+      ctx.clearRect(0, 0, w, h);
+
+      if (stars) {
+        const sp = sprites();
+        const now = performance.now();
+        motes.forEach((m, i) => {
+          m.d += .02;
+          const tw = .4 + .6 * Math.abs(Math.sin(m.d + i * 1.7));
+          const bright = i % 9 === 0;
+          const img = bright ? sp.flare : (i % 3 === 0 ? sp.white : sp.gold);
+          const s = bright ? m.r * 12 + 12 : m.r * 6.5 + 5;
+          ctx.globalAlpha = Math.min(1, m.a * tw + (bright ? .2 : 0));
+          ctx.drawImage(img, m.x - s / 2, m.y - s / 2, s, s);
+        });
+
+        if (!nextMeteor) nextMeteor = now + 1500;
+        if (now >= nextMeteor) {
+          spawnMeteor(meteors, w);
+          // usually a lone streak; sometimes two, close together — a shower
+          nextMeteor = now + (Math.random() < .3 ? 420 : 2400 + Math.random() * 4200);
+        }
+        meteors = meteors.filter(mt => mt.life > 0 && mt.y < h + 60);
+        meteors.forEach(mt => {
+          mt.x += mt.vx; mt.y += mt.vy; mt.life -= .016;
+          drawMeteor(ctx, mt);
+        });
+
+        ctx.globalAlpha = 1;
+        raf = requestAnimationFrame(paint);
+        return;
+      }
+
       const styles = getComputedStyle(root);
       const palette = petals
         ? [styles.getPropertyValue("--accent").trim(), styles.getPropertyValue("--accent-2").trim(), "#BE9A4E"]
-        : stars
-        ? ["#D4AF6A", "#EDEAF2", "#E7CD96"]
         : [styles.getPropertyValue("--accent").trim() || "#B4893C"];
 
-      ctx.clearRect(0, 0, w, h);
       motes.forEach((m, i) => {
         ctx.fillStyle = palette[i % palette.length];
-        if (stars) {
-          // fixed in place, breathing
-          m.d += .022;
-          ctx.globalAlpha = m.a * (.4 + .6 * Math.abs(Math.sin(m.d + i)));
-          ctx.beginPath(); ctx.arc(m.x, m.y, m.r * .85, 0, Math.PI * 2); ctx.fill();
-          return;
-        }
         m.d += .008; m.x += Math.sin(m.d) * .28;
         if (petals) {
           m.y += m.v * 1.4;
@@ -738,6 +824,39 @@ const T = {
 
   /* ── the openings ──────────────────────────────────────────────── */
 
+  // shooting stars drift across the night gate while the star hangs there
+  let gateRaf = 0;
+  function gateSky(run) {
+    cancelAnimationFrame(gateRaf);
+    gateRaf = 0;
+    const cv = $("#fw");
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    if (!run || reduce) {
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      return;
+    }
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const w = cv.clientWidth, h = cv.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    let meteors = [], next = performance.now() + 700;
+    (function fr(now) {
+      ctx.clearRect(0, 0, w, h);
+      if (now >= next) {
+        spawnMeteor(meteors, w);
+        next = now + (Math.random() < .35 ? 380 : 1600 + Math.random() * 3200);
+      }
+      meteors = meteors.filter(mt => mt.life > 0 && mt.y < h + 60);
+      meteors.forEach(mt => {
+        mt.x += mt.vx; mt.y += mt.vy; mt.life -= .016;
+        drawMeteor(ctx, mt);
+      });
+      gateRaf = requestAnimationFrame(fr);
+    })(performance.now());
+  }
+
   // fireworks for the night gate, drawn on its own canvas
   function fireworks() {
     const cv = $("#fw");
@@ -760,10 +879,12 @@ const T = {
         });
       }
     }
-    burst(w * .5,  h * .32, 100);
-    setTimeout(() => burst(w * .3,  h * .46, 65), 280);
-    setTimeout(() => burst(w * .72, h * .4,  65), 520);
+    burst(w * .5,  h * .32, 120);
+    setTimeout(() => burst(w * .3,  h * .46, 75), 280);
+    setTimeout(() => burst(w * .72, h * .4,  75), 520);
+    setTimeout(() => burst(w * .5,  h * .24, 50), 900);
 
+    const halo = sprites().gold;
     let frames = 0;
     (function fr() {
       ctx.clearRect(0, 0, w, h);
@@ -773,13 +894,16 @@ const T = {
         alive = true;
         p.x += p.vx; p.y += p.vy;
         p.vy += .03; p.vx *= .985; p.vy *= .985;
-        p.life -= .012;
-        ctx.globalAlpha = Math.max(p.life, 0);
+        p.life -= .011;
+        const a = Math.max(p.life, 0);
+        ctx.globalAlpha = a * .5;                               // soft halo
+        ctx.drawImage(halo, p.x - p.r * 4, p.y - p.r * 4, p.r * 8, p.r * 8);
+        ctx.globalAlpha = a;                                    // bright core
         ctx.fillStyle = p.c;
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
       });
       ctx.globalAlpha = 1;
-      if (alive && ++frames < 220) requestAnimationFrame(fr);
+      if (alive && ++frames < 260) requestAnimationFrame(fr);
       else ctx.clearRect(0, 0, w, h);
     })();
   }
@@ -800,6 +924,7 @@ const T = {
       btn.classList.add("opening");
     } else if (variant === "night") {
       btn.classList.add("opening");            // the star launches…
+      gateSky(false);                          // hand the canvas over
       if (!reduce) fireworks();                // …and bursts
     } else { // postal and garden: the photographed envelopes
       btn.classList.add("pressing");

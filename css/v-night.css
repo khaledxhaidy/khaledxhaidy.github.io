@@ -32,8 +32,14 @@
   --body:    var(--f-la-body);
 }
 
+/* the whole page sits under fixed stars and two faint nebula washes */
 :root[data-variant="night"] body {
-  background-image: var(--starfield);
+  background-image:
+    var(--starfield),
+    radial-gradient(44% 34% at 16% 20%, rgba(118, 94, 178, .16), transparent 70%),
+    radial-gradient(46% 36% at 84% 10%, rgba(66, 124, 156, .13), transparent 70%),
+    radial-gradient(50% 40% at 72% 88%, rgba(146, 102, 182, .10), transparent 72%);
+  background-attachment: scroll, fixed, fixed, fixed;
 }
 
 /* ── hero: the sky, a moon, and the couple in a locket ─────────── */
@@ -48,8 +54,18 @@
   width: 58px; aspect-ratio: 1; border-radius: 50%;
   box-shadow:
     inset -13px 8px 0 0 var(--accent-2),
-    0 0 34px rgba(212, 175, 106, .35);
-  opacity: .9; z-index: 0; rotate: -14deg;
+    0 0 48px 6px rgba(212, 175, 106, .45);
+  opacity: .95; z-index: 0; rotate: -14deg;
+}
+[data-variant="night"] .hero::after {    /* aurora, drifting slowly */
+  content: ""; position: absolute; inset: -20%; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(30% 26% at 30% 30%, rgba(122, 98, 184, .22), transparent 70%),
+    radial-gradient(26% 22% at 72% 62%, rgba(72, 132, 164, .18), transparent 70%);
+  animation: nebulaDrift 26s ease-in-out infinite alternate;
+}
+@keyframes nebulaDrift {
+  to { transform: translate(4%, -3%) scale(1.09); }
 }
 
 [data-variant="night"] .frame {
@@ -58,7 +74,7 @@
   box-shadow:
     0 0 0 1px var(--accent),
     0 0 0 9px color-mix(in srgb, var(--accent) 16%, transparent),
-    0 0 55px rgba(212, 175, 106, .3),
+    0 0 70px 8px rgba(212, 175, 106, .38),
     0 26px 60px -24px var(--shadow);
 }
 [data-variant="night"] .frame img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; }
@@ -79,7 +95,9 @@
 [data-variant="night"] .names {
   font-family: var(--display); font-size: var(--step-4);
   line-height: 1.06; display: grid; gap: .03em;
-  text-shadow: 0 0 34px rgba(212, 175, 106, .35);
+  text-shadow:
+    0 0 18px rgba(237, 234, 242, .35),
+    0 0 46px rgba(212, 175, 106, .5);
 }
 [data-variant="night"] .names .amp { font-size: .34em; color: var(--accent); }
 [data-variant="night"] .hero-date,
@@ -172,13 +190,17 @@
 [data-variant="night"] #gate-star { display: grid; }
 
 #gate-star {
-  background: radial-gradient(ellipse at 50% 30%, #17273F, var(--ground) 75%);
+  background:
+    radial-gradient(38% 30% at 22% 24%, rgba(122, 98, 184, .22), transparent 70%),
+    radial-gradient(34% 28% at 78% 68%, rgba(72, 132, 164, .18), transparent 70%),
+    radial-gradient(ellipse at 50% 30%, #17273F, var(--ground) 75%);
 }
 #gate-star::before {   /* the same fixed stars behind the gate */
   content: ""; position: absolute; inset: 0;
   background-image: var(--starfield); opacity: .8; pointer-events: none;
 }
-.fw { position: absolute; inset: 0; pointer-events: none; }
+/* canvas is a replaced element: inset alone won't stretch it */
+.fw { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
 .star-gate {
   position: relative; z-index: 1;
@@ -189,11 +211,16 @@
   width: clamp(64px, 16vw, 90px); aspect-ratio: 1;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2 L60 40 L98 50 L60 60 L50 98 L40 60 L2 50 L40 40 Z' fill='%23E7CD96'/%3E%3C/svg%3E") center / contain no-repeat;
   filter: drop-shadow(0 0 16px rgba(212, 175, 106, .8));
-  animation: starPulse 2.6s ease-in-out infinite;
+  animation:
+    starPulse 2.6s ease-in-out infinite,
+    starBob 4.8s ease-in-out infinite;
   transition: transform .8s cubic-bezier(.55, -.2, .3, 1), opacity .5s ease .2s;
 }
 @keyframes starPulse {
-  50% { filter: drop-shadow(0 0 30px rgba(212, 175, 106, 1)); scale: 1.09; }
+  50% { filter: drop-shadow(0 0 32px rgba(212, 175, 106, 1)); scale: 1.09; }
+}
+@keyframes starBob {
+  50% { translate: 0 -9px; }
 }
 .star-gate.opening .star { transform: translateY(-42vh) scale(.3); opacity: 0; }
 .star-gate .gate-hint { color: var(--ink-soft); }
