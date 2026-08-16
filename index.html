@@ -301,6 +301,7 @@ const CONFIG = {
 
   startsAt: "2026-09-19T19:00:00",
   endsAt:   "2026-09-20T02:00:00",
+  timezone: "Africa/Cairo",
 
   venue: {
     name:    { ar: "قاعة كابيتال", en: "Capital" },
@@ -1144,33 +1145,51 @@ const T = {
   }
 
   /* ── add to calendar ───────────────────────────────────────────── */
-  const stamp = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  // Local wall-clock stamps pinned to the venue's timezone — never the
+  // viewer's, so a guest abroad still sees seven in the evening, Cairo.
+  const wall = s => s.replace(/[-:]/g, "");
 
   $("#calBtn").addEventListener("click", async () => {
     const title = CONFIG.groom[lang] + " " + T[lang].amp + " " + CONFIG.bride[lang];
-    const ics = [
-      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//wedding//invitation//EN",
-      "BEGIN:VEVENT",
-      "UID:" + stamp(START) + "@wedding",
-      "DTSTAMP:" + stamp(new Date()),
-      "DTSTART:" + stamp(START),
-      "DTEND:" + stamp(END),
-      "SUMMARY:" + title,
-      "LOCATION:" + CONFIG.venue.name[lang] + ", " + CONFIG.venue.address[lang],
-      "END:VEVENT", "END:VCALENDAR"
-    ].join("\r\n");
-    const filename = "wedding.ics";
+
+    // hosted preview on claude.ai: hand the file over through the host
     try {
       if (window.claude && typeof window.claude.use === "function") {
         const dl = await window.claude.use("downloads");
-        if (dl) { await dl.save({ filename, data: ics }); return; }
+        if (dl) {
+          const ics = [
+            "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//wedding//invitation//AR",
+            "BEGIN:VEVENT",
+            "UID:" + wall(CONFIG.startsAt) + "@wedding",
+            "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""),
+            "DTSTART;TZID=" + CONFIG.timezone + ":" + wall(CONFIG.startsAt),
+            "DTEND;TZID=" + CONFIG.timezone + ":" + wall(CONFIG.endsAt),
+            "SUMMARY:" + title,
+            "LOCATION:" + CONFIG.venue.name[lang] + ", " + CONFIG.venue.address[lang],
+            "END:VEVENT", "END:VCALENDAR"
+          ].join("\r\n");
+          await dl.save({ filename: "wedding.ics", data: ics });
+          return;
+        }
       }
     } catch (e) {}
-    const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
-    const a = document.createElement("a");
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    // iPhone / iPad: opening a real .ics file shows Apple Calendar's
+    // native add-event sheet — a blob download would just sit in Files
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      location.href = "wedding.ics";
+      return;
+    }
+
+    // everyone else: Google Calendar's event template, which opens the
+    // Calendar app directly on Android
+    const url = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      "&text=" + encodeURIComponent(title) +
+      "&dates=" + wall(CONFIG.startsAt) + "/" + wall(CONFIG.endsAt) +
+      "&ctz=" + encodeURIComponent(CONFIG.timezone) +
+      "&location=" + encodeURIComponent(CONFIG.venue.name[lang] + ", " + CONFIG.venue.address[lang]) +
+      "&details=" + encodeURIComponent(T[lang].footerNote + " " + CONFIG.hashtag);
+    open(url, "_blank", "noopener");
   });
 
   /* ── go ────────────────────────────────────────────────────────── */

@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//khaledxhaidy//wedding//AR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:khaledxhaidy-20260919@khaledxhaidy.github.io
+DTSTAMP:20260816T120000Z
+DTSTART;TZID=Africa/Cairo:20260919T190000
+DTEND;TZID=Africa/Cairo:20260920T020000
+SUMMARY:حفل زفاف خالد و هايدي
+LOCATION:قاعة كابيتال\, طلخا\, الدقهلية
+DESCRIPTION:مستنينكم! https://khaledxhaidy.github.io/
+GEO:31.0549652;31.3933104
+URL:https://khaledxhaidy.github.io/
+BEGIN:VALARM
+TRIGGER:-PT3H
+ACTION:DISPLAY
+DESCRIPTION:حفل زفاف خالد و هايدي
+END:VALARM
+END:VEVENT
+END:VCALENDAR
