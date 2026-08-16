@@ -46,7 +46,9 @@ body {
 }
 body.locked { overflow: hidden; height: 100svh; }
 
-img { max-width: 100%; display: block; }
+/* height:auto beats the width/height attributes, so CSS aspect-ratio
+   rules actually apply; variants that need a fixed height set it. */
+img { max-width: 100%; height: auto; display: block; }
 h1, h2, h3 { font-weight: 400; margin: 0; }
 
 :where(a, button, input, select, textarea):focus-visible {
@@ -89,6 +91,9 @@ h2 {
    variants lay the hero out with grid, and a stray item breaks it. */
 #dust { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
 .hero-copy, .hero-media { position: relative; z-index: 1; }
+
+/* collage scraps: only the postal variant shows and places these */
+.deco { display: none; }
 
 .paper { position: relative; background: linear-gradient(160deg, var(--paper-a), var(--paper-b)); }
 .paper::before {
@@ -237,6 +242,7 @@ body.open .switcher { opacity: 1; transform: none; }
   content: ""; position: absolute; inset: -4px;
   border: 1px solid var(--accent); border-radius: 50%;
 }
+.v-dot[data-v="postal"]     { background: linear-gradient(135deg, #F8F3E8 50%, #A8443A 50%); }
 .v-dot[data-v="manuscript"] { background: linear-gradient(135deg, #FBF6EC 50%, #B4893C 50%); }
 .v-dot[data-v="arabesque"]  { background: linear-gradient(135deg, #0C3A31 50%, #CBA135 50%); }
 .v-dot[data-v="garden"]     { background: linear-gradient(135deg, #FBF4F1 50%, #C0857C 50%); }

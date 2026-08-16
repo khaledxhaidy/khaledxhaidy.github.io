@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-lang="ar" data-variant="manuscript">
+<html lang="ar" dir="rtl" data-lang="ar" data-variant="postal">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FBF6EC">
-<title>هايدي و خالد</title>
-<meta name="description" content="دعوة حفل زفاف هايدي و خالد">
+<meta name="theme-color" content="#F8F3E8">
+<title>خالد و هايدي</title>
+<meta name="description" content="دعوة حفل زفاف خالد و هايدي">
 
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/v-postal.css">
 <link rel="stylesheet" href="css/v-manuscript.css">
 <link rel="stylesheet" href="css/v-arabesque.css">
 <link rel="stylesheet" href="css/v-garden.css">
@@ -53,7 +54,7 @@
   <button class="gate-open-btn" data-open aria-label="افتح الدعوة"></button>
 </div>
 
-<!-- garden: a real envelope, photographed closed and open -->
+<!-- postal: the couple's dove envelope, photographed closed and open -->
 <div class="gate" id="gate-dove">
   <button class="dove-gate" data-open aria-label="افتح الدعوة">
     <span class="dove-stack">
@@ -65,14 +66,25 @@
   </button>
 </div>
 
+<!-- garden: the blue envelope; the couple's card rises out of it -->
+<div class="gate" id="gate-bloom">
+  <button class="bloom-gate" data-open aria-label="افتح الدعوة">
+    <span class="bloom-stack">
+      <span class="bloom-card"><img src="assets/couple-story.jpg" alt="" width="880" height="1100"></span>
+      <img class="env" src="assets/env-open.png" alt="" width="490" height="572">
+    </span>
+    <span class="gate-hint" data-t="hintTap"></span>
+  </button>
+</div>
+
 <!-- modern: a curtain wipes up -->
 <div class="gate" id="gate-curtain">
   <button class="curtain" data-open aria-label="افتح الدعوة">
     <span class="sub" data-t="kicker"></span>
     <span class="nm">
-      <span data-name="bride"></span>
-      <span class="amp" data-t="amp"></span>
       <span data-name="groom"></span>
+      <span class="amp" data-t="amp"></span>
+      <span data-name="bride"></span>
     </span>
     <span class="gate-hint hint" data-t="hintTap"></span>
   </button>
@@ -93,6 +105,9 @@
   <header class="hero" id="hero">
     <canvas id="dust" aria-hidden="true"></canvas>
 
+    <span class="deco deco-dove" aria-hidden="true"><img src="assets/env-dove.png" alt="" width="360" height="360"></span>
+    <span class="deco deco-blossom" aria-hidden="true"><img src="assets/flower-blossom.png" alt="" width="98" height="310"></span>
+
     <div class="hero-media">
       <div class="frame wipe" id="heroFrame">
         <img src="assets/couple-hero.jpg" alt="" width="960" height="1200">
@@ -103,9 +118,9 @@
       <p class="bism reveal" data-t="bism"></p>
       <p class="kicker reveal" data-t="kicker"></p>
       <h1 class="names reveal" id="names">
-        <span data-name="bride"></span>
-        <span class="amp" data-t="amp"></span>
         <span data-name="groom"></span>
+        <span class="amp" data-t="amp"></span>
+        <span data-name="bride"></span>
       </h1>
       <div class="orn reveal"><i></i></div>
       <p class="hero-date reveal" id="heroDate"></p>
@@ -129,6 +144,7 @@
   <span class="rule" aria-hidden="true"></span>
 
   <section id="welcome" data-n>
+    <span class="deco deco-flower" aria-hidden="true"><img src="assets/flower-rose.png" alt="" width="235" height="335"></span>
     <div class="wrap-wide story" data-num="01">
       <div class="frame wipe">
         <img src="assets/couple-story.jpg" alt="" width="880" height="1100" loading="lazy">
@@ -186,6 +202,7 @@
   </div>
 
   <section id="rsvp" data-n>
+    <span class="deco deco-bloomenv" aria-hidden="true"><img src="assets/env-open.png" alt="" width="490" height="572"></span>
     <div class="wrap" data-num="03">
       <p class="eyebrow reveal" data-t="rsvpEyebrow"></p>
       <h2 class="reveal" data-split data-t="rsvpTitle"></h2>
@@ -248,9 +265,11 @@
       <div class="wishes" id="wishList"></div>
       <p class="wishes-empty hidden" id="wishEmpty" data-t="noWishes"></p>
     </div>
+    <span class="deco deco-rose" aria-hidden="true"><img src="assets/env-rose.png" alt="" width="483" height="360"></span>
   </section>
 
   <footer>
+    <span class="deco deco-dovegold" aria-hidden="true"><img src="assets/dove-gold.png" alt="" width="318" height="148"></span>
     <div class="orn"><i></i></div>
     <p class="hashtag" id="hashtag"></p>
     <small data-t="footerNote"></small>
@@ -265,7 +284,7 @@
 const CONFIG = {
   bride: { ar: "هايدي", en: "Haidy" },
   groom: { ar: "خالد",  en: "Khaled" },
-  monogram: { ar: "هـ خ", en: "K h" },
+  monogram: { ar: "خ هـ", en: "K h" },
 
   startsAt: "2026-09-19T19:00:00",
   endsAt:   "2026-09-20T02:00:00",
@@ -278,11 +297,11 @@ const CONFIG = {
 
   whatsapp: "",
   endpoint: "",
-  hashtag: "#هايدي_وخالد",
+  hashtag: "#خالد_وهايدي",
 
   defaultLang: "ar",
-  /* manuscript | arabesque | garden | modern */
-  defaultVariant: "manuscript"
+  /* postal | manuscript | arabesque | garden | modern */
+  defaultVariant: "postal"
 };
 
 /* ═════════════════════════════════════════════════════════════════
@@ -424,11 +443,12 @@ const T = {
   const START = new Date(CONFIG.startsAt);
   const END   = new Date(CONFIG.endsAt);
 
-  const VARIANTS = ["manuscript", "arabesque", "garden", "modern"];
+  const VARIANTS = ["postal", "manuscript", "arabesque", "garden", "modern"];
   const GATE_OF = {
+    postal:     "gate-dove",
     manuscript: "gate-envelope",
     arabesque:  "gate-screens",
-    garden:     "gate-dove",
+    garden:     "gate-bloom",
     modern:     "gate-curtain"
   };
 
@@ -525,6 +545,9 @@ const T = {
     const bg = getComputedStyle(root).getPropertyValue("--ground").trim();
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta && bg) meta.setAttribute("content", bg);
+
+    // regenerate the ambient motes in the new variant's palette
+    if (opened) dispatchEvent(new Event("resize"));
   }
 
   VARIANTS.forEach(name => {
@@ -579,8 +602,6 @@ const T = {
     const hero  = $("#hero");
     const frame = $("#heroFrame");
     const names = $("#names");
-    const stage = $("#venueStage");
-    const vimg  = $("#venueImg");
     let ticking = false;
 
     function frameFn() {
@@ -594,18 +615,6 @@ const T = {
         frame.style.transform = "translateY(" + (y * .18) + "px)";
         names.style.transform = "translateY(" + (y * .08) + "px)";
         hero.style.opacity    = String(Math.max(0, 1 - p * 1.2));
-      }
-
-      // only the manuscript variant pins the venue photo
-      if (variant === "manuscript") {
-        const r = stage.getBoundingClientRect();
-        const span = r.height - innerHeight;
-        if (span > 0 && r.top <= 0 && r.bottom >= 0) {
-          const p = Math.min(1, Math.max(0, -r.top / span));
-          vimg.style.transform = "scale(" + (1.28 - p * .28) + ")";
-        }
-      } else {
-        vimg.style.transform = "";
       }
       ticking = false;
     }
@@ -635,13 +644,36 @@ const T = {
       }));
     }
     function paint() {
+      // postal and garden get falling petals; the others, rising gold dust
+      const petals = variant === "postal" || variant === "garden";
+      const styles = getComputedStyle(root);
+      const palette = petals
+        ? [styles.getPropertyValue("--accent").trim(), styles.getPropertyValue("--accent-2").trim(), "#BE9A4E"]
+        : [styles.getPropertyValue("--accent").trim() || "#B4893C"];
+
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = getComputedStyle(root).getPropertyValue("--accent").trim() || "#B4893C";
-      motes.forEach(m => {
-        m.y -= m.v; m.d += .008; m.x += Math.sin(m.d) * .28;
-        if (m.y < -6) { m.y = h + 6; m.x = Math.random() * w; }
+      motes.forEach((m, i) => {
+        m.d += .008; m.x += Math.sin(m.d) * .28;
+        if (petals) {
+          m.y += m.v * 1.4;
+          if (m.y > h + 8) { m.y = -8; m.x = Math.random() * w; }
+        } else {
+          m.y -= m.v;
+          if (m.y < -6) { m.y = h + 6; m.x = Math.random() * w; }
+        }
         ctx.globalAlpha = m.a;
-        ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = palette[i % palette.length];
+        if (petals) {
+          ctx.save();
+          ctx.translate(m.x, m.y);
+          ctx.rotate(m.d * 2);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, m.r * 2.6, m.r * 1.3, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else {
+          ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2); ctx.fill();
+        }
       });
       ctx.globalAlpha = 1;
       raf = requestAnimationFrame(paint);
@@ -668,11 +700,11 @@ const T = {
       setTimeout(() => btn.classList.add("gone"), reduce ? 0 : 1900);
     } else if (variant === "arabesque") {
       $("[data-screens]").classList.add("parting");
-    } else if (variant === "garden") {
+    } else if (variant === "modern") {
+      btn.classList.add("opening");
+    } else { // postal and garden: the photographed envelopes
       btn.classList.add("opening");
       setTimeout(() => btn.classList.add("gone"), reduce ? 0 : 1800);
-    } else {
-      btn.classList.add("opening");
     }
 
     const wait = reduce ? 0 : (variant === "modern" ? 1150 : variant === "arabesque" ? 1350 : 2050);
@@ -795,7 +827,7 @@ const T = {
   const stamp = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
 
   $("#calBtn").addEventListener("click", async () => {
-    const title = CONFIG.bride[lang] + " " + T[lang].amp + " " + CONFIG.groom[lang];
+    const title = CONFIG.groom[lang] + " " + T[lang].amp + " " + CONFIG.bride[lang];
     const ics = [
       "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//wedding//invitation//EN",
       "BEGIN:VEVENT",

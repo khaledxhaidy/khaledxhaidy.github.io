@@ -157,40 +157,33 @@
   [data-variant="garden"] .venue-copy .orn { margin-inline: 0; }
 }
 
-/* ═══ OPENING · a real envelope, photographed closed and open ═══ */
+/* ═══ OPENING · the blue envelope; the couple's card rises out ══ */
 
-[data-variant="garden"] #gate-dove { display: grid; }
+[data-variant="garden"] #gate-bloom { display: grid; }
 
-.dove-gate {
+.bloom-gate {
   position: relative; z-index: 1;
   display: grid; justify-items: center; gap: 1.6rem;
   border: 0; background: none; padding: 0; cursor: pointer;
 }
-.dove-stack { position: relative; width: min(84vw, 26rem); aspect-ratio: 1/1; }
-.dove-stack img {
+.bloom-stack { position: relative; width: min(74vw, 19rem); aspect-ratio: 490/572; }
+.bloom-stack .env {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: contain;
-  transition: opacity .75s ease, transform 1.2s cubic-bezier(.3,.9,.3,1);
+  object-fit: contain; z-index: 2;
+  transition: transform 1s cubic-bezier(.3,.9,.3,1);
 }
-.dove-closed { opacity: 1; transform: scale(1); }
-.dove-open   { opacity: 0; transform: scale(.97); }
-.dove-gate:hover .dove-closed { transform: scale(1.02); }
+.bloom-gate:hover .env { transform: translateY(-3px); }
+.bloom-gate.opening .env { transform: translateY(3%); }
 
-.dove-gate.opening .dove-closed { opacity: 0; transform: scale(1.05); }
-.dove-gate.opening .dove-open   { opacity: 1; transform: scale(1.06); }
-
-/* the couple's card rises out of the open envelope */
-.dove-card {
-  position: absolute; left: 50%; top: 46%; translate: -50% -50%;
-  width: 44%; aspect-ratio: 4/5; overflow: hidden;
-  border: 3px solid #fff; box-shadow: 0 14px 34px -14px rgba(80,60,55,.5);
-  opacity: 0; transform: translateY(10%) rotate(-2deg) scale(.9);
-  transition: opacity .5s ease .55s, transform 1.1s cubic-bezier(.25,.9,.3,1) .55s;
-  z-index: 3;
+/* rises from behind the envelope, between the flap and the flowers */
+.bloom-card {
+  position: absolute; left: 50%; top: 26%; translate: -50% 0;
+  width: 58%; aspect-ratio: 4/5; overflow: hidden; z-index: 1;
+  border: 3px solid #fff; box-shadow: 0 14px 34px -16px rgba(80,60,55,.45);
+  opacity: 0; transform: translateY(24%) rotate(2deg);
+  transition: opacity .5s ease .25s, transform 1.15s cubic-bezier(.25,.9,.3,1) .25s;
 }
-.dove-card img { position: static; width: 100%; height: 100%; object-fit: cover; transition: none; }
-.dove-gate.opening .dove-card {
-  opacity: 1; transform: translateY(-52%) rotate(-2deg) scale(1);
-}
+.bloom-card img { width: 100%; height: 100%; object-fit: cover; }
+.bloom-gate.opening .bloom-card { opacity: 1; transform: translateY(-96%) rotate(2deg); }
 
-.dove-gate.gone { opacity: 0; transform: scale(1.08); transition: opacity .8s ease, transform 1s ease; }
+.bloom-gate.gone { opacity: 0; transform: scale(1.07); transition: opacity .8s ease, transform 1s ease; }

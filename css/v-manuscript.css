@@ -118,35 +118,22 @@
   height: 2px; background: var(--accent); opacity: .6;
 }
 
-/* ── venue: pinned photo, copy on a card ───────────────────────── */
+/* ── venue: a normal framed photo with the copy beneath it ─────── */
 
-[data-variant="manuscript"] .venue-stage { position: relative; height: 190svh; }
+[data-variant="manuscript"] .venue-stage { padding-block: var(--gap); }
 [data-variant="manuscript"] .venue-pin {
-  position: sticky; top: 0; height: 100svh;
-  display: grid; place-items: center; overflow: hidden;
+  display: grid; justify-items: center; gap: 1.8rem;
+  width: min(100% - (var(--pad) * 2), 46rem); margin-inline: auto;
+  text-align: center;
 }
 [data-variant="manuscript"] .venue-pin img {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; transform: scale(1.28); will-change: transform;
+  width: min(100%, 34rem); aspect-ratio: 3/2; object-fit: cover;
+  border-radius: 50% 50% 6px 6px / 30% 30% 2% 2%;
+  box-shadow: 0 22px 55px -22px var(--shadow), inset 0 0 0 1px var(--line);
 }
-[data-variant="manuscript"] .venue-veil {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom,
-    color-mix(in srgb, var(--ground) 42%, transparent),
-    color-mix(in srgb, var(--ground) 4%, transparent) 42%,
-    color-mix(in srgb, var(--ground) 52%, transparent));
-}
-[data-variant="manuscript"] .venue-copy {
-  position: relative; z-index: 2; text-align: center;
-  display: grid; justify-items: center; gap: .15rem;
-  width: min(100% - (var(--pad) * 2), 27rem);
-  padding: clamp(1.8rem, 5vw, 2.8rem) clamp(1.4rem, 4vw, 2.4rem);
-  background: color-mix(in srgb, var(--ground) 93%, transparent);
-  border: 1px solid var(--line);
-  box-shadow: 0 28px 70px -30px var(--shadow);
-  backdrop-filter: blur(4px);
-}
-[data-variant="manuscript"] .venue-copy h2 { font-size: var(--step-3); margin-bottom: .3rem; }
+[data-variant="manuscript"] .venue-veil { display: none; }
+[data-variant="manuscript"] .venue-copy { display: grid; justify-items: center; gap: .15rem; }
+[data-variant="manuscript"] .venue-copy h2 { font-size: var(--step-2); margin-bottom: .3rem; }
 
 /* ═══ OPENING · a wax-sealed envelope ═══════════════════════════ */
 
