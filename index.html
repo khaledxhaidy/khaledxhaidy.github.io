@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-lang="ar" data-variant="postal">
+<html lang="ar" dir="rtl" data-lang="ar" data-variant="night">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F8F3E8">
+<meta name="theme-color" content="#0D1728">
 <title>خالد و هايدي</title>
 <meta name="description" content="دعوة حفل زفاف خالد و هايدي">
 
@@ -107,6 +107,8 @@
   <button class="lang-btn" id="langBtn" type="button"></button>
   <span aria-hidden="true" style="width:1px;height:17px;background:var(--line)"></span>
   <span class="variants" id="variants"></span>
+  <span aria-hidden="true" style="width:1px;height:17px;background:var(--line)"></span>
+  <button class="lang-btn music-btn" id="musicBtn" type="button" aria-label="الموسيقى"></button>
 </div>
 
 <!-- ══ PAGE ════════════════════════════════════════════════════════ -->
@@ -310,9 +312,18 @@ const CONFIG = {
   endpoint: "",
   hashtag: "#خالد_وهايدي",
 
+  /* Background music. The first entry is what plays when the envelope
+     is opened; the ♪ button in the switcher cycles song 1 → song 2 → off. */
+  songs: [
+    { src: "assets/song-wedding-march.mp3",   label: "Mendelssohn — Wedding March" },
+    { src: "assets/song-a-thousand-years.mp3", label: "A Thousand Years" }
+  ],
+
   defaultLang: "ar",
-  /* postal | manuscript | arabesque | garden | modern */
-  defaultVariant: "postal"
+  /* Which designs the guests can see, in dot order.
+     All of: postal | manuscript | arabesque | garden | night | modern */
+  variants: ["night", "garden", "arabesque"],
+  defaultVariant: "night"
 };
 
 /* ═════════════════════════════════════════════════════════════════
@@ -466,8 +477,12 @@ const T = {
     modern:     "gate-curtain"
   };
 
+  // the designs actually offered to guests (CONFIG.variants), in order
+  const ENABLED = (CONFIG.variants && CONFIG.variants.length ? CONFIG.variants : VARIANTS)
+    .filter(v => VARIANTS.includes(v));
+
   let lang    = CONFIG.defaultLang === "en" ? "en" : "ar";
-  let variant = VARIANTS.includes(CONFIG.defaultVariant) ? CONFIG.defaultVariant : "manuscript";
+  let variant = ENABLED.includes(CONFIG.defaultVariant) ? CONFIG.defaultVariant : ENABLED[0];
   let opened  = false;
 
   const locale = () => (lang === "ar" ? "ar-EG" : "en-GB");
@@ -586,7 +601,7 @@ const T = {
     gateSky(variant === "night" && !opened);
   }
 
-  VARIANTS.forEach(name => {
+  ENABLED.forEach(name => {
     const b = document.createElement("button");
     b.className = "v-dot"; b.type = "button"; b.dataset.v = name;
     b.setAttribute("aria-label", name);
@@ -610,6 +625,80 @@ const T = {
   setInterval(tick, 1000);
 
   $("#mapBtn").href = CONFIG.mapUrl;
+
+  /* ── music ─────────────────────────────────────────────────────── */
+  const SONGS = CONFIG.songs || [];
+  const audio = new Audio();
+  audio.loop = true;
+  audio.preload = "none";
+  const deadSongs = new Set();   // tracks that failed to load (kept out of the cycle)
+
+  let musicIdx = 0;              // 0..n-1 selects a song, -1 is off
+  try {
+    const saved = parseInt(localStorage.getItem("hk.music.v1"), 10);
+    if (!Number.isNaN(saved) && saved >= -1 && saved < SONGS.length) musicIdx = saved;
+  } catch (e) {}
+
+  let fadeTimer = 0;
+  function fadeTo(target, ms) {
+    clearInterval(fadeTimer);
+    fadeTimer = setInterval(() => {
+      const step = (target > audio.volume ? 1 : -1) * .05;
+      const v = audio.volume + step;
+      if ((step > 0 && v >= target) || (step < 0 && v <= target)) {
+        audio.volume = target;
+        clearInterval(fadeTimer);
+        if (target === 0) audio.pause();
+      } else {
+        audio.volume = v;
+      }
+    }, Math.max(20, ms / 20));
+  }
+
+  function playCurrent() {
+    if (musicIdx < 0 || deadSongs.has(musicIdx) || !SONGS[musicIdx]) return;
+    if (audio.dataset.idx !== String(musicIdx)) {
+      audio.src = SONGS[musicIdx].src;
+      audio.dataset.idx = String(musicIdx);
+    }
+    audio.volume = 0;
+    audio.play().then(() => fadeTo(.7, 1200)).catch(() => {});
+  }
+
+  function musicLabel() {
+    const b = $("#musicBtn");
+    b.classList.toggle("off", musicIdx < 0);
+    b.textContent = musicIdx < 0 ? "♪" : "♪" + (musicIdx + 1);
+    b.title = musicIdx < 0 ? "" : SONGS[musicIdx].label;
+  }
+
+  function cycleMusic() {
+    const states = SONGS.map((_, i) => i).concat(-1);
+    let pos = states.indexOf(musicIdx);
+    for (let k = 0; k < states.length; k++) {
+      pos = (pos + 1) % states.length;
+      if (states[pos] === -1 || !deadSongs.has(states[pos])) { musicIdx = states[pos]; break; }
+    }
+    try { localStorage.setItem("hk.music.v1", String(musicIdx)); } catch (e) {}
+    musicLabel();
+    if (musicIdx < 0) fadeTo(0, 400);
+    else playCurrent();      // button press is a user gesture, so this is allowed
+  }
+
+  audio.addEventListener("error", () => {
+    // aborts from swapping src mid-play are not a broken track — only a
+    // network failure (2) or an unplayable source (4) takes a song out
+    const code = audio.error && audio.error.code;
+    if (code !== 2 && code !== 4) return;
+    const i = parseInt(audio.dataset.idx || "-1", 10);
+    if (i >= 0) {
+      deadSongs.add(i);
+      if (musicIdx === i) cycleMusic();
+    }
+  });
+
+  $("#musicBtn").addEventListener("click", cycleMusic);
+  musicLabel();
 
   /* ── reveals ───────────────────────────────────────────────────── */
   const io = new IntersectionObserver(entries => {
@@ -911,6 +1000,9 @@ const T = {
   function openGate(btn) {
     if (opened) return;
     opened = true;
+
+    // the tap on the envelope is the user gesture that lets the music start
+    if (musicIdx >= 0 && audio.paused) playCurrent();
 
     const gate = btn.closest(".gate");
 

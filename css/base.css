@@ -231,6 +231,9 @@ body.open #progress { opacity: .85; }
 }
 .lang-btn:hover { color: var(--ink); }
 
+.music-btn { font-size: 1.02rem; line-height: 1; min-width: 2.1em; }
+.music-btn.off { opacity: .4; text-decoration: line-through; }
+
 .variants { display: flex; gap: .3rem; }
 .v-dot {
   width: 19px; height: 19px; border-radius: 50%; border: 1px solid var(--line);

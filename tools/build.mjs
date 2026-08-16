@@ -17,7 +17,11 @@ const outPath = resolve(root, "dist", "invitation.html");
 let html = await readFile(resolve(root, "index.html"), "utf8");
 
 const MIME = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png",
-               webp: "image/webp", svg: "image/svg+xml", gif: "image/gif" };
+               webp: "image/webp", svg: "image/svg+xml", gif: "image/gif",
+               mp3: "audio/mpeg", m4a: "audio/mp4", ogg: "audio/ogg", wav: "audio/wav" };
+
+// hosted previews reject pages over 16 MB — stay safely below it
+const BUDGET = 15 * 1024 * 1024;
 
 const cache = new Map();
 async function dataUri(relPath) {
@@ -54,6 +58,21 @@ for (const ref of srcs) {
   html = html.replaceAll(`src="${ref}"`, `src="${await dataUri(ref)}"`);
 }
 html = html.replaceAll(' loading="lazy"', "");
+
+/* ── audio, referenced from the CONFIG block ────────────────────── */
+// Inlined greedily in order of appearance while the page stays under
+// BUDGET; anything left keeps its relative path, which the single-file
+// preview cannot resolve but a normal folder deployment serves fine.
+const tracks = [...new Set([...html.matchAll(/"(assets\/[^"]+\.(?:mp3|m4a|ogg|wav))"/g)].map(m => m[1]))];
+for (const ref of tracks) {
+  const bytes = await readFile(resolve(root, ref));
+  const projected = Buffer.byteLength(html) + Math.ceil(bytes.length * 4 / 3);
+  if (projected > BUDGET) {
+    console.log(`  ${ref.padEnd(30)} ${Math.round(bytes.length / 1024)} KB  SKIPPED (over budget — plays on folder hosting only)`);
+    continue;
+  }
+  html = html.replaceAll(`"${ref}"`, `"${await dataUri(ref)}"`);
+}
 
 /* ── unwrap the document ────────────────────────────────────────── */
 const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
