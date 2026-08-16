@@ -574,12 +574,14 @@ const T = {
     // switching variants always starts over from that variant's opening
     if (opened && next !== variant) {
       opened = false;
+      // scroll home BEFORE locking — a scroll issued while the body is
+      // overflow-hidden can be silently kept and restored on unlock
+      scrollTo({ top: 0, behavior: "instant" });
       document.body.classList.remove("open");
       document.body.classList.add("locked");
       $$(".reveal, .wipe, .w").forEach(el => el.classList.remove("in"));
       const hero = $("#hero");
       if (hero) hero.style.opacity = "1";
-      scrollTo({ top: 0, behavior: "instant" });
     }
 
     variant = next;
@@ -1035,6 +1037,8 @@ const T = {
       gate.classList.add("done");   // gates stay in the DOM, sealed again on variant switch
       document.body.classList.remove("locked");
       document.body.classList.add("open");
+      // the unlock can resurrect a scroll position from before the lock
+      scrollTo({ top: 0, behavior: "instant" });
       observeAll();
       scrollFx();
       dust();
