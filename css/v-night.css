@@ -1,0 +1,199 @@
+/* ═══════════════════════════════════════════════════════════════════
+   VARIANT · ليلة العمر / NIGHT — the wedding runs from seven in the
+   evening to two in the morning, so this one is that night itself.
+   Midnight sky with slow-twinkling stars, a crescent moon, photos in
+   glowing gold-ringed circles, constellation lines as ornament,
+   glass panels for the cards and forms.
+   Opening: a hanging gold star — tap it and it launches into
+   fireworks that light the sky before the page appears.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root[data-variant="night"] {
+  --ground:   #0D1728;  --ground-2: #152238;
+  --ink:      #EDEAF2;  --ink-soft: #9AA6BF;
+  --accent:   #D4AF6A;  --accent-2: #E7CD96;
+  --line:     #2B3A57;
+  --shadow:   rgba(0, 0, 0, .55);
+  --paper-a:  #1A2A45;  --paper-b:  #0F1C31;
+  --btn-hover-ink: #0D1728;
+  --glass:    rgba(255, 255, 255, .045);
+
+  --display: var(--f-ar-disp);
+  --body:    var(--f-ar-body);
+
+  /* a handful of fixed stars, tiled behind the whole page */
+  --starfield: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cg fill='%23D4AF6A'%3E%3Ccircle cx='18' cy='34' r='1' opacity='.5'/%3E%3Ccircle cx='92' cy='12' r='.8' opacity='.35'/%3E%3Ccircle cx='150' cy='58' r='1.2' opacity='.45'/%3E%3Ccircle cx='58' cy='96' r='.7' opacity='.3'/%3E%3Ccircle cx='128' cy='132' r='1' opacity='.4'/%3E%3Ccircle cx='30' cy='160' r='.8' opacity='.3'/%3E%3Ccircle cx='176' cy='170' r='.9' opacity='.4'/%3E%3C/g%3E%3Cg fill='%23EDEAF2'%3E%3Ccircle cx='72' cy='52' r='.7' opacity='.35'/%3E%3Ccircle cx='166' cy='104' r='.7' opacity='.3'/%3E%3Ccircle cx='104' cy='178' r='.8' opacity='.3'/%3E%3C/g%3E%3C/svg%3E");
+
+  /* dots joined by faint lines — a little constellation */
+  --constellation: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 30'%3E%3Cpath d='M12 20 L58 8 L104 22 L152 10 L188 18' fill='none' stroke='%23D4AF6A' stroke-width='1' opacity='.55'/%3E%3Cg fill='%23E7CD96'%3E%3Ccircle cx='12' cy='20' r='2.4'/%3E%3Ccircle cx='58' cy='8' r='3'/%3E%3Ccircle cx='104' cy='22' r='2.2'/%3E%3Ccircle cx='152' cy='10' r='3'/%3E%3Ccircle cx='188' cy='18' r='2'/%3E%3C/g%3E%3C/svg%3E");
+}
+:root[data-variant="night"][data-lang="en"] {
+  --display: var(--f-la-disp);
+  --body:    var(--f-la-body);
+}
+
+:root[data-variant="night"] body {
+  background-image: var(--starfield);
+}
+
+/* ── hero: the sky, a moon, and the couple in a locket ─────────── */
+
+[data-variant="night"] .hero {
+  position: relative; min-height: 100svh; overflow: hidden;
+  display: grid; align-content: center; justify-items: center;
+  gap: 1rem; padding: calc(var(--gap) * .9) var(--pad); text-align: center;
+}
+[data-variant="night"] .hero::before {   /* crescent moon */
+  content: ""; position: absolute; top: 9%; inset-inline-end: 12%;
+  width: 58px; aspect-ratio: 1; border-radius: 50%;
+  box-shadow:
+    inset -13px 8px 0 0 var(--accent-2),
+    0 0 34px rgba(212, 175, 106, .35);
+  opacity: .9; z-index: 0; rotate: -14deg;
+}
+
+[data-variant="night"] .frame {
+  position: relative; overflow: hidden;
+  width: min(58vw, 14.5rem); aspect-ratio: 1; border-radius: 50%;
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 0 0 9px color-mix(in srgb, var(--accent) 16%, transparent),
+    0 0 55px rgba(212, 175, 106, .3),
+    0 26px 60px -24px var(--shadow);
+}
+[data-variant="night"] .frame img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; }
+
+/* the wipe's clip-path would cut the ring glow — reveal by fade instead */
+[data-variant="night"] .wipe {
+  clip-path: none; opacity: 0; translate: 0 26px;
+  transition: opacity 1.1s cubic-bezier(.2,.8,.3,1), translate 1.1s cubic-bezier(.2,.8,.3,1);
+}
+[data-variant="night"] .wipe.in { clip-path: none; opacity: 1; translate: 0 0; }
+[data-variant="night"] .wipe img { transform: none; }
+
+[data-variant="night"] .bism {
+  font-family: var(--f-quran); font-size: var(--step-1);
+  color: var(--accent-2); margin: 0; line-height: 2;
+}
+[data-variant="night"] .kicker { font-size: var(--step--1); color: var(--accent); margin: 0; }
+[data-variant="night"] .names {
+  font-family: var(--display); font-size: var(--step-4);
+  line-height: 1.06; display: grid; gap: .03em;
+  text-shadow: 0 0 34px rgba(212, 175, 106, .35);
+}
+[data-variant="night"] .names .amp { font-size: .34em; color: var(--accent); }
+[data-variant="night"] .hero-date,
+[data-variant="night"] .hero-where { color: var(--ink-soft); margin: 0; }
+[data-variant="night"] .count b {
+  color: var(--accent-2);
+  text-shadow: 0 0 22px rgba(212, 175, 106, .5);
+}
+
+/* ── ornament: constellations ──────────────────────────────────── */
+
+[data-variant="night"] .orn {
+  display: block; width: min(58vw, 13rem); height: 2rem;
+  margin-block: 1.3rem; margin-inline: auto;
+  background: var(--constellation) center / contain no-repeat;
+}
+[data-variant="night"] .orn i { display: none; }
+
+[data-variant="night"] .rule {
+  display: block; height: 34px; opacity: .5;
+  background: var(--constellation) center / auto 22px no-repeat;
+}
+
+/* ── the verse glows softly ────────────────────────────────────── */
+
+[data-variant="night"] .ayah-sec { background: var(--ground-2); }
+[data-variant="night"] .ayah {
+  font-family: var(--f-quran); font-size: var(--step-2);
+  line-height: 2.2; text-align: center; text-wrap: balance;
+  max-width: 32rem; margin-inline: auto; color: var(--accent-2);
+  text-shadow: 0 0 30px rgba(212, 175, 106, .25);
+}
+[data-variant="night"] .ayah-src { text-align: center; color: var(--ink-soft); font-size: var(--step--1); margin: 1rem 0 0; }
+
+/* ── story: locket beside a glass panel ────────────────────────── */
+
+[data-variant="night"] .story { display: grid; gap: 2.2rem; justify-items: center; }
+[data-variant="night"] .story .frame { width: min(64vw, 15rem); }
+[data-variant="night"] .story .txt {
+  background: var(--glass); border: 1px solid var(--line);
+  padding: clamp(1.6rem, 4vw, 2.4rem); max-width: 34rem;
+}
+@media (min-width: 48rem) {
+  [data-variant="night"] .story {
+    grid-template-columns: .8fr 1.2fr; align-items: center;
+    width: min(100%, 58rem); margin-inline: auto;
+  }
+  [data-variant="night"] .story .frame { width: min(30vw, 14rem); }
+}
+
+/* ── glass cards and forms ─────────────────────────────────────── */
+
+[data-variant="night"] .card {
+  background: var(--glass); border-color: var(--line);
+}
+[data-variant="night"] .card .k { color: var(--accent); }
+[data-variant="night"] .form {
+  background: var(--glass); border: 1px solid var(--line);
+  padding: clamp(1.4rem, 4vw, 2rem);
+}
+[data-variant="night"] input,
+[data-variant="night"] textarea,
+[data-variant="night"] select { background: var(--ground-2); }
+[data-variant="night"] .choice label { background: var(--ground-2); }
+[data-variant="night"] .wish { background: var(--glass); }
+[data-variant="night"] .wish cite { color: var(--accent); }
+[data-variant="night"] .hashtag { text-shadow: 0 0 26px rgba(212, 175, 106, .4); }
+
+/* ── venue: lit gold against the dark, in a glowing frame ──────── */
+
+[data-variant="night"] .venue-stage { padding-block: var(--gap); }
+[data-variant="night"] .venue-pin {
+  display: grid; justify-items: center; gap: 1.8rem;
+  width: min(100% - (var(--pad) * 2), 46rem); margin-inline: auto;
+  text-align: center;
+}
+[data-variant="night"] .venue-pin img {
+  width: min(100%, 34rem); aspect-ratio: 3/2; object-fit: cover;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 0 45px rgba(212, 175, 106, .28),
+    0 26px 60px -24px var(--shadow);
+}
+[data-variant="night"] .venue-veil { display: none; }
+[data-variant="night"] .venue-copy { display: grid; justify-items: center; gap: .2rem; }
+
+/* ═══ OPENING · tap the star, and the sky answers ═══════════════ */
+
+[data-variant="night"] #gate-star { display: grid; }
+
+#gate-star {
+  background: radial-gradient(ellipse at 50% 30%, #17273F, var(--ground) 75%);
+}
+#gate-star::before {   /* the same fixed stars behind the gate */
+  content: ""; position: absolute; inset: 0;
+  background-image: var(--starfield); opacity: .8; pointer-events: none;
+}
+.fw { position: absolute; inset: 0; pointer-events: none; }
+
+.star-gate {
+  position: relative; z-index: 1;
+  display: grid; justify-items: center; gap: 2rem;
+  border: 0; background: none; padding: 0; cursor: pointer;
+}
+.star-gate .star {
+  width: clamp(64px, 16vw, 90px); aspect-ratio: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2 L60 40 L98 50 L60 60 L50 98 L40 60 L2 50 L40 40 Z' fill='%23E7CD96'/%3E%3C/svg%3E") center / contain no-repeat;
+  filter: drop-shadow(0 0 16px rgba(212, 175, 106, .8));
+  animation: starPulse 2.6s ease-in-out infinite;
+  transition: transform .8s cubic-bezier(.55, -.2, .3, 1), opacity .5s ease .2s;
+}
+@keyframes starPulse {
+  50% { filter: drop-shadow(0 0 30px rgba(212, 175, 106, 1)); scale: 1.09; }
+}
+.star-gate.opening .star { transform: translateY(-42vh) scale(.3); opacity: 0; }
+.star-gate .gate-hint { color: var(--ink-soft); }

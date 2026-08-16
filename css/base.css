@@ -214,17 +214,16 @@ footer small { color: var(--ink-soft); font-size: var(--step--1); }
 :root[dir="rtl"] #progress { transform-origin: right center; }
 body.open #progress { opacity: .85; }
 
+/* Always visible — above the gates too, so a guest can flip variants
+   right from the envelope screen and each one restarts its opening. */
 .switcher {
-  position: fixed; top: .75rem; inset-inline-end: .75rem; z-index: 60;
+  position: fixed; top: .75rem; inset-inline-end: .75rem; z-index: 120;
   display: flex; align-items: center; gap: .5rem;
   padding: .4rem .55rem; border-radius: 999px;
   background: color-mix(in srgb, var(--ground) 80%, transparent);
   border: 1px solid var(--line); backdrop-filter: blur(12px);
   box-shadow: 0 8px 24px -14px var(--shadow);
-  opacity: 0; transform: translateY(-10px);
-  transition: opacity .7s ease .3s, transform .7s ease .3s;
 }
-body.open .switcher { opacity: 1; transform: none; }
 .lang-btn {
   font: inherit; font-size: var(--step--1); font-family: var(--f-la-body);
   letter-spacing: .1em; padding: .1rem .5rem; border: 0; background: none;
@@ -246,6 +245,7 @@ body.open .switcher { opacity: 1; transform: none; }
 .v-dot[data-v="manuscript"] { background: linear-gradient(135deg, #FBF6EC 50%, #B4893C 50%); }
 .v-dot[data-v="arabesque"]  { background: linear-gradient(135deg, #0C3A31 50%, #CBA135 50%); }
 .v-dot[data-v="garden"]     { background: linear-gradient(135deg, #FBF4F1 50%, #C0857C 50%); }
+.v-dot[data-v="night"]      { background: linear-gradient(135deg, #0D1728 50%, #D4AF6A 50%); }
 .v-dot[data-v="modern"]     { background: linear-gradient(135deg, #F2F2F0 50%, #16130F 50%); }
 
 /* ── openings: only the active variant's gate is in the DOM flow ── */

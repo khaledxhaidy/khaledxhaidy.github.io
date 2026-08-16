@@ -175,6 +175,19 @@
 .bloom-gate:hover .env { transform: translateY(-3px); }
 .bloom-gate.opening .env { transform: translateY(3%); }
 
+/* the couple's wax stamp seals the blank note — and is the tap target */
+.bloom-seal {
+  position: absolute; left: 50%; top: 52%; translate: -50% -50%;
+  width: 37%; z-index: 3;
+  filter: drop-shadow(0 5px 10px rgba(40, 20, 10, .38));
+  transition: transform .45s cubic-bezier(.3,1.4,.5,1), opacity .6s ease .1s;
+}
+.bloom-gate:hover .bloom-seal { transform: scale(1.06); }
+.bloom-gate.pressing .bloom-seal { transform: translateY(2px) scale(.93); }
+.bloom-gate.opening .bloom-seal {
+  transform: translateY(74px) rotate(-17deg) scale(.94); opacity: 0;
+}
+
 /* rises from behind the envelope, between the flap and the flowers */
 .bloom-card {
   position: absolute; left: 50%; top: 26%; translate: -50% 0;

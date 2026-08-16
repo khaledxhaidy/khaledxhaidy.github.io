@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="css/v-manuscript.css">
 <link rel="stylesheet" href="css/v-arabesque.css">
 <link rel="stylesheet" href="css/v-garden.css">
+<link rel="stylesheet" href="css/v-night.css">
 <link rel="stylesheet" href="css/v-modern.css">
 </head>
 <body>
@@ -66,14 +67,24 @@
   </button>
 </div>
 
-<!-- garden: the blue envelope; the couple's card rises out of it -->
+<!-- garden: the blue envelope, sealed with the couple's wax stamp -->
 <div class="gate" id="gate-bloom">
   <button class="bloom-gate" data-open aria-label="افتح الدعوة">
     <span class="bloom-stack">
       <span class="bloom-card"><img src="assets/couple-story.jpg" alt="" width="880" height="1100"></span>
       <img class="env" src="assets/env-open.png" alt="" width="490" height="572">
+      <img class="bloom-seal" src="assets/seal.png" alt="" width="420" height="420">
     </span>
-    <span class="gate-hint" data-t="hintTap"></span>
+    <span class="gate-hint" data-t="hintSeal"></span>
+  </button>
+</div>
+
+<!-- night: a hanging gold star; tap it and fireworks light the sky -->
+<div class="gate" id="gate-star">
+  <canvas class="fw" id="fw" aria-hidden="true"></canvas>
+  <button class="star-gate" data-open aria-label="افتح الدعوة">
+    <span class="star" aria-hidden="true"></span>
+    <span class="gate-hint" data-t="hintStar"></span>
   </button>
 </div>
 
@@ -314,6 +325,7 @@ const T = {
     gateCap: "حفل زفاف",
     hintSeal: "دوس على الختم تفتح الدعوة",
     hintTap: "دوس عشان تفتح الدعوة",
+    hintStar: "دوس على النجمة وشوف الليلة بتنور إزاي",
 
     kicker: "حفل زفاف",
     amp: "و",
@@ -373,6 +385,7 @@ const T = {
     gateCap: "Wedding",
     hintSeal: "Tap the seal to open",
     hintTap: "Tap to open",
+    hintStar: "Tap the star and watch the night light up",
 
     kicker: "The wedding of",
     amp: "&",
@@ -443,12 +456,13 @@ const T = {
   const START = new Date(CONFIG.startsAt);
   const END   = new Date(CONFIG.endsAt);
 
-  const VARIANTS = ["postal", "manuscript", "arabesque", "garden", "modern"];
+  const VARIANTS = ["postal", "manuscript", "arabesque", "garden", "night", "modern"];
   const GATE_OF = {
     postal:     "gate-dove",
     manuscript: "gate-envelope",
     arabesque:  "gate-screens",
     garden:     "gate-bloom",
+    night:      "gate-star",
     modern:     "gate-curtain"
   };
 
@@ -528,14 +542,37 @@ const T = {
   }
 
   /* ── variant ───────────────────────────────────────────────────── */
+
+  // put every gate back to its sealed state
+  function resetGates() {
+    $$(".gate").forEach(g => g.classList.remove("done"));
+    $$(".envelope, .dove-gate, .bloom-gate, .curtain, .star-gate")
+      .forEach(b => b.classList.remove("pressing", "opening", "gone"));
+    const scr = $("[data-screens]");
+    if (scr) scr.classList.remove("parting");
+    const fw = $("#fw");
+    if (fw) fw.getContext("2d").clearRect(0, 0, fw.width, fw.height);
+  }
+
   function applyVariant(next) {
+    // switching variants always starts over from that variant's opening
+    if (opened && next !== variant) {
+      opened = false;
+      document.body.classList.remove("open");
+      document.body.classList.add("locked");
+      $$(".reveal, .wipe, .w").forEach(el => el.classList.remove("in"));
+      const hero = $("#hero");
+      if (hero) hero.style.opacity = "1";
+      scrollTo({ top: 0, behavior: "instant" });
+    }
+
     variant = next;
     root.dataset.variant = variant;
     $$(".v-dot").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === variant)));
 
     // only the active variant's gate is allowed on screen
     if (!opened) {
-      $$(".gate").forEach(g => { g.style.visibility = ""; });
+      resetGates();
       Object.entries(GATE_OF).forEach(([v, id]) => {
         const g = document.getElementById(id);
         if (g) g.style.visibility = (v === variant) ? "" : "hidden";
@@ -545,9 +582,6 @@ const T = {
     const bg = getComputedStyle(root).getPropertyValue("--ground").trim();
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta && bg) meta.setAttribute("content", bg);
-
-    // regenerate the ambient motes in the new variant's palette
-    if (opened) dispatchEvent(new Event("resize"));
   }
 
   VARIANTS.forEach(name => {
@@ -596,8 +630,10 @@ const T = {
   }
 
   /* ── scroll effects ────────────────────────────────────────────── */
+  let fxOn = false;
   function scrollFx() {
-    if (reduce) return;
+    if (fxOn || reduce) return;
+    fxOn = true;
     const bar   = $("#progress");
     const hero  = $("#hero");
     const frame = $("#heroFrame");
@@ -626,8 +662,10 @@ const T = {
   }
 
   /* ── ambient dust ──────────────────────────────────────────────── */
+  let dustOn = false;
   function dust() {
-    if (reduce) return;
+    if (dustOn || reduce) return;
+    dustOn = true;
     const cv = $("#dust"), ctx = cv.getContext("2d"), host = cv.parentElement;
     let w, h, motes = [], raf = 0;
 
@@ -644,15 +682,27 @@ const T = {
       }));
     }
     function paint() {
-      // postal and garden get falling petals; the others, rising gold dust
+      // postal and garden get falling petals; night gets twinkling stars;
+      // the rest, rising gold dust
       const petals = variant === "postal" || variant === "garden";
+      const stars  = variant === "night";
       const styles = getComputedStyle(root);
       const palette = petals
         ? [styles.getPropertyValue("--accent").trim(), styles.getPropertyValue("--accent-2").trim(), "#BE9A4E"]
+        : stars
+        ? ["#D4AF6A", "#EDEAF2", "#E7CD96"]
         : [styles.getPropertyValue("--accent").trim() || "#B4893C"];
 
       ctx.clearRect(0, 0, w, h);
       motes.forEach((m, i) => {
+        ctx.fillStyle = palette[i % palette.length];
+        if (stars) {
+          // fixed in place, breathing
+          m.d += .022;
+          ctx.globalAlpha = m.a * (.4 + .6 * Math.abs(Math.sin(m.d + i)));
+          ctx.beginPath(); ctx.arc(m.x, m.y, m.r * .85, 0, Math.PI * 2); ctx.fill();
+          return;
+        }
         m.d += .008; m.x += Math.sin(m.d) * .28;
         if (petals) {
           m.y += m.v * 1.4;
@@ -662,7 +712,6 @@ const T = {
           if (m.y < -6) { m.y = h + 6; m.x = Math.random() * w; }
         }
         ctx.globalAlpha = m.a;
-        ctx.fillStyle = palette[i % palette.length];
         if (petals) {
           ctx.save();
           ctx.translate(m.x, m.y);
@@ -688,6 +737,53 @@ const T = {
   }
 
   /* ── the openings ──────────────────────────────────────────────── */
+
+  // fireworks for the night gate, drawn on its own canvas
+  function fireworks() {
+    const cv = $("#fw");
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const w = cv.clientWidth, h = cv.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const colors = ["#D4AF6A", "#F3E3B8", "#EDEAF2", "#C98A83"];
+    const parts = [];
+    function burst(x, y, n) {
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const s = Math.random() * 3.4 + .7;
+        parts.push({
+          x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s,
+          life: 1, c: colors[i % colors.length], r: Math.random() * 1.9 + .8
+        });
+      }
+    }
+    burst(w * .5,  h * .32, 100);
+    setTimeout(() => burst(w * .3,  h * .46, 65), 280);
+    setTimeout(() => burst(w * .72, h * .4,  65), 520);
+
+    let frames = 0;
+    (function fr() {
+      ctx.clearRect(0, 0, w, h);
+      let alive = false;
+      parts.forEach(p => {
+        if (p.life <= 0) return;
+        alive = true;
+        p.x += p.vx; p.y += p.vy;
+        p.vy += .03; p.vx *= .985; p.vy *= .985;
+        p.life -= .012;
+        ctx.globalAlpha = Math.max(p.life, 0);
+        ctx.fillStyle = p.c;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      if (alive && ++frames < 220) requestAnimationFrame(fr);
+      else ctx.clearRect(0, 0, w, h);
+    })();
+  }
+
   function openGate(btn) {
     if (opened) return;
     opened = true;
@@ -702,21 +798,28 @@ const T = {
       $("[data-screens]").classList.add("parting");
     } else if (variant === "modern") {
       btn.classList.add("opening");
+    } else if (variant === "night") {
+      btn.classList.add("opening");            // the star launches…
+      if (!reduce) fireworks();                // …and bursts
     } else { // postal and garden: the photographed envelopes
-      btn.classList.add("opening");
-      setTimeout(() => btn.classList.add("gone"), reduce ? 0 : 1800);
+      btn.classList.add("pressing");
+      setTimeout(() => { btn.classList.remove("pressing"); btn.classList.add("opening"); }, 150);
+      setTimeout(() => btn.classList.add("gone"), reduce ? 0 : 1950);
     }
 
-    const wait = reduce ? 0 : (variant === "modern" ? 1150 : variant === "arabesque" ? 1350 : 2050);
+    const wait = reduce ? 0
+      : variant === "modern"    ? 1150
+      : variant === "arabesque" ? 1350
+      : variant === "night"     ? 2150
+      : 2050;
 
     setTimeout(() => {
-      gate.classList.add("done");
+      gate.classList.add("done");   // gates stay in the DOM, sealed again on variant switch
       document.body.classList.remove("locked");
       document.body.classList.add("open");
       observeAll();
       scrollFx();
       dust();
-      setTimeout(() => $$(".gate").forEach(g => g.remove()), 1400);
     }, wait);
   }
   $$("[data-open]").forEach(b => b.addEventListener("click", () => openGate(b)));
@@ -861,7 +964,7 @@ const T = {
 
   if (reduce) {
     opened = true;
-    $$(".gate").forEach(g => g.remove());
+    $$(".gate").forEach(g => g.classList.add("done"));
     document.body.classList.remove("locked");
     document.body.classList.add("open");
     $$(".reveal, .wipe").forEach(el => el.classList.add("in"));
