@@ -108,8 +108,6 @@
   <button class="lang-btn" id="langBtn" type="button"></button>
   <span aria-hidden="true" style="width:1px;height:17px;background:var(--line)"></span>
   <span class="variants" id="variants"></span>
-  <span aria-hidden="true" style="width:1px;height:17px;background:var(--line)"></span>
-  <button class="lang-btn music-btn" id="musicBtn" type="button" aria-label="الموسيقى"></button>
 </div>
 
 <!-- ══ PAGE ════════════════════════════════════════════════════════ -->
@@ -650,12 +648,8 @@ const T = {
   audio.preload = "none";
   const deadSongs = new Set();   // tracks that failed to load (kept out of the cycle)
 
-  const MUSIC_KEY = "hk.music." + (CONFIG.version || "v1");
+  // no switcher any more — each version simply plays its own song
   let musicIdx = Math.min(Math.max(CONFIG.defaultSong ?? 0, -1), SONGS.length - 1);
-  try {
-    const saved = parseInt(localStorage.getItem(MUSIC_KEY), 10);
-    if (!Number.isNaN(saved) && saved >= -1 && saved < SONGS.length) musicIdx = saved;
-  } catch (e) {}
 
   let fadeTimer = 0;
   function fadeTo(target, ms) {
@@ -683,40 +677,14 @@ const T = {
     audio.play().then(() => fadeTo(.7, 1200)).catch(() => {});
   }
 
-  function musicLabel() {
-    const b = $("#musicBtn");
-    b.classList.toggle("off", musicIdx < 0);
-    b.textContent = musicIdx < 0 ? "♪" : "♪" + (musicIdx + 1);
-    b.title = musicIdx < 0 ? "" : SONGS[musicIdx].label;
-  }
-
-  function cycleMusic() {
-    const states = SONGS.map((_, i) => i).concat(-1);
-    let pos = states.indexOf(musicIdx);
-    for (let k = 0; k < states.length; k++) {
-      pos = (pos + 1) % states.length;
-      if (states[pos] === -1 || !deadSongs.has(states[pos])) { musicIdx = states[pos]; break; }
-    }
-    try { localStorage.setItem(MUSIC_KEY, String(musicIdx)); } catch (e) {}
-    musicLabel();
-    if (musicIdx < 0) fadeTo(0, 400);
-    else playCurrent();      // button press is a user gesture, so this is allowed
-  }
-
   audio.addEventListener("error", () => {
     // aborts from swapping src mid-play are not a broken track — only a
     // network failure (2) or an unplayable source (4) takes a song out
     const code = audio.error && audio.error.code;
     if (code !== 2 && code !== 4) return;
     const i = parseInt(audio.dataset.idx || "-1", 10);
-    if (i >= 0) {
-      deadSongs.add(i);
-      if (musicIdx === i) cycleMusic();
-    }
+    if (i >= 0) deadSongs.add(i);
   });
-
-  $("#musicBtn").addEventListener("click", cycleMusic);
-  musicLabel();
 
   /* ── reveals ───────────────────────────────────────────────────── */
   const io = new IntersectionObserver(entries => {
