@@ -83,6 +83,7 @@
 <div class="gate" id="gate-star">
   <canvas class="fw" id="fw" aria-hidden="true"></canvas>
   <button class="star-gate" data-open aria-label="افتح الدعوة">
+    <span class="star-line" data-t="starLine"></span>
     <span class="star" aria-hidden="true"></span>
     <span class="gate-hint" data-t="hintStar"></span>
   </button>
@@ -313,7 +314,7 @@ const CONFIG = {
   mapUrl: "https://www.google.com/maps/search/?api=1&query=31.0549652%2C31.3933104",
 
   whatsapp: "",
-  endpoint: "",
+  endpoint: "https://script.google.com/macros/s/AKfycbxYwk2YP_GgAQCS7a-dCFo87tXYgVlehbFtTG9HAYWKs_0Dm1dO0MpOrAsL_gjOuIEbTQ/exec",
   hashtag: "#خالد_وهايدي",
 
   /* Background music. The first entry is what plays when the envelope
@@ -344,6 +345,7 @@ const T = {
     hintSeal: "دوس على الختم تفتح الدعوة",
     hintTap: "دوس عشان تفتح الدعوة",
     hintStar: "دوس على النجمة وشوف الليلة بتنور إزاي",
+    starLine: "نجمة صغيرة… تفتح سماءً من الفرح",
 
     kicker: "حفل زفاف",
     amp: "و",
@@ -404,6 +406,7 @@ const T = {
     hintSeal: "Tap the seal to open",
     hintTap: "Tap to open",
     hintStar: "Tap the star and watch the night light up",
+    starLine: "A little star… that opens a sky of joy",
 
     kicker: "The wedding of",
     amp: "&",
@@ -1149,7 +1152,7 @@ const T = {
       guests: attending === "yes" ? $("#rGuests").value : "0",
       guestNames: attending === "yes" ? $("#rNames").value.trim() : "",
       phone: $("#rPhone").value.trim(),
-      lang, at: new Date().toISOString()
+      lang, version: CONFIG.version, at: new Date().toLocaleString("en-GB")
     };
 
     const btn = $("#rsvpSubmit");
@@ -1196,7 +1199,7 @@ const T = {
     const name = $("#wName").value.trim(), message = $("#wMsg").value.trim();
     if (!name || !message) { status.textContent = t.wishNeed; return; }
 
-    const entry = { type: "wish", name, message, lang, at: new Date().toISOString() };
+    const entry = { type: "wish", name, message, lang, version: CONFIG.version, at: new Date().toLocaleString("en-GB") };
     const btn = $("#wishSubmit");
     btn.disabled = true; status.textContent = t.sending;
     try {

@@ -205,7 +205,16 @@
 .star-gate {
   position: relative; z-index: 1;
   display: grid; justify-items: center; gap: 2rem;
-  border: 0; background: none; padding: 0; cursor: pointer;
+  border: 0; background: none; padding: 0 var(--pad); cursor: pointer;
+}
+.star-gate .star-line {
+  font-family: var(--f-quran); font-size: var(--step-2); line-height: 2;
+  color: var(--accent-2); text-align: center; text-wrap: balance;
+  max-width: 22ch;
+  text-shadow: 0 0 30px rgba(212, 175, 106, .5);
+}
+:root[data-lang="en"] .star-gate .star-line {
+  font-family: var(--f-la-disp); font-style: italic; line-height: 1.6;
 }
 .star-gate .star {
   width: clamp(64px, 16vw, 90px); aspect-ratio: 1;

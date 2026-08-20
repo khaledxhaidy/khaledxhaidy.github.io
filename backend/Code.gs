@@ -1,32 +1,42 @@
 /**
  * Google Apps Script backend for the wedding invitation.
  *
- * It writes every RSVP and every guestbook message into two tabs of a
- * Google Sheet that the couple owns, and serves the guestbook back to
- * the page so wishes are visible to all guests.
- *
- * Setup is in SETUP.md — it takes about five minutes and costs nothing.
+ * Both versions of the invitation post here. RSVPs land in the tab
+ * «الحضور», guestbook messages in «التهاني», inside the spreadsheet
+ * this script is bound to. The guestbook is served back to the page
+ * so wishes are visible to every guest; RSVPs are never served.
  */
 
-var SHEET_ID = ''; // <- paste the Sheet ID from its URL between the quotes
+var SHEET_ID = ''; // empty = the spreadsheet this script is bound to
 
-var TABS = {
-  rsvp: ['at', 'name', 'attending', 'guests', 'guestNames', 'phone', 'lang'],
-  wish: ['at', 'name', 'message', 'lang']
+var COLS = {
+  rsvp: ['at', 'name', 'attending', 'guests', 'guestNames', 'phone', 'lang', 'version'],
+  wish: ['at', 'name', 'message', 'lang', 'version']
+};
+var TAB_NAME = { rsvp: 'الحضور', wish: 'التهاني' };
+var HEADERS = {
+  rsvp: ['الوقت', 'الاسم', 'الحضور', 'عدد المرافقين', 'أسماء المرافقين', 'الموبايل', 'اللغة', 'النسخة'],
+  wish: ['الوقت', 'الاسم', 'التهنئة', 'اللغة', 'النسخة']
 };
 
 function sheetFor_(type) {
   var book = SHEET_ID ? SpreadsheetApp.openById(SHEET_ID)
                       : SpreadsheetApp.getActiveSpreadsheet();
-  var name = type === 'rsvp' ? 'RSVP' : 'Wishes';
-  var tab = book.getSheetByName(name);
+  var tab = book.getSheetByName(TAB_NAME[type]);
   if (!tab) {
-    tab = book.insertSheet(name);
-    tab.appendRow(TABS[type]);
-    tab.getRange(1, 1, 1, TABS[type].length).setFontWeight('bold');
+    tab = book.insertSheet(TAB_NAME[type]);
+    tab.appendRow(HEADERS[type]);
+    tab.getRange(1, 1, 1, HEADERS[type].length).setFontWeight('bold');
     tab.setFrozenRows(1);
+    tab.setRightToLeft(true);
   }
   return tab;
+}
+
+/** Run me once from the editor to authorize and create both tabs. */
+function authorize() {
+  sheetFor_('rsvp');
+  sheetFor_('wish');
 }
 
 /** Receives a submission from the invitation page. */
@@ -34,8 +44,13 @@ function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
     var type = data.type === 'wish' ? 'wish' : 'rsvp';
+
+    if (type === 'rsvp') {
+      data.attending = data.attending === 'yes' ? 'حاضر ✔' : 'معتذر ✖';
+    }
+
     var tab = sheetFor_(type);
-    var row = TABS[type].map(function (key) {
+    var row = COLS[type].map(function (key) {
       return data[key] === undefined ? '' : data[key];
     });
     tab.appendRow(row);
