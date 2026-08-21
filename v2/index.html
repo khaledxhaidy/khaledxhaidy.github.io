@@ -340,7 +340,7 @@ const CONFIG = {
   mapUrl: "https://www.google.com/maps/search/?api=1&query=31.0549652%2C31.3933104",
 
   whatsapp: "",
-  endpoint: "https://script.google.com/macros/s/AKfycbxYwk2YP_GgAQCS7a-dCFo87tXYgVlehbFtTG9HAYWKs_0Dm1dO0MpOrAsL_gjOuIEbTQ/exec",
+  endpoint: "https://script.google.com/macros/s/AKfycbxvGEb9hRQxLf-5pSTpaHVBjC1Y6NTk--6Zacf44A_pdjZ9pq16AfP-ZWkHucPYy2ekcw/exec",
   hashtag: "#خالد_وهايدي",
 
   /* Background music. The first entry is what plays when the envelope
@@ -1287,11 +1287,11 @@ const T = {
   photoForm.addEventListener("submit", async e => {
     e.preventDefault();
     const t = T[lang], status = $("#photoStatus");
+    const who = $("#pName").value.trim();
+    if (!who) { status.textContent = t.rsvpNeedName; $("#pName").focus(); return; }
     const files = [...pFiles.files];
     if (!files.length) { status.textContent = t.photoNeed; return; }
     if (!CONFIG.endpoint) { status.textContent = t.sendFailed; return; }
-
-    const who = $("#pName").value.trim() || "-";
     const btn = $("#photoSubmit");
     btn.disabled = true;
     let sent = 0, failed = 0;

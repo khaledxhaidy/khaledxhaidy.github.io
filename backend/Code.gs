@@ -11,7 +11,7 @@
 
 var SHEET_ID = ''; // empty = the spreadsheet this script is bound to
 
-var FOLDER_NAME = 'يومنا بعيونكم — Khalid & Haidy';
+var FOLDER_NAME = 'Haidy & Khalid';
 
 var COLS = {
   rsvp: ['at', 'name', 'attending', 'guests', 'guestNames', 'phone', 'lang', 'version'],
@@ -27,6 +27,14 @@ var HEADERS = {
 function folderFor_() {
   var it = DriveApp.getFoldersByName(FOLDER_NAME);
   return it.hasNext() ? it.next() : DriveApp.createFolder(FOLDER_NAME);
+}
+
+/** Each guest gets their own folder inside «Haidy & Khalid». */
+function guestFolderFor_(guestName) {
+  var parent = folderFor_();
+  var name = (guestName || '').toString().trim() || 'غير معروف';
+  var it = parent.getFoldersByName(name);
+  return it.hasNext() ? it.next() : parent.createFolder(name);
 }
 
 function sheetFor_(type) {
@@ -56,15 +64,14 @@ function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
 
-    // a guest's photo or video: file into Drive, a log row into the sheet
+    // a guest's photo or video: into their own folder, a log row in the sheet
     if (data.type === 'photo') {
       var bytes = Utilities.base64Decode(data.data);
       var stamp = Utilities.formatDate(new Date(), 'Africa/Cairo', 'yyyyMMdd-HHmmss');
-      var who = data.name && data.name !== '-' ? data.name + ' — ' : '';
       var blob = Utilities.newBlob(bytes,
         data.mime || 'application/octet-stream',
-        who + stamp + ' — ' + (data.filename || 'photo.jpg'));
-      var file = folderFor_().createFile(blob);
+        stamp + ' — ' + (data.filename || 'photo.jpg'));
+      var file = guestFolderFor_(data.name).createFile(blob);
       sheetFor_('photo').appendRow([
         data.at || new Date(), data.name || '', data.filename || '',
         file.getUrl(), data.version || ''
