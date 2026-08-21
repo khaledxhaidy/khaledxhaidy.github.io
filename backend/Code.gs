@@ -2,22 +2,32 @@
  * Google Apps Script backend for the wedding invitation.
  *
  * Both versions of the invitation post here. RSVPs land in the tab
- * «الحضور», guestbook messages in «التهاني», inside the spreadsheet
- * this script is bound to. The guestbook is served back to the page
- * so wishes are visible to every guest; RSVPs are never served.
+ * «الحضور», guestbook messages in «التهاني», guest photo uploads go
+ * to a Drive folder and are logged in «الصور» — all inside the
+ * spreadsheet this script is bound to. The guestbook is served back
+ * to the page so wishes are visible to every guest; RSVPs and photos
+ * are never served.
  */
 
 var SHEET_ID = ''; // empty = the spreadsheet this script is bound to
+
+var FOLDER_NAME = 'يومنا بعيونكم — Khalid & Haidy';
 
 var COLS = {
   rsvp: ['at', 'name', 'attending', 'guests', 'guestNames', 'phone', 'lang', 'version'],
   wish: ['at', 'name', 'message', 'lang', 'version']
 };
-var TAB_NAME = { rsvp: 'الحضور', wish: 'التهاني' };
+var TAB_NAME = { rsvp: 'الحضور', wish: 'التهاني', photo: 'الصور' };
 var HEADERS = {
   rsvp: ['الوقت', 'الاسم', 'الحضور', 'عدد المرافقين', 'أسماء المرافقين', 'الموبايل', 'اللغة', 'النسخة'],
-  wish: ['الوقت', 'الاسم', 'التهنئة', 'اللغة', 'النسخة']
+  wish: ['الوقت', 'الاسم', 'التهنئة', 'اللغة', 'النسخة'],
+  photo: ['الوقت', 'الاسم', 'الملف', 'الرابط', 'النسخة']
 };
+
+function folderFor_() {
+  var it = DriveApp.getFoldersByName(FOLDER_NAME);
+  return it.hasNext() ? it.next() : DriveApp.createFolder(FOLDER_NAME);
+}
 
 function sheetFor_(type) {
   var book = SHEET_ID ? SpreadsheetApp.openById(SHEET_ID)
@@ -33,16 +43,35 @@ function sheetFor_(type) {
   return tab;
 }
 
-/** Run me once from the editor to authorize and create both tabs. */
+/** Run me once from the editor to authorize and create the tabs + folder. */
 function authorize() {
   sheetFor_('rsvp');
   sheetFor_('wish');
+  sheetFor_('photo');
+  folderFor_();
 }
 
 /** Receives a submission from the invitation page. */
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
+
+    // a guest's photo or video: file into Drive, a log row into the sheet
+    if (data.type === 'photo') {
+      var bytes = Utilities.base64Decode(data.data);
+      var stamp = Utilities.formatDate(new Date(), 'Africa/Cairo', 'yyyyMMdd-HHmmss');
+      var who = data.name && data.name !== '-' ? data.name + ' — ' : '';
+      var blob = Utilities.newBlob(bytes,
+        data.mime || 'application/octet-stream',
+        who + stamp + ' — ' + (data.filename || 'photo.jpg'));
+      var file = folderFor_().createFile(blob);
+      sheetFor_('photo').appendRow([
+        data.at || new Date(), data.name || '', data.filename || '',
+        file.getUrl(), data.version || ''
+      ]);
+      return json_({ ok: true, url: file.getUrl() });
+    }
+
     var type = data.type === 'wish' ? 'wish' : 'rsvp';
 
     if (type === 'rsvp') {

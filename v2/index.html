@@ -281,6 +281,32 @@
     <span class="deco deco-rose" aria-hidden="true"><img src="assets/env-rose.png" alt="" width="483" height="360"></span>
   </section>
 
+  <span class="rule" aria-hidden="true"></span>
+
+  <!-- guests' own photos and videos of the day, straight to the couple -->
+  <section id="photos" data-n>
+    <div class="wrap" data-num="05">
+      <p class="eyebrow reveal" data-t="photosEyebrow"></p>
+      <h2 class="reveal" data-split data-t="photosTitle"></h2>
+      <p class="lede reveal" data-t="photosBody"></p>
+
+      <form class="form reveal" id="photoForm" novalidate>
+        <div class="field">
+          <label for="pName" data-t="fName"></label>
+          <input type="text" id="pName" name="name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="pFiles" data-t="fPhotos"></label>
+          <input type="file" id="pFiles" accept="image/*,video/*" multiple>
+          <p class="note" id="pCount"></p>
+        </div>
+        <button class="btn" type="submit" id="photoSubmit" data-t="sendPhotos"></button>
+        <p class="status" id="photoStatus" role="status"></p>
+        <p class="note" data-t="photosNote"></p>
+      </form>
+    </div>
+  </section>
+
   <footer>
     <span class="deco deco-dovegold" aria-hidden="true"><img src="assets/dove-gold.png" alt="" width="318" height="148"></span>
     <div class="orn"><i></i></div>
@@ -387,6 +413,18 @@ const T = {
     sending: "بنبعت…",
     sendFailed: "معرفناش نبعت، جرب تاني من فضلك.",
 
+    photosEyebrow: "ذكريات",
+    photosTitle: "يومنا بعيونكم",
+    photosBody: "صوّرتوا لحظة حلوة في الفرح؟ ابعتوهالنا هنا — أحلى هدية نفتكر بيها يومنا.",
+    fPhotos: "الصور أو الفيديوهات",
+    sendPhotos: "ابعتوا الذكريات",
+    photosNote: "الصور بتوصل للعروسين على طول، ومش بتظهر لحد تاني.",
+    photoPicked: "اخترت {n}",
+    photoUploading: "بنرفع {i} من {n}…",
+    photoDone: "وصلت! ألف شكر على الذكرى الحلوة.",
+    photoNeed: "اختار الصور الأول من فضلك.",
+    photoFail: "في ملفات معرفناش نرفعها، جرب تاني.",
+
     wishEyebrow: "دفتر التهاني",
     wishTitle: "اكتبلنا كلمة حلوة",
     wishBody: "سيبلنا تهنئة أو ذكرى، هنحتفظ بيها للأبد.",
@@ -448,6 +486,18 @@ const T = {
     rsvpNeedName: "Please add your name first.",
     sending: "Sending…",
     sendFailed: "That didn't send. Please try once more.",
+
+    photosEyebrow: "Memories",
+    photosTitle: "Our day through your eyes",
+    photosBody: "Caught a beautiful moment? Send it to us here — the sweetest keepsake of our day.",
+    fPhotos: "Photos or videos",
+    sendPhotos: "Send your memories",
+    photosNote: "They go straight to the couple — nothing is shown publicly.",
+    photoPicked: "{n} selected",
+    photoUploading: "Uploading {i} of {n}…",
+    photoDone: "Received — thank you for the memory!",
+    photoNeed: "Please pick some photos first.",
+    photoFail: "Some files didn't upload. Please try again.",
 
     wishEyebrow: "Guestbook",
     wishTitle: "Leave us a word",
@@ -1182,6 +1232,94 @@ const T = {
     } catch (err) {
       status.textContent = t.sendFailed;
     } finally { btn.disabled = false; }
+  });
+
+  /* ── guests' photos → the couple's Drive ───────────────────────── */
+  const photoForm = $("#photoForm");
+  const pFiles = $("#pFiles");
+
+  pFiles.addEventListener("change", () => {
+    const n = pFiles.files.length;
+    $("#pCount").textContent = n ? T[lang].photoPicked.replace("{n}", num(n)) : "";
+  });
+
+  // shrink a photo in the browser: max edge 2000px, JPEG — a phone shot
+  // drops from ~8 MB to ~1 MB, so uploads survive venue wifi
+  function shrinkImage(file) {
+    const url = URL.createObjectURL(file);
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const scale = Math.min(1, 2000 / Math.max(img.width, img.height));
+          const cv = document.createElement("canvas");
+          cv.width = Math.round(img.width * scale);
+          cv.height = Math.round(img.height * scale);
+          cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+          resolve({
+            data: cv.toDataURL("image/jpeg", .85).split(",")[1],
+            mime: "image/jpeg",
+            filename: file.name.replace(/\.[^.]+$/, "") + ".jpg"
+          });
+        } catch (err) { reject(err); }
+        finally { URL.revokeObjectURL(url); }
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("decode")); };
+      img.src = url;
+    });
+  }
+
+  const MAX_RAW = 25 * 1024 * 1024;   // videos and undecodable images go up as-is
+  function readRaw(file) {
+    return new Promise((resolve, reject) => {
+      if (file.size > MAX_RAW) { reject(new Error("too big")); return; }
+      const r = new FileReader();
+      r.onload = () => resolve({
+        data: String(r.result).split(",")[1],
+        mime: file.type || "application/octet-stream",
+        filename: file.name
+      });
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+
+  photoForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const t = T[lang], status = $("#photoStatus");
+    const files = [...pFiles.files];
+    if (!files.length) { status.textContent = t.photoNeed; return; }
+    if (!CONFIG.endpoint) { status.textContent = t.sendFailed; return; }
+
+    const who = $("#pName").value.trim() || "-";
+    const btn = $("#photoSubmit");
+    btn.disabled = true;
+    let sent = 0, failed = 0;
+
+    for (const f of files) {
+      status.textContent = t.photoUploading
+        .replace("{i}", num(sent + failed + 1))
+        .replace("{n}", num(files.length));
+      try {
+        const payload = f.type.startsWith("image/")
+          ? await shrinkImage(f).catch(() => readRaw(f))
+          : await readRaw(f);
+        await fetch(CONFIG.endpoint, {
+          method: "POST", mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            type: "photo", name: who, lang, version: CONFIG.version,
+            at: new Date().toLocaleString("en-GB"),
+            filename: payload.filename, mime: payload.mime, data: payload.data
+          })
+        });
+        sent++;
+      } catch (err) { failed++; }
+    }
+
+    btn.disabled = false;
+    status.textContent = failed ? t.photoFail : t.photoDone;
+    if (!failed) { photoForm.reset(); $("#pCount").textContent = ""; }
   });
 
   async function loadWishes() {
