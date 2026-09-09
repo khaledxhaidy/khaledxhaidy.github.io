@@ -1200,11 +1200,13 @@ const T = {
   // device's local cache is used solely in offline/endpoint-less mode
   let remoteWishes = null;
   function renderWishes(list) {
-    const items = list || (CONFIG.endpoint ? (remoteWishes || []) : store.read(KEY.wish));
+    const all = list || (CONFIG.endpoint ? (remoteWishes || []) : store.read(KEY.wish));
+    // only the first three wishes ever received, in the order they came
+    const items = all.slice(0, 3);
     const box = $("#wishList");
     box.textContent = "";
     $("#wishEmpty").classList.toggle("hidden", items.length > 0);
-    items.slice().reverse().forEach((w, i) => {
+    items.forEach((w, i) => {
       const el = document.createElement("article");
       el.className = "wish";
       el.style.animationDelay = Math.min(i, 8) * 60 + "ms";
