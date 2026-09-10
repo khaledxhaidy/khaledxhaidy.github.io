@@ -1,6 +1,7 @@
-// Generates v2/index.html — the dove-envelope version — from index.html.
-// v1 (the root page) is the starry night with the Wedding March;
-// v2 is the postal design with "A Thousand Years" as its default song.
+// Generates v2/index.html from index.html. The two versions are the
+// identical starry-night design; the only difference is the soundtrack:
+// v1 (the root page) plays the Wedding March, v2 plays "A Thousand
+// Years" — plus a version tag so the sheet shows where a reply came from.
 //
 //   node tools/make-v2.mjs
 
@@ -18,12 +19,8 @@ function patch(from, to) {
   html = html.replace(from, to);
 }
 
-patch('data-variant="night"',      'data-variant="postal"');
-patch('content="#0D1728"',         'content="#F8F3E8"');
-patch('version: "v1"',             'version: "v2"');
-patch('defaultSong: 0',            'defaultSong: 1');
-patch('variants: ["night"]',       'variants: ["postal"]');
-patch('defaultVariant: "night"',   'defaultVariant: "postal"');
+patch('version: "v1"',   'version: "v2"');
+patch('defaultSong: 0',  'defaultSong: 1');
 
 // v2 lives under /v2/ — resolve every relative asset from the site root
 patch("<head>", '<head>\n<base href="/">');
