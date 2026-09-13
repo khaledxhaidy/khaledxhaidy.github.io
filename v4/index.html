@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-lang="ar" data-variant="arabesque">
+<head>
+<base href="/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C3A31">
+<title>خالد و هايدي</title>
+<meta name="description" content="دعوة حفل زفاف خالد و هايدي">
+
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/v-postal.css">
+<link rel="stylesheet" href="css/v-manuscript.css">
+<link rel="stylesheet" href="css/v-arabesque.css">
+<link rel="stylesheet" href="css/v-garden.css">
+<link rel="stylesheet" href="css/v-night.css">
+<link rel="stylesheet" href="css/v-modern.css">
+</head>
+<body>
+
+<span id="progress" aria-hidden="true"></span>
+
+<!-- ══ OPENINGS — one per variant, only the active one is displayed ══ -->
+
+<!-- manuscript: a paper envelope closed with a real wax seal -->
+<div class="gate" id="gate-envelope">
+  <div class="env-wrap">
+    <p class="env-bism" data-t="bism"></p>
+    <button class="envelope" data-open aria-label="افتح الدعوة">
+      <span class="env-back paper"></span>
+      <span class="env-card paper">
+        <img src="assets/couple-hero.jpg" alt="" width="960" height="1200">
+        <span class="cap" data-t="gateCap"></span>
+      </span>
+      <span class="env-flap paper"></span>
+      <span class="seal">
+        <span class="seal-face"></span>
+        <span class="seal-mono" data-t="monogram"></span>
+      </span>
+    </button>
+    <p class="gate-hint" data-t="hintSeal"></p>
+  </div>
+</div>
+
+<!-- arabesque: two mashrabiya screens part -->
+<div class="gate" id="gate-screens">
+  <div class="screens" data-screens>
+    <span class="screen left"></span>
+    <span class="screen right"></span>
+    <div class="screens-copy">
+      <span class="mono"><span data-t="monogram"></span></span>
+      <p class="gate-hint hint" data-t="hintTap"></p>
+    </div>
+  </div>
+  <button class="gate-open-btn" data-open aria-label="افتح الدعوة"></button>
+</div>
+
+<!-- postal: the couple's dove envelope, photographed closed and open -->
+<div class="gate" id="gate-dove">
+  <button class="dove-gate" data-open aria-label="افتح الدعوة">
+    <span class="dove-stack">
+      <img class="dove-closed" src="assets/env-dove.png" alt="" width="360" height="360">
+      <img class="dove-open"   src="assets/env-dove-open.png" alt="" width="626" height="418">
+      <span class="dove-card"><img src="assets/couple-hero.jpg" alt="" width="960" height="1200"></span>
+    </span>
+    <span class="gate-hint" data-t="hintTap"></span>
+  </button>
+</div>
+
+<!-- garden: the blue envelope, sealed with the couple's wax stamp -->
+<div class="gate" id="gate-bloom">
+  <button class="bloom-gate" data-open aria-label="افتح الدعوة">
+    <span class="bloom-stack">
+      <span class="bloom-card"><img src="assets/couple-story.jpg" alt="" width="880" height="1100"></span>
+      <img class="env" src="assets/env-open.png" alt="" width="490" height="572">
+      <img class="bloom-seal" src="assets/seal.png" alt="" width="420" height="420">
+    </span>
+    <span class="gate-hint" data-t="hintSeal"></span>
+  </button>
+</div>
+
+<!-- night: a hanging gold star; tap it and fireworks light the sky -->
+<div class="gate" id="gate-star">
+  <canvas class="fw" id="fw" aria-hidden="true"></canvas>
+  <button class="star-gate" data-open aria-label="افتح الدعوة">
+    <span class="star-line" data-t="starLine"></span>
+    <span class="star" aria-hidden="true"></span>
+    <span class="gate-hint" data-t="hintStar"></span>
+  </button>
+</div>
+
+<!-- modern: a curtain wipes up -->
+<div class="gate" id="gate-curtain">
+  <button class="curtain" data-open aria-label="افتح الدعوة">
+    <span class="sub" data-t="kicker"></span>
+    <span class="nm">
+      <span data-name="groom"></span>
+      <span class="amp" data-t="amp"></span>
+      <span data-name="bride"></span>
+    </span>
+    <span class="gate-hint hint" data-t="hintTap"></span>
+  </button>
+</div>
+
+<!-- ══ CHROME ══════════════════════════════════════════════════════ -->
+
+<div class="switcher" role="group" aria-label="خيارات العرض">
+  <button class="lang-btn" id="langBtn" type="button"></button>
+  <span aria-hidden="true" style="width:1px;height:17px;background:var(--line)"></span>
+  <span class="variants" id="variants"></span>
+</div>
+
+<!-- ══ PAGE ════════════════════════════════════════════════════════ -->
+
+<main id="page">
+
+  <header class="hero" id="hero">
+    <canvas id="dust" aria-hidden="true"></canvas>
+
+    <span class="deco deco-dove" aria-hidden="true"><img src="assets/env-dove.png" alt="" width="360" height="360"></span>
+    <span class="deco deco-blossom" aria-hidden="true"><img src="assets/flower-blossom.png" alt="" width="98" height="310"></span>
+
+    <div class="hero-media">
+      <div class="frame wipe" id="heroFrame">
+        <img src="assets/couple-hero.jpg" alt="" width="960" height="1200">
+      </div>
+    </div>
+
+    <div class="hero-copy">
+      <p class="bism reveal" data-t="bism"></p>
+      <p class="kicker reveal" data-t="kicker"></p>
+      <h1 class="names reveal" id="names">
+        <span data-name="groom"></span>
+        <span class="amp" data-t="amp"></span>
+        <span data-name="bride"></span>
+      </h1>
+      <div class="orn reveal"><i></i></div>
+      <p class="hero-date reveal" id="heroDate"></p>
+      <p class="hero-where reveal" id="heroWhere"></p>
+      <div class="count reveal" id="count">
+        <div><b id="cd">٠</b><span data-t="days"></span></div>
+        <div><b id="ch">٠</b><span data-t="hours"></span></div>
+        <div><b id="cm">٠</b><span data-t="mins"></span></div>
+        <div><b id="cs">٠</b><span data-t="secs"></span></div>
+      </div>
+    </div>
+
+    <span class="scroll-cue" aria-hidden="true"></span>
+  </header>
+
+  <section class="ayah-sec">
+    <div class="wrap">
+      <p class="ayah reveal" data-t="ayah"></p>
+      <p class="ayah-src reveal" data-t="ayahSrc"></p>
+    </div>
+  </section>
+
+  <span class="rule" aria-hidden="true"></span>
+
+  <section id="welcome" data-n>
+    <span class="deco deco-flower" aria-hidden="true"><img src="assets/flower-rose.png" alt="" width="235" height="335"></span>
+    <div class="wrap-wide story" data-num="01">
+      <div class="frame wipe">
+        <img src="assets/couple-story.jpg" alt="" width="880" height="1100" loading="lazy">
+      </div>
+      <div class="txt reveal">
+        <p class="eyebrow" data-t="welcomeEyebrow"></p>
+        <h2 data-split data-t="welcomeTitle"></h2>
+        <div class="orn"><i></i></div>
+        <p class="lede" data-t="welcomeBody"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="details" data-n>
+    <div class="wrap-wide" data-num="02">
+      <p class="eyebrow reveal" data-t="detailsEyebrow"></p>
+      <h2 class="reveal" data-split data-t="detailsTitle"></h2>
+      <div class="cards">
+        <div class="card reveal">
+          <span class="k" data-t="kWhen"></span>
+          <span class="v" id="cardDate"></span>
+          <span class="n" id="cardDay"></span>
+        </div>
+        <div class="card reveal">
+          <span class="k" data-t="kTime"></span>
+          <span class="v" id="cardTime"></span>
+          <span class="n" data-t="timeNote"></span>
+        </div>
+        <div class="card reveal">
+          <span class="k" data-t="kDress"></span>
+          <span class="v" data-t="dressValue"></span>
+          <span class="n" data-t="dressNote"></span>
+        </div>
+      </div>
+      <div class="btn-row reveal">
+        <button class="btn" id="calBtn" type="button" data-t="addToCalendar"></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="venue-stage" id="venueStage">
+    <div class="venue-pin">
+      <img id="venueImg" src="assets/venue-main.jpg" alt="" width="1320" height="901" loading="lazy">
+      <span class="venue-veil" aria-hidden="true"></span>
+      <div class="venue-copy">
+        <p class="eyebrow" data-t="venueEyebrow"></p>
+        <h2 id="venueName"></h2>
+        <div class="orn"><i></i></div>
+        <p class="lede" id="venueAddress"></p>
+        <div class="btn-row">
+          <a class="btn" id="mapBtn" href="#" target="_blank" rel="noopener" data-t="openMap"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="rsvp" data-n>
+    <span class="deco deco-bloomenv" aria-hidden="true"><img src="assets/env-open.png" alt="" width="490" height="572"></span>
+    <div class="wrap" data-num="03">
+      <p class="eyebrow reveal" data-t="rsvpEyebrow"></p>
+      <h2 class="reveal" data-split data-t="rsvpTitle"></h2>
+      <p class="lede reveal" data-t="rsvpBody"></p>
+
+      <form class="form reveal" id="rsvpForm" novalidate>
+        <div class="field">
+          <label for="rName" data-t="fName"></label>
+          <input type="text" id="rName" name="name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label data-t="fAttending"></label>
+          <div class="choice">
+            <label><input type="radio" name="attending" value="yes" checked><span data-t="optYes"></span></label>
+            <label><input type="radio" name="attending" value="no"><span data-t="optNo"></span></label>
+          </div>
+        </div>
+        <div class="field" id="guestsField">
+          <label for="rGuests" data-t="fGuests"></label>
+          <select id="rGuests" name="guests">
+            <option>0</option><option>1</option><option>2</option>
+            <option>3</option><option>4</option><option>5+</option>
+          </select>
+        </div>
+        <div class="field" id="namesField">
+          <label for="rNames" data-t="fGuestNames"></label>
+          <textarea id="rNames" name="guestNames" rows="2"></textarea>
+        </div>
+        <div class="field">
+          <label for="rPhone" data-t="fPhone"></label>
+          <input type="tel" id="rPhone" name="phone" autocomplete="tel" inputmode="tel">
+        </div>
+        <button class="btn" type="submit" id="rsvpSubmit" data-t="sendRsvp"></button>
+        <p class="status" id="rsvpStatus" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <span class="rule" aria-hidden="true"></span>
+
+  <section id="guestbook" data-n>
+    <div class="wrap" data-num="04">
+      <p class="eyebrow reveal" data-t="wishEyebrow"></p>
+      <h2 class="reveal" data-split data-t="wishTitle"></h2>
+      <p class="lede reveal" data-t="wishBody"></p>
+
+      <form class="form reveal" id="wishForm" novalidate>
+        <div class="field">
+          <label for="wName" data-t="fName"></label>
+          <input type="text" id="wName" name="name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="wMsg" data-t="fMessage"></label>
+          <textarea id="wMsg" name="message" rows="3"></textarea>
+        </div>
+        <button class="btn" type="submit" id="wishSubmit" data-t="sendWish"></button>
+        <p class="status" id="wishStatus" role="status"></p>
+      </form>
+
+      <div class="wishes" id="wishList"></div>
+      <p class="wishes-empty hidden" id="wishEmpty" data-t="noWishes"></p>
+    </div>
+    <span class="deco deco-rose" aria-hidden="true"><img src="assets/env-rose.png" alt="" width="483" height="360"></span>
+  </section>
+
+  <span class="rule" aria-hidden="true"></span>
+
+  <!-- guests' own photos and videos of the day, straight to the couple -->
+  <section id="photos" data-n>
+    <div class="wrap" data-num="05">
+      <p class="eyebrow reveal" data-t="photosEyebrow"></p>
+      <h2 class="reveal" data-split data-t="photosTitle"></h2>
+      <p class="lede reveal" data-t="photosBody"></p>
+
+      <form class="form reveal" id="photoForm" novalidate>
+        <div class="field">
+          <label for="pName" data-t="fName"></label>
+          <input type="text" id="pName" name="name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="pFiles" data-t="fPhotos"></label>
+          <input type="file" id="pFiles" accept="image/*,video/*" multiple>
+          <p class="note" id="pCount"></p>
+        </div>
+        <button class="btn" type="submit" id="photoSubmit" data-t="sendPhotos"></button>
+        <p class="status" id="photoStatus" role="status"></p>
+        <p class="note" data-t="photosNote"></p>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <span class="deco deco-dovegold" aria-hidden="true"><img src="assets/dove-gold.png" alt="" width="318" height="148"></span>
+    <div class="orn"><i></i></div>
+    <p class="hashtag" id="hashtag"></p>
+    <small data-t="footerNote"></small>
+  </footer>
+
+</main>
+
+<script>
+/* ═════════════════════════════════════════════════════════════════
+   CONFIG — the only block you need to edit.
+   ═════════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  bride: { ar: "هايدي", en: "Haidy" },
+  groom: { ar: "خالد",  en: "Khalid" },
+  monogram: { ar: "خ هـ", en: "K h" },
+
+  /* zodiac constellations drawn into the night sky — groom first
+     (Khalid 10 Dec → Sagittarius, Haidy 5 Jul → Cancer) */
+  zodiac: ["sagittarius", "cancer"],
+
+  startsAt: "2026-09-19T19:00:00",
+  endsAt:   "2026-09-20T02:00:00",
+  timezone: "Africa/Cairo",
+
+  venue: {
+    name:    { ar: "قاعة كابيتال", en: "Capital" },
+    address: { ar: "طلخا، محافظة الدقهلية", en: "Talkha, Dakahlia Governorate" }
+  },
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=31.0549652%2C31.3933104",
+
+  whatsapp: "",
+  endpoint: "https://script.google.com/macros/s/AKfycbxvGEb9hRQxLf-5pSTpaHVBjC1Y6NTk--6Zacf44A_pdjZ9pq16AfP-ZWkHucPYy2ekcw/exec",
+  hashtag: "#خالد_وهايدي",
+
+  /* Background music. The first entry is what plays when the envelope
+     is opened; the ♪ button in the switcher cycles song 1 → song 2 → off. */
+  songs: [
+    { src: "assets/song-wedding-march.mp3",   label: "Mendelssohn — Wedding March" },
+    { src: "assets/song-a-thousand-years.mp3", label: "A Thousand Years" }
+  ],
+
+  defaultLang: "ar",
+
+  /* v1 = the starry night with the Wedding March; tools/make-v2.mjs
+     rewrites these four lines to produce the dove version at /v2/. */
+  version: "v4",
+  defaultSong: 0,
+  variants: ["arabesque"],
+  defaultVariant: "arabesque"
+};
+
+/* ═════════════════════════════════════════════════════════════════
+   WORDING — Egyptian Arabic, and English.
+   ═════════════════════════════════════════════════════════════════ */
+const T = {
+  ar: {
+    bism: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ",
+    monogram: CONFIG.monogram.ar,
+    gateCap: "حفل زفاف",
+    hintSeal: "دوس على الختم تفتح الدعوة",
+    hintTap: "دوس عشان تفتح الدعوة",
+    hintStar: "دوس على النجمة وشوف الليلة بتنور إزاي",
+    starLine: "نجمة صغيرة… تفتح سماءً من الفرح",
+
+    kicker: "حفل زفاف",
+    amp: "و",
+    days: "يوم", hours: "ساعة", mins: "دقيقة", secs: "ثانية",
+
+    ayah: "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    ayahSrc: "سورة الروم — الآية ٢١",
+
+    welcomeEyebrow: "أهلاً بيكم",
+    welcomeTitle: "نورتوا فرحنا",
+    welcomeBody: "بكل فرحة وسعادة، بندعوكم تشاركونا أحلى يوم في حياتنا. " +
+                 "وجودكم معانا هو أغلى هدية، وفرحتنا مش هتكمل من غيركم.",
+
+    detailsEyebrow: "التفاصيل",
+    detailsTitle: "ميعاد الفرح",
+    kWhen: "التاريخ", kTime: "الميعاد", kDress: "الزي",
+    timeNote: "الاستقبال من ٧ بالليل",
+    dressValue: "أناقة رسمية",
+    dressNote: "نورونا بأحلى إطلالة",
+    addToCalendar: "ضيف الميعاد للتقويم",
+
+    venueEyebrow: "المكان",
+    openMap: "افتح الخريطة",
+
+    rsvpEyebrow: "تأكيد الحضور",
+    rsvpTitle: "هتشرفونا؟",
+    rsvpBody: "أكدولنا حضوركم عشان نجهزلكم مكانكم على أصوله.",
+    fName: "الاسم",
+    fAttending: "هتحضروا؟",
+    optYes: "إن شاء الله هحضر",
+    optNo: "للأسف مش هقدر",
+    fGuests: "عدد المرافقين",
+    fGuestNames: "أسماء المرافقين (اختياري)",
+    fPhone: "رقم الموبايل (اختياري)",
+    sendRsvp: "ابعت التأكيد",
+    rsvpOkYes: "نورتونا، مستنينكم!",
+    rsvpOkNo: "شكراً إنك قلتلنا، هتوحشنا.",
+    rsvpNeedName: "اكتب اسمك الأول من فضلك.",
+    sending: "بنبعت…",
+    sendFailed: "معرفناش نبعت، جرب تاني من فضلك.",
+
+    photosEyebrow: "ذكريات",
+    photosTitle: "يومنا بعيونكم",
+    photosBody: "صوّرتوا لحظة حلوة في الفرح؟ ابعتوهالنا هنا — أحلى هدية نفتكر بيها يومنا.",
+    fPhotos: "الصور أو الفيديوهات",
+    sendPhotos: "ابعتوا الذكريات",
+    photosNote: "الصور بتوصل للعروسين على طول، ومش بتظهر لحد تاني.",
+    photoPicked: "اخترت {n}",
+    photoUploading: "بنرفع {i} من {n}…",
+    photoDone: "وصلت! ألف شكر على الذكرى الحلوة.",
+    photoNeed: "اختار الصور الأول من فضلك.",
+    photoFail: "في ملفات معرفناش نرفعها، جرب تاني.",
+
+    wishEyebrow: "دفتر التهاني",
+    wishTitle: "اكتبلنا كلمة حلوة",
+    wishBody: "سيبلنا تهنئة أو ذكرى، هنحتفظ بيها للأبد.",
+    fMessage: "رسالتك",
+    sendWish: "ابعت التهنئة",
+    wishOk: "شكراً من قلبنا على كلامك الجميل.",
+    wishNeed: "اكتب اسمك ورسالتك من فضلك.",
+    noWishes: "كن أول واحد يسيبلنا كلمة.",
+
+    footerNote: "مستنينكم",
+    waIntro: "تأكيد حضور"
+  },
+  en: {
+    bism: "In the name of God, the Most Gracious, the Most Merciful",
+    monogram: CONFIG.monogram.en,
+    gateCap: "Wedding",
+    hintSeal: "Tap the seal to open",
+    hintTap: "Tap to open",
+    hintStar: "Tap the star and watch the night light up",
+    starLine: "A little star… that opens a sky of joy",
+
+    kicker: "The wedding of",
+    amp: "&",
+    days: "Days", hours: "Hours", mins: "Minutes", secs: "Seconds",
+
+    ayah: "And among His signs is that He created for you mates from among yourselves, " +
+          "that you may find tranquillity in them, and He placed between you affection and mercy.",
+    ayahSrc: "Ar-Rum — 21",
+
+    welcomeEyebrow: "Welcome",
+    welcomeTitle: "You light up our day",
+    welcomeBody: "With all our joy, we invite you to share the happiest day of our lives. " +
+                 "Your presence is the greatest gift, and our celebration is not complete without you.",
+
+    detailsEyebrow: "The details",
+    detailsTitle: "When and how",
+    kWhen: "Date", kTime: "Time", kDress: "Dress code",
+    timeNote: "Reception opens at seven",
+    dressValue: "Formal elegant",
+    dressNote: "Come as your finest",
+    addToCalendar: "Add to calendar",
+
+    venueEyebrow: "The venue",
+    openMap: "Open in maps",
+
+    rsvpEyebrow: "RSVP",
+    rsvpTitle: "Will you join us?",
+    rsvpBody: "Let us know so we can set your place exactly as it should be.",
+    fName: "Your name",
+    fAttending: "Will you attend?",
+    optYes: "Joyfully accept",
+    optNo: "Regretfully decline",
+    fGuests: "Companions",
+    fGuestNames: "Companion names (optional)",
+    fPhone: "Phone (optional)",
+    sendRsvp: "Send RSVP",
+    rsvpOkYes: "Wonderful — we can't wait to see you.",
+    rsvpOkNo: "Thank you for telling us. You'll be missed.",
+    rsvpNeedName: "Please add your name first.",
+    sending: "Sending…",
+    sendFailed: "That didn't send. Please try once more.",
+
+    photosEyebrow: "Memories",
+    photosTitle: "Our day through your eyes",
+    photosBody: "Caught a beautiful moment? Send it to us here — the sweetest keepsake of our day.",
+    fPhotos: "Photos or videos",
+    sendPhotos: "Send your memories",
+    photosNote: "They go straight to the couple — nothing is shown publicly.",
+    photoPicked: "{n} selected",
+    photoUploading: "Uploading {i} of {n}…",
+    photoDone: "Received — thank you for the memory!",
+    photoNeed: "Please pick some photos first.",
+    photoFail: "Some files didn't upload. Please try again.",
+
+    wishEyebrow: "Guestbook",
+    wishTitle: "Leave us a word",
+    wishBody: "Write a wish or a memory. We'll keep it for good.",
+    fMessage: "Your message",
+    sendWish: "Send your wish",
+    wishOk: "Thank you, truly, for your words.",
+    wishNeed: "Please add your name and a message.",
+    noWishes: "Be the first to leave a word.",
+
+    footerNote: "We'll be waiting for you",
+    waIntro: "RSVP"
+  }
+};
+
+/* ═════════════════════════════════════════════════════════════════
+   Runtime
+   ═════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  const root   = document.documentElement;
+  const $      = (s, c) => (c || document).querySelector(s);
+  const $$     = (s, c) => Array.from((c || document).querySelectorAll(s));
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const START = new Date(CONFIG.startsAt);
+  const END   = new Date(CONFIG.endsAt);
+
+  const VARIANTS = ["postal", "manuscript", "arabesque", "garden", "night", "modern"];
+  const GATE_OF = {
+    postal:     "gate-dove",
+    manuscript: "gate-envelope",
+    arabesque:  "gate-screens",
+    garden:     "gate-bloom",
+    night:      "gate-star",
+    modern:     "gate-curtain"
+  };
+
+  // the designs actually offered to guests (CONFIG.variants), in order
+  const ENABLED = (CONFIG.variants && CONFIG.variants.length ? CONFIG.variants : VARIANTS)
+    .filter(v => VARIANTS.includes(v));
+
+  let lang    = CONFIG.defaultLang === "en" ? "en" : "ar";
+  let variant = ENABLED.includes(CONFIG.defaultVariant) ? CONFIG.defaultVariant : ENABLED[0];
+  let opened  = false;
+
+  const locale = () => (lang === "ar" ? "ar-EG" : "en-GB");
+  const num    = n => Number(n).toLocaleString(locale());
+
+  const KEY = { rsvp: "hk.rsvp.v1", wish: "hk.wishes.v1" };
+  const store = {
+    read(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch (e) { return []; } },
+    push(k, v) {
+      const list = store.read(k); list.push(v);
+      try { localStorage.setItem(k, JSON.stringify(list)); } catch (e) {}
+      return list;
+    }
+  };
+
+  /* ── words split for the staggered heading reveal ───────────────── */
+  function setSplit(el, text) {
+    el.textContent = "";
+    text.split(" ").forEach((word, i) => {
+      const s = document.createElement("span");
+      s.className = "w";
+      s.textContent = word;
+      s.style.transitionDelay = i * 55 + "ms";
+      el.append(s, document.createTextNode(" "));
+    });
+    if (el.classList.contains("in")) {
+      requestAnimationFrame(() => $$(".w", el).forEach(w => w.classList.add("in")));
+    }
+  }
+
+  /* ── language ──────────────────────────────────────────────────── */
+  function applyLang(next) {
+    lang = next;
+    root.lang = lang;
+    root.dir  = lang === "ar" ? "rtl" : "ltr";
+    root.dataset.lang = lang;
+
+    const t = T[lang];
+    $$("[data-t]").forEach(el => {
+      const v = t[el.dataset.t];
+      if (v === undefined) return;
+      if (el.hasAttribute("data-split")) setSplit(el, v);
+      else el.textContent = v;
+    });
+    $$("[data-name]").forEach(el => { el.textContent = CONFIG[el.dataset.name][lang]; });
+
+    $("#venueName").textContent    = CONFIG.venue.name[lang];
+    $("#venueAddress").textContent = CONFIG.venue.address[lang];
+    $("#hashtag").textContent      = CONFIG.hashtag;
+    $("#heroWhere").textContent    = CONFIG.venue.name[lang] + " · " + CONFIG.venue.address[lang];
+
+    $("#langBtn").textContent = lang === "ar" ? "EN" : "ع";
+    $("#langBtn").setAttribute("aria-label",
+      lang === "ar" ? "Switch to English" : "التبديل إلى العربية");
+    $$("[data-open]").forEach(b =>
+      b.setAttribute("aria-label", lang === "ar" ? "افتح الدعوة" : "Open the invitation"));
+
+    const L = locale();
+    const dateOpts = { day: "numeric", month: "long", year: "numeric" };
+    $("#heroDate").textContent = START.toLocaleDateString(L, dateOpts);
+    $("#cardDate").textContent = START.toLocaleDateString(L, dateOpts);
+    $("#cardDay").textContent  = START.toLocaleDateString(L, { weekday: "long" });
+    const tm = d => d.toLocaleTimeString(L, { hour: "numeric", minute: "2-digit" });
+    $("#cardTime").textContent = tm(START) + " – " + tm(END);
+
+    $$("section[data-n] > [data-num]").forEach(el => {
+      el.setAttribute("data-num", num(el.dataset.num).padStart ? el.dataset.num : el.dataset.num);
+    });
+
+    renderWishes();
+    tick();
+  }
+
+  /* ── variant ───────────────────────────────────────────────────── */
+
+  // put every gate back to its sealed state
+  function resetGates() {
+    $$(".gate").forEach(g => g.classList.remove("done"));
+    $$(".envelope, .dove-gate, .bloom-gate, .curtain, .star-gate")
+      .forEach(b => b.classList.remove("pressing", "opening", "gone"));
+    const scr = $("[data-screens]");
+    if (scr) scr.classList.remove("parting");
+    const fw = $("#fw");
+    if (fw) fw.getContext("2d").clearRect(0, 0, fw.width, fw.height);
+  }
+
+  function applyVariant(next) {
+    // switching variants always starts over from that variant's opening
+    if (opened && next !== variant) {
+      opened = false;
+      // scroll home BEFORE locking — a scroll issued while the body is
+      // overflow-hidden can be silently kept and restored on unlock
+      scrollTo({ top: 0, behavior: "instant" });
+      document.body.classList.remove("open");
+      document.body.classList.add("locked");
+      $$(".reveal, .wipe, .w").forEach(el => el.classList.remove("in"));
+      const hero = $("#hero");
+      if (hero) hero.style.opacity = "1";
+    }
+
+    variant = next;
+    root.dataset.variant = variant;
+    $$(".v-dot").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === variant)));
+
+    // only the active variant's gate is allowed on screen
+    if (!opened) {
+      resetGates();
+      Object.entries(GATE_OF).forEach(([v, id]) => {
+        const g = document.getElementById(id);
+        if (g) g.style.visibility = (v === variant) ? "" : "hidden";
+      });
+    }
+
+    const bg = getComputedStyle(root).getPropertyValue("--ground").trim();
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta && bg) meta.setAttribute("content", bg);
+
+    gateSky(variant === "night" && !opened);
+  }
+
+  ENABLED.forEach(name => {
+    const b = document.createElement("button");
+    b.className = "v-dot"; b.type = "button"; b.dataset.v = name;
+    b.setAttribute("aria-label", name);
+    b.addEventListener("click", () => applyVariant(name));
+    $("#variants").appendChild(b);
+  });
+  if (ENABLED.length < 2) {   // a single design needs no picker
+    $("#variants").classList.add("hidden");
+    const divider = $("#variants").previousElementSibling;
+    if (divider) divider.classList.add("hidden");
+  }
+  $("#langBtn").addEventListener("click", () => applyLang(lang === "ar" ? "en" : "ar"));
+
+  /* ── countdown ─────────────────────────────────────────────────── */
+  function tick() {
+    const ms = START - new Date();
+    const box = $("#count");
+    if (ms <= 0) { box.style.visibility = "hidden"; return; }
+    box.style.visibility = "visible";
+    const s = Math.floor(ms / 1000);
+    $("#cd").textContent = num(Math.floor(s / 86400));
+    $("#ch").textContent = num(Math.floor(s / 3600) % 24);
+    $("#cm").textContent = num(Math.floor(s / 60) % 60);
+    $("#cs").textContent = num(s % 60);
+  }
+  setInterval(tick, 1000);
+
+  $("#mapBtn").href = CONFIG.mapUrl;
+
+  /* ── music ─────────────────────────────────────────────────────── */
+  const SONGS = CONFIG.songs || [];
+  const audio = new Audio();
+  audio.loop = true;
+  audio.preload = "none";
+  const deadSongs = new Set();   // tracks that failed to load (kept out of the cycle)
+
+  // no switcher any more — each version simply plays its own song
+  let musicIdx = Math.min(Math.max(CONFIG.defaultSong ?? 0, -1), SONGS.length - 1);
+
+  let fadeTimer = 0;
+  function fadeTo(target, ms) {
+    clearInterval(fadeTimer);
+    fadeTimer = setInterval(() => {
+      const step = (target > audio.volume ? 1 : -1) * .05;
+      const v = audio.volume + step;
+      if ((step > 0 && v >= target) || (step < 0 && v <= target)) {
+        audio.volume = target;
+        clearInterval(fadeTimer);
+        if (target === 0) audio.pause();
+      } else {
+        audio.volume = v;
+      }
+    }, Math.max(20, ms / 20));
+  }
+
+  function playCurrent() {
+    if (musicIdx < 0 || deadSongs.has(musicIdx) || !SONGS[musicIdx]) return;
+    if (audio.dataset.idx !== String(musicIdx)) {
+      audio.src = SONGS[musicIdx].src;
+      audio.dataset.idx = String(musicIdx);
+    }
+    audio.volume = 0;
+    audio.play().then(() => fadeTo(.7, 1200)).catch(() => {});
+  }
+
+  audio.addEventListener("error", () => {
+    // aborts from swapping src mid-play are not a broken track — only a
+    // network failure (2) or an unplayable source (4) takes a song out
+    const code = audio.error && audio.error.code;
+    if (code !== 2 && code !== 4) return;
+    const i = parseInt(audio.dataset.idx || "-1", 10);
+    if (i >= 0) deadSongs.add(i);
+  });
+
+  /* ── reveals ───────────────────────────────────────────────────── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("in");
+      $$(".w", e.target).forEach(w => w.classList.add("in"));
+      io.unobserve(e.target);
+    });
+  }, { threshold: .12, rootMargin: "0px 0px -6% 0px" });
+
+  function observeAll() {
+    $$(".reveal, .wipe").forEach((el, i) => {
+      if (!el.dataset.delayed) {
+        el.style.transitionDelay = Math.min(i % 5, 4) * 80 + "ms";
+        el.dataset.delayed = "1";
+      }
+      io.observe(el);
+    });
+  }
+
+  /* ── scroll effects ────────────────────────────────────────────── */
+  let fxOn = false;
+  function scrollFx() {
+    if (fxOn || reduce) return;
+    fxOn = true;
+    const bar   = $("#progress");
+    const hero  = $("#hero");
+    const frame = $("#heroFrame");
+    const names = $("#names");
+    let ticking = false;
+
+    function frameFn() {
+      const y = scrollY;
+      const max = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
+
+      const hh = hero.offsetHeight;
+      if (y < hh) {
+        const p = y / hh;
+        frame.style.transform = "translateY(" + (y * .18) + "px)";
+        names.style.transform = "translateY(" + (y * .08) + "px)";
+        hero.style.opacity    = String(Math.max(0, 1 - p * 1.2));
+      }
+      ticking = false;
+    }
+
+    addEventListener("scroll", () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(frameFn); }
+    }, { passive: true });
+    frameFn();
+  }
+
+  /* ── ambient dust ──────────────────────────────────────────────── */
+  /* pre-rendered glow sprites shared by the night sky and the meteors */
+  let SPRITES = null;
+  function sprites() {
+    if (SPRITES) return SPRITES;
+    function glow(size, core, mid, edge) {
+      const c = document.createElement("canvas");
+      c.width = c.height = size;
+      const g = c.getContext("2d");
+      const rg = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      rg.addColorStop(0, core); rg.addColorStop(.3, mid); rg.addColorStop(1, edge);
+      g.fillStyle = rg; g.fillRect(0, 0, size, size);
+      return c;
+    }
+    // a bright star with a four-point cross flare
+    const flare = glow(64, "rgba(255,250,235,.98)", "rgba(212,175,106,.5)", "rgba(212,175,106,0)");
+    const fg = flare.getContext("2d");
+    const lg = fg.createLinearGradient(0, 0, 64, 0);
+    lg.addColorStop(0, "rgba(237,234,242,0)");
+    lg.addColorStop(.5, "rgba(255,252,240,.9)");
+    lg.addColorStop(1, "rgba(237,234,242,0)");
+    fg.fillStyle = lg;
+    fg.fillRect(0, 31.2, 64, 1.6);
+    fg.save(); fg.translate(32, 32); fg.rotate(Math.PI / 2); fg.translate(-32, -32);
+    fg.fillRect(0, 31.2, 64, 1.6); fg.restore();
+
+    SPRITES = {
+      gold:  glow(48, "rgba(255,250,235,.95)", "rgba(212,175,106,.5)",  "rgba(212,175,106,0)"),
+      white: glow(48, "rgba(255,255,255,.95)", "rgba(186,200,232,.45)", "rgba(186,200,232,0)"),
+      flare
+    };
+    return SPRITES;
+  }
+
+  /* the couple's star signs, drawn as their real asterisms:
+     Sagittarius as the Teapot; Cancer as its faint upside-down Y —
+     iota at the top, the two Aselli in the middle, Acubens and
+     Al Tarf as the open arms */
+  const CONSTELLATIONS = {
+    sagittarius: {
+      ar: "برج القوس", en: "Sagittarius",
+      stars: [[30,35],[20,55],[5,45],[38,18],[55,30],[68,18],[72,38],[60,52]],
+      lines: [[2,0],[2,1],[0,1],[0,3],[3,4],[4,0],[4,5],[5,6],[6,7],[7,4],[7,1]]
+    },
+    cancer: {
+      ar: "برج السرطان", en: "Cancer",
+      stars: [[42,0],[50,28],[56,48],[88,72],[20,80]],
+      lines: [[0,1],[1,2],[2,3],[2,4]]
+    }
+  };
+
+  function drawZodiac(ctx, w, h, now) {
+    const keys = CONFIG.zodiac || [];
+    if (!keys.length) return;
+    const sp = sprites();
+    const scale = Math.min(Math.max(w * .14, 84), 160);
+    // flanking the hero content, groom on the reading-start side
+    const rtl = root.dir === "rtl";
+    const left  = [w * .03, h * .30];
+    const right = [w * .97 - scale, h * .30];
+    const spots = rtl ? [right, left] : [left, right];
+
+    keys.forEach((key, ki) => {
+      const c = CONSTELLATIONS[key];
+      const spot = spots[ki];
+      if (!c || !spot) return;
+      const [ox, oy] = spot;
+      const pt = i => [ox + c.stars[i][0] / 100 * scale, oy + c.stars[i][1] / 100 * scale * .8];
+
+      ctx.strokeStyle = "rgba(212,175,106,.32)";
+      ctx.lineWidth = 1;
+      c.lines.forEach(([a, b]) => {
+        const [x1, y1] = pt(a), [x2, y2] = pt(b);
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      });
+      c.stars.forEach((s, i) => {
+        const [x, y] = pt(i);
+        const tw = .55 + .45 * Math.abs(Math.sin(now * .0012 + i * 2.1 + ki * 3));
+        const sz = 10 + (i % 3) * 3;
+        ctx.globalAlpha = tw;
+        ctx.drawImage(sp.gold, x - sz / 2, y - sz / 2, sz, sz);
+      });
+      ctx.globalAlpha = .75;
+      ctx.fillStyle = "rgba(212,175,106,.85)";
+      ctx.font = "12px Cairo, 'Segoe UI', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(root.dataset.lang === "ar" ? c.ar : c.en,
+                   ox + scale / 2, oy + scale * .8 + 24);
+      ctx.globalAlpha = 1;
+    });
+  }
+
+  // one shooting star; shared by the hero sky and the gate sky
+  function drawMeteor(ctx, mt) {
+    const mag = Math.hypot(mt.vx, mt.vy);
+    const ux = mt.vx / mag, uy = mt.vy / mag;
+    const L = mt.len * Math.max(mt.life, 0);
+    const g = ctx.createLinearGradient(mt.x, mt.y, mt.x - ux * L, mt.y - uy * L);
+    g.addColorStop(0, "rgba(255,252,240," + (.9 * mt.life) + ")");
+    g.addColorStop(1, "rgba(212,175,106,0)");
+    ctx.strokeStyle = g; ctx.lineWidth = 1.8; ctx.lineCap = "round";
+    ctx.globalAlpha = 1;
+    ctx.beginPath();
+    ctx.moveTo(mt.x, mt.y);
+    ctx.lineTo(mt.x - ux * L, mt.y - uy * L);
+    ctx.stroke();
+    ctx.globalAlpha = Math.max(mt.life, 0);
+    ctx.drawImage(sprites().white, mt.x - 9, mt.y - 9, 18, 18);
+    ctx.globalAlpha = 1;
+  }
+  function spawnMeteor(list, w) {
+    const ang = Math.PI * (.6 + Math.random() * .16);   // down and across
+    const spd = 6.5 + Math.random() * 5;
+    list.push({
+      x: Math.random() * w * .9 + w * .05, y: -14,
+      vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
+      life: 1, len: 60 + Math.random() * 90
+    });
+  }
+
+  let dustOn = false;
+  function dust() {
+    if (dustOn || reduce) return;
+    dustOn = true;
+    const cv = $("#dust"), ctx = cv.getContext("2d"), host = cv.parentElement;
+    let w, h, motes = [], raf = 0, meteors = [], nextMeteor = 0;
+
+    function size() {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      w = host.clientWidth; h = host.clientHeight;
+      cv.width = w * dpr; cv.height = h * dpr;
+      cv.style.width = w + "px"; cv.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      motes = Array.from({ length: Math.round(Math.min(w, 760) / 13) }, () => ({
+        x: Math.random() * w, y: Math.random() * h,
+        r: Math.random() * 1.5 + .35, v: Math.random() * .22 + .05,
+        d: Math.random() * Math.PI * 2, a: Math.random() * .45 + .12
+      }));
+    }
+    function paint() {
+      // postal and garden get falling petals; night gets a living sky of
+      // glowing stars and shooting stars; the rest, rising gold dust
+      const petals = variant === "postal" || variant === "garden";
+      const stars  = variant === "night";
+
+      ctx.clearRect(0, 0, w, h);
+
+      if (stars) {
+        const sp = sprites();
+        const now = performance.now();
+        motes.forEach((m, i) => {
+          m.d += .02;
+          const tw = .4 + .6 * Math.abs(Math.sin(m.d + i * 1.7));
+          const bright = i % 9 === 0;
+          const img = bright ? sp.flare : (i % 3 === 0 ? sp.white : sp.gold);
+          const s = bright ? m.r * 12 + 12 : m.r * 6.5 + 5;
+          ctx.globalAlpha = Math.min(1, m.a * tw + (bright ? .2 : 0));
+          ctx.drawImage(img, m.x - s / 2, m.y - s / 2, s, s);
+        });
+
+        drawZodiac(ctx, w, h, now);
+
+        if (!nextMeteor) nextMeteor = now + 1500;
+        if (now >= nextMeteor) {
+          spawnMeteor(meteors, w);
+          // usually a lone streak; sometimes two, close together — a shower
+          nextMeteor = now + (Math.random() < .3 ? 420 : 2400 + Math.random() * 4200);
+        }
+        meteors = meteors.filter(mt => mt.life > 0 && mt.y < h + 60);
+        meteors.forEach(mt => {
+          mt.x += mt.vx; mt.y += mt.vy; mt.life -= .016;
+          drawMeteor(ctx, mt);
+        });
+
+        ctx.globalAlpha = 1;
+        raf = requestAnimationFrame(paint);
+        return;
+      }
+
+      const styles = getComputedStyle(root);
+      const palette = petals
+        ? [styles.getPropertyValue("--accent").trim(), styles.getPropertyValue("--accent-2").trim(), "#BE9A4E"]
+        : [styles.getPropertyValue("--accent").trim() || "#B4893C"];
+
+      motes.forEach((m, i) => {
+        ctx.fillStyle = palette[i % palette.length];
+        m.d += .008; m.x += Math.sin(m.d) * .28;
+        if (petals) {
+          m.y += m.v * 1.4;
+          if (m.y > h + 8) { m.y = -8; m.x = Math.random() * w; }
+        } else {
+          m.y -= m.v;
+          if (m.y < -6) { m.y = h + 6; m.x = Math.random() * w; }
+        }
+        ctx.globalAlpha = m.a;
+        if (petals) {
+          ctx.save();
+          ctx.translate(m.x, m.y);
+          ctx.rotate(m.d * 2);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, m.r * 2.6, m.r * 1.3, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else {
+          ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2); ctx.fill();
+        }
+      });
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(paint);
+    }
+    size();
+    addEventListener("resize", size, { passive: true });
+    paint();
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { if (!raf) paint(); }
+      else { cancelAnimationFrame(raf); raf = 0; }
+    }, { threshold: 0 }).observe(host);
+  }
+
+  /* ── the openings ──────────────────────────────────────────────── */
+
+  // shooting stars drift across the night gate while the star hangs there
+  let gateRaf = 0;
+  function gateSky(run) {
+    cancelAnimationFrame(gateRaf);
+    gateRaf = 0;
+    const cv = $("#fw");
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    if (!run || reduce) {
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      return;
+    }
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const w = cv.clientWidth, h = cv.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    let meteors = [], next = performance.now() + 700;
+    (function fr(now) {
+      ctx.clearRect(0, 0, w, h);
+      if (now >= next) {
+        spawnMeteor(meteors, w);
+        next = now + (Math.random() < .35 ? 380 : 1600 + Math.random() * 3200);
+      }
+      meteors = meteors.filter(mt => mt.life > 0 && mt.y < h + 60);
+      meteors.forEach(mt => {
+        mt.x += mt.vx; mt.y += mt.vy; mt.life -= .016;
+        drawMeteor(ctx, mt);
+      });
+      gateRaf = requestAnimationFrame(fr);
+    })(performance.now());
+  }
+
+  // fireworks for the night gate, drawn on its own canvas
+  function fireworks() {
+    const cv = $("#fw");
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const w = cv.clientWidth, h = cv.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const colors = ["#D4AF6A", "#F3E3B8", "#EDEAF2", "#C98A83"];
+    const parts = [];
+    function burst(x, y, n) {
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const s = Math.random() * 3.4 + .7;
+        parts.push({
+          x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s,
+          life: 1, c: colors[i % colors.length], r: Math.random() * 1.9 + .8
+        });
+      }
+    }
+    burst(w * .5,  h * .32, 120);
+    setTimeout(() => burst(w * .3,  h * .46, 75), 280);
+    setTimeout(() => burst(w * .72, h * .4,  75), 520);
+    setTimeout(() => burst(w * .5,  h * .24, 50), 900);
+
+    const halo = sprites().gold;
+    let frames = 0;
+    (function fr() {
+      ctx.clearRect(0, 0, w, h);
+      let alive = false;
+      parts.forEach(p => {
+        if (p.life <= 0) return;
+        alive = true;
+        p.x += p.vx; p.y += p.vy;
+        p.vy += .03; p.vx *= .985; p.vy *= .985;
+        p.life -= .011;
+        const a = Math.max(p.life, 0);
+        ctx.globalAlpha = a * .5;                               // soft halo
+        ctx.drawImage(halo, p.x - p.r * 4, p.y - p.r * 4, p.r * 8, p.r * 8);
+        ctx.globalAlpha = a;                                    // bright core
+        ctx.fillStyle = p.c;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      if (alive && ++frames < 260) requestAnimationFrame(fr);
+      else ctx.clearRect(0, 0, w, h);
+    })();
+  }
+
+  function openGate(btn) {
+    if (opened) return;
+    opened = true;
+
+    // the tap on the envelope is the user gesture that lets the music start
+    if (musicIdx >= 0 && audio.paused) playCurrent();
+
+    const gate = btn.closest(".gate");
+
+    if (variant === "manuscript") {
+      btn.classList.add("pressing");
+      setTimeout(() => { btn.classList.remove("pressing"); btn.classList.add("opening"); }, 170);
+      setTimeout(() => btn.classList.add("gone"), reduce ? 0 : 1900);
+    } else if (variant === "arabesque") {
+      $("[data-screens]").classList.add("parting");
+    } else if (variant === "modern") {
+      btn.classList.add("opening");
+    } else if (variant === "night") {
+      btn.classList.add("opening");            // the star launches…
+      gateSky(false);                          // hand the canvas over
+      if (!reduce) fireworks();                // …and bursts
+    } else { // postal and garden: the photographed envelopes
+      btn.classList.add("pressing");
+      setTimeout(() => { btn.classList.remove("pressing"); btn.classList.add("opening"); }, 150);
+      setTimeout(() => btn.classList.add("gone"), reduce ? 0 : 1950);
+    }
+
+    const wait = reduce ? 0
+      : variant === "modern"    ? 1150
+      : variant === "arabesque" ? 1350
+      : variant === "night"     ? 2150
+      : 2050;
+
+    setTimeout(() => {
+      gate.classList.add("done");   // gates stay in the DOM, sealed again on variant switch
+      document.body.classList.remove("locked");
+      document.body.classList.add("open");
+      // the unlock can resurrect a scroll position from before the lock
+      scrollTo({ top: 0, behavior: "instant" });
+      observeAll();
+      scrollFx();
+      dust();
+    }, wait);
+  }
+  $$("[data-open]").forEach(b => b.addEventListener("click", () => openGate(b)));
+
+  /* ── sending ───────────────────────────────────────────────────── */
+  async function post(payload) {
+    if (!CONFIG.endpoint) return "local";
+    await fetch(CONFIG.endpoint, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    return "sent";
+  }
+
+  /* ── RSVP ──────────────────────────────────────────────────────── */
+  const rsvpForm = $("#rsvpForm");
+  function syncAttending() {
+    const yes = rsvpForm.attending.value === "yes";
+    $("#guestsField").classList.toggle("hidden", !yes);
+    $("#namesField").classList.toggle("hidden", !yes);
+  }
+  $$("input[name='attending']", rsvpForm).forEach(r => r.addEventListener("change", syncAttending));
+  syncAttending();
+
+  rsvpForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const t = T[lang], status = $("#rsvpStatus");
+    const name = $("#rName").value.trim();
+    if (!name) { status.textContent = t.rsvpNeedName; $("#rName").focus(); return; }
+
+    const attending = rsvpForm.attending.value;
+    const entry = {
+      type: "rsvp", name, attending,
+      guests: attending === "yes" ? $("#rGuests").value : "0",
+      guestNames: attending === "yes" ? $("#rNames").value.trim() : "",
+      phone: $("#rPhone").value.trim(),
+      lang, version: CONFIG.version, at: new Date().toLocaleString("en-GB")
+    };
+
+    const btn = $("#rsvpSubmit");
+    btn.disabled = true; status.textContent = t.sending;
+    try {
+      const mode = await post(entry);
+      store.push(KEY.rsvp, entry);
+      status.textContent = attending === "yes" ? t.rsvpOkYes : t.rsvpOkNo;
+      rsvpForm.reset(); syncAttending();
+      if (mode === "local" && CONFIG.whatsapp) {
+        const msg = t.waIntro + ": " + entry.name + " — " +
+          (attending === "yes" ? t.optYes : t.optNo) +
+          (entry.guests !== "0" ? " (+" + entry.guests + ")" : "") +
+          (entry.phone ? " — " + entry.phone : "");
+        open("https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
+      }
+    } catch (err) {
+      status.textContent = t.sendFailed;
+    } finally { btn.disabled = false; }
+  });
+
+  /* ── guestbook ─────────────────────────────────────────────────── */
+  // with a live endpoint the sheet is the only source of truth — the
+  // device's local cache is used solely in offline/endpoint-less mode
+  let remoteWishes = null;
+  function renderWishes(list) {
+    const all = list || (CONFIG.endpoint ? (remoteWishes || []) : store.read(KEY.wish));
+    // only the first three wishes ever received, in the order they came
+    const items = all.slice(0, 3);
+    const box = $("#wishList");
+    box.textContent = "";
+    $("#wishEmpty").classList.toggle("hidden", items.length > 0);
+    items.forEach((w, i) => {
+      const el = document.createElement("article");
+      el.className = "wish";
+      el.style.animationDelay = Math.min(i, 8) * 60 + "ms";
+      const p = document.createElement("p");
+      p.textContent = "“" + w.message + "”";
+      const c = document.createElement("cite");
+      c.textContent = "— " + w.name;
+      el.append(p, c);
+      box.appendChild(el);
+    });
+  }
+
+  $("#wishForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const t = T[lang], status = $("#wishStatus");
+    const name = $("#wName").value.trim(), message = $("#wMsg").value.trim();
+    if (!name || !message) { status.textContent = t.wishNeed; return; }
+
+    const entry = { type: "wish", name, message, lang, version: CONFIG.version, at: new Date().toLocaleString("en-GB") };
+    const btn = $("#wishSubmit");
+    btn.disabled = true; status.textContent = t.sending;
+    try {
+      await post(entry);
+      status.textContent = t.wishOk;
+      e.target.reset();
+      if (CONFIG.endpoint) {
+        // let the sheet be the source: the new wish comes back from it
+        setTimeout(loadWishes, 1500);
+      } else {
+        renderWishes(store.push(KEY.wish, entry));
+      }
+    } catch (err) {
+      status.textContent = t.sendFailed;
+    } finally { btn.disabled = false; }
+  });
+
+  /* ── guests' photos → the couple's Drive ───────────────────────── */
+  const photoForm = $("#photoForm");
+  const pFiles = $("#pFiles");
+
+  pFiles.addEventListener("change", () => {
+    const n = pFiles.files.length;
+    $("#pCount").textContent = n ? T[lang].photoPicked.replace("{n}", num(n)) : "";
+  });
+
+  // shrink a photo in the browser: max edge 3200px, JPEG q.92 — a phone
+  // shot lands around ~3 MB, high quality but still upload-friendly
+  function shrinkImage(file) {
+    const url = URL.createObjectURL(file);
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const scale = Math.min(1, 3200 / Math.max(img.width, img.height));
+          const cv = document.createElement("canvas");
+          cv.width = Math.round(img.width * scale);
+          cv.height = Math.round(img.height * scale);
+          cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+          resolve({
+            data: cv.toDataURL("image/jpeg", .92).split(",")[1],
+            mime: "image/jpeg",
+            filename: file.name.replace(/\.[^.]+$/, "") + ".jpg"
+          });
+        } catch (err) { reject(err); }
+        finally { URL.revokeObjectURL(url); }
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("decode")); };
+      img.src = url;
+    });
+  }
+
+  const MAX_RAW = 25 * 1024 * 1024;   // videos and undecodable images go up as-is
+  function readRaw(file) {
+    return new Promise((resolve, reject) => {
+      if (file.size > MAX_RAW) { reject(new Error("too big")); return; }
+      const r = new FileReader();
+      r.onload = () => resolve({
+        data: String(r.result).split(",")[1],
+        mime: file.type || "application/octet-stream",
+        filename: file.name
+      });
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+
+  photoForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const t = T[lang], status = $("#photoStatus");
+    const who = $("#pName").value.trim();
+    if (!who) { status.textContent = t.rsvpNeedName; $("#pName").focus(); return; }
+    const files = [...pFiles.files];
+    if (!files.length) { status.textContent = t.photoNeed; return; }
+    if (!CONFIG.endpoint) { status.textContent = t.sendFailed; return; }
+    const btn = $("#photoSubmit");
+    btn.disabled = true;
+    let sent = 0, failed = 0;
+
+    for (const f of files) {
+      status.textContent = t.photoUploading
+        .replace("{i}", num(sent + failed + 1))
+        .replace("{n}", num(files.length));
+      try {
+        const payload = f.type.startsWith("image/")
+          ? await shrinkImage(f).catch(() => readRaw(f))
+          : await readRaw(f);
+        await fetch(CONFIG.endpoint, {
+          method: "POST", mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            type: "photo", name: who, lang, version: CONFIG.version,
+            at: new Date().toLocaleString("en-GB"),
+            filename: payload.filename, mime: payload.mime, data: payload.data
+          })
+        });
+        sent++;
+      } catch (err) { failed++; }
+    }
+
+    btn.disabled = false;
+    status.textContent = failed ? t.photoFail : t.photoDone;
+    if (!failed) { photoForm.reset(); $("#pCount").textContent = ""; }
+  });
+
+  async function loadWishes() {
+    if (!CONFIG.endpoint) return;
+    try {
+      const res = await fetch(CONFIG.endpoint + "?type=wish");
+      const remote = await res.json();
+      if (Array.isArray(remote)) { remoteWishes = remote; renderWishes(remote); }
+    } catch (e) {}
+  }
+
+  /* ── add to calendar ───────────────────────────────────────────── */
+  // Local wall-clock stamps pinned to the venue's timezone — never the
+  // viewer's, so a guest abroad still sees seven in the evening, Cairo.
+  const wall = s => s.replace(/[-:]/g, "");
+
+  $("#calBtn").addEventListener("click", async () => {
+    const title = CONFIG.groom[lang] + " " + T[lang].amp + " " + CONFIG.bride[lang];
+
+    // hosted preview on claude.ai: hand the file over through the host
+    try {
+      if (window.claude && typeof window.claude.use === "function") {
+        const dl = await window.claude.use("downloads");
+        if (dl) {
+          const ics = [
+            "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//wedding//invitation//AR",
+            "BEGIN:VEVENT",
+            "UID:" + wall(CONFIG.startsAt) + "@wedding",
+            "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""),
+            "DTSTART;TZID=" + CONFIG.timezone + ":" + wall(CONFIG.startsAt),
+            "DTEND;TZID=" + CONFIG.timezone + ":" + wall(CONFIG.endsAt),
+            "SUMMARY:" + title,
+            "LOCATION:" + CONFIG.venue.name[lang] + ", " + CONFIG.venue.address[lang],
+            "END:VEVENT", "END:VCALENDAR"
+          ].join("\r\n");
+          await dl.save({ filename: "wedding.ics", data: ics });
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // iPhone / iPad: opening a real .ics file shows Apple Calendar's
+    // native add-event sheet — a blob download would just sit in Files
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      location.href = "wedding.ics";
+      return;
+    }
+
+    // everyone else: Google Calendar's event template, which opens the
+    // Calendar app directly on Android
+    const url = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      "&text=" + encodeURIComponent(title) +
+      "&dates=" + wall(CONFIG.startsAt) + "/" + wall(CONFIG.endsAt) +
+      "&ctz=" + encodeURIComponent(CONFIG.timezone) +
+      "&location=" + encodeURIComponent(CONFIG.venue.name[lang] + ", " + CONFIG.venue.address[lang]) +
+      "&details=" + encodeURIComponent(T[lang].footerNote + " " + CONFIG.hashtag);
+    open(url, "_blank", "noopener");
+  });
+
+  /* ── go ────────────────────────────────────────────────────────── */
+  document.body.classList.add("locked");
+  applyVariant(variant);
+  applyLang(lang);
+  loadWishes();
+
+  if (reduce) {
+    opened = true;
+    $$(".gate").forEach(g => g.classList.add("done"));
+    document.body.classList.remove("locked");
+    document.body.classList.add("open");
+    $$(".reveal, .wipe").forEach(el => el.classList.add("in"));
+    $$(".w").forEach(w => w.classList.add("in"));
+  }
+})();
+</script>
+</body>
+</html>
